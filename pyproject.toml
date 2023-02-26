@@ -1,0 +1,14 @@
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Amichay Oren", email = "amor71@sgeltd.com"},
+]
+dependencies = [
+    "functions-framework>=3.3.0",
+]
+requires-python = ">=3.9"
+license = {text = "MIT"}
