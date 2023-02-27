@@ -1,4 +1,9 @@
 [tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=23.1.0",
+    "pytest>=7.2.1",
+]
 
 [project]
 name = ""
@@ -9,6 +14,9 @@ authors = [
 ]
 dependencies = [
     "functions-framework>=3.3.0",
+    "requests>=2.28.2",
+    "google-cloud-secret-manager>=2.15.1",
+    "google-crc32c>=1.5.0",
 ]
 requires-python = ">=3.9"
 license = {text = "MIT"}
