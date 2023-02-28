@@ -1,4 +1,8 @@
 steps:
+  # Install dependencies
+  - name: python
+    entrypoint: pip
+    args: ["install", "-r", "requirements.txt", "--user"]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     args:
       - gcloud
