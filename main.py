@@ -10,6 +10,7 @@ from google.cloud import secretmanager
 import google_crc32c
 from google.api_core.exceptions import NotFound
 from typing import Dict
+from time import time
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
@@ -67,7 +68,7 @@ def alpaca_proxy(method: str, url: str, payload: str | None) -> Response:
     )
 
 
-def log(request: Request, response: Response) -> None:
+def log(request: Request, response: Response, latency: float) -> None:
     # Build structured log messages as an object.
     global_log_fields = {
         "request_headers": dict(request.headers),
@@ -79,6 +80,7 @@ def log(request: Request, response: Response) -> None:
         "method": request.method,
         "request_payload": request.json if request.is_json else None,
         "response_payload": response.json(),
+        "latency": latency,
     }
 
     # Add log correlation to nest all log messages.
@@ -114,9 +116,11 @@ def proxy(request):
         payload = request.get_json() if request.is_json else None
 
         try:
+            t = time()
             r = alpaca_proxy(request.method, "/".join(directories[2:]), payload)
             if debug:
-                log(request=request, response=r)
+                t1 = time()
+                log(request=request, response=r, latency=t1 - t)
         except NotFound as e:
             return ("secrets missing", 500)
 
