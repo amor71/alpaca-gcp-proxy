@@ -1,18 +1,21 @@
 import os
+import json
 import functions_framework
+from sys import getsizeof
 from urllib.parse import urlparse
 
 from requests.auth import HTTPBasicAuth
-from requests import request, Response
+from requests import request, Response, Request
 from google.cloud import secretmanager
 import google_crc32c
 from google.api_core.exceptions import NotFound
-
+from typing import Dict
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
 
 project_id = os.getenv("PROJECT_ID", None)
+debug: bool = bool(os.getenv("DEBUG", "True"))
 alpaca_base_url = os.getenv(
     "ALPACA_BASE_URL", "https://broker-api.sandbox.alpaca.markets"
 )
@@ -56,22 +59,54 @@ def alpaca_proxy(method: str, url: str, payload: str | None) -> Response:
         else f"{alpaca_base_url[:-2]}/{url}"
     )
 
-    print(f"{method} Alpaca Proxy for {request_url}")
-    if payload:
-        print(f"payload {payload}")
-
     auth = get_alpaca_authentication()
     return (
         request(method=method, url=request_url, json=payload, auth=auth)
         if payload
-        else request(method=method, url=url, auth=auth)
+        else request(method=method, url=request_url, auth=auth)
     )
+
+
+def log(request: Request, response: Response) -> None:
+    # Build structured log messages as an object.
+    global_log_fields = {
+        "request_headers": dict(request.headers),
+        "response_headers": dict(response.headers),
+        "request_url": request.url,
+        "status_code": response.status_code,
+        "reason": response.reason,
+        "response_url": response.url,
+        "method": request.method,
+        "request_payload": request.json if request.is_json else None,
+        "response_payload": response.json(),
+    }
+
+    # Add log correlation to nest all log messages.
+    # This is only relevant in HTTP-based contexts, and is ignored elsewhere.
+    # (In particular, non-HTTP-based Cloud Functions.)
+    request_is_defined = "request" in globals() or "request" in locals()
+    if request_is_defined and request:
+        if trace_header := request.headers.get("X-Cloud-Trace-Context"):
+            trace = trace_header.split("/")
+            global_log_fields[
+                "logging.googleapis.com/trace"
+            ] = f"projects/{project_id}/traces/{trace[0]}"
+
+    # Complete a structured log entry.
+    entry = dict(
+        severity="DEBUG",
+        message="request",
+        # Log viewer accesses 'component' as jsonPayload.component'.
+        component="arbitrary-property",
+        **global_log_fields,
+    )
+
+    print(json.dumps(entry))
 
 
 @functions_framework.http
 def proxy(request):
-    print(request)
-    print(request.method)
+    assert project_id, "project_id not specified"
     parts = urlparse(request.url)
     directories = parts.path.strip("/").split("/")
 
@@ -80,9 +115,11 @@ def proxy(request):
 
         try:
             r = alpaca_proxy(request.method, "/".join(directories[2:]), payload)
+            if debug:
+                log(request=request, response=r)
         except NotFound as e:
-            return "secrets missing", 500
+            return ("secrets missing", 500)
 
-        return (r.json, 200) if r.status_code == 200 else (r.reason, r.status_code)
+        return (r.content, r.status_code)
 
     return "proxy not found", 400

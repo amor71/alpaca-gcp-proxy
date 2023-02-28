@@ -11,10 +11,8 @@ Add two secrets to [GCP Secrets Manager](https://console.cloud.google.com/securi
 
 That should be obtained after registering to [Alpaca Broker API](https://broker-app.alpaca.markets/sign-up)
 
-## Environment Variables 
+## Environment Variables
 
-- _PROJECT_ID_ -> GCP project-id hosting GCP Function and secret
-- _ALPACA_BASE_URL_ -> Alpaca base URL, defaults to Sandbox
-
-
-
+* _PROJECT_ID_ -> GCP project-id hosting GCP Function and secret
+* _ALPACA_BASE_URL_ -> Alpaca base URL, defaults to Sandbox
+* _DEBUG_ -> "True"/"False" (default "True") log both request and response
