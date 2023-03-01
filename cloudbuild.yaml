@@ -1,4 +1,7 @@
 steps:
+  - name: python
+    entrypoint: python
+    args: ["-m", "pip", "install", "--upgrade", "pip"]
   # Install dependencies
   - name: python
     entrypoint: pip
@@ -14,7 +17,8 @@ steps:
       - --trigger-http
       - --runtime=python311
       - --allow-unauthenticated
-    env:
-      - PROJECT_ID=algo2-260618
+
 options:
   logging: CLOUD_LOGGING_ONLY
+  env:
+    - PROJECT_ID=algo2-260618
