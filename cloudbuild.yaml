@@ -11,10 +11,10 @@ steps:
       - proxy
       - --region=us-east4
       - --source=.
+      - --set-env-vars PROJECT_ID="algo2-260618"
       - --trigger-http
       - --runtime=python311
       - --allow-unauthenticated
-      - --set-env-vars PROJECT_ID=algo2-260618
-
+    
 options:
   logging: CLOUD_LOGGING_ONLY
