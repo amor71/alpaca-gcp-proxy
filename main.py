@@ -15,7 +15,7 @@ from time import time
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
 
-project_id = os.getenv("GCP_PROJECT", None)
+project_id = os.getenv("PROJECT_ID", None)
 debug: bool = bool(os.getenv("DEBUG", "True"))
 alpaca_base_url = os.getenv(
     "ALPACA_BASE_URL", "https://broker-api.sandbox.alpaca.markets"

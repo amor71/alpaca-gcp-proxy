@@ -14,6 +14,7 @@ steps:
       - --trigger-http
       - --runtime=python311
       - --allow-unauthenticated
+      - --set-env-vars PROJECT_ID=algo2-260618
 
 options:
   logging: CLOUD_LOGGING_ONLY
