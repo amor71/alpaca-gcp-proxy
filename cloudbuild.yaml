@@ -20,5 +20,3 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  env:
-    - PROJECT_ID=algo2-260618
