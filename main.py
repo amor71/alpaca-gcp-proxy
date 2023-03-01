@@ -113,12 +113,12 @@ def proxy(request):
     directories = parts.path.strip("/").split("/")
 
     print(directories)
-    if directories[0] == "proxy" and directories[1] == "alpaca":
+    if directories[0] == "alpaca":
         payload = request.get_json() if request.is_json else None
 
         try:
             t = time()
-            r = alpaca_proxy(request.method, "/".join(directories[2:]), payload)
+            r = alpaca_proxy(request.method, "/".join(directories[1:]), payload)
             if debug:
                 t1 = time()
                 log(request=request, response=r, latency=t1 - t)
