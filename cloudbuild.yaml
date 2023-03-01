@@ -12,7 +12,7 @@ steps:
       - --region=us-east4
       - --source=.
       - --set-env-vars
-      - "PROJECT_ID=algo2-260618"
+      - PROJECT_ID=algo2-260618
       - --trigger-http
       - --runtime=python311
       - --allow-unauthenticated

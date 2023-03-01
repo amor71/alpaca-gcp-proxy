@@ -112,6 +112,7 @@ def proxy(request):
     parts = urlparse(request.url)
     directories = parts.path.strip("/").split("/")
 
+    print(directories)
     if directories[0] == "proxy" and directories[1] == "alpaca":
         payload = request.get_json() if request.is_json else None
 
