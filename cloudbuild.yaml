@@ -1,7 +1,4 @@
 steps:
-  - name: python
-    entrypoint: python
-    args: ["-m", "pip", "install", "--upgrade", "pip"]
   # Install dependencies
   - name: python
     entrypoint: pip
