@@ -14,15 +14,29 @@ from time import time
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
+plaid_client_id = "plaid_cient_id"
+plaid_secret = "plaid_secret"
 
 project_id = os.getenv("PROJECT_ID", None)
 debug: bool = bool(os.getenv("DEBUG", "True"))
 alpaca_base_url = os.getenv(
     "ALPACA_BASE_URL", "https://broker-api.sandbox.alpaca.markets"
 )
+plaid_base_url = os.getenv("PLAID_BASE_URL", "https://sandbox.plaid.com")
 
 
-def get_alpaca_authentication() -> HTTPBasicAuth:
+def _construct_url(base_url: str, url: str) -> str:
+    return f"{base_url}/{url}" if base_url[-1] != "/" else f"{base_url[:-2]}/{url}"
+
+
+def _check_crc(arg0):
+    # Verify payload checksum.
+    crc32 = google_crc32c.Checksum()
+    crc32.update(arg0.payload.data)
+    assert arg0.payload.data_crc32c == int(crc32.hexdigest(), 16), "data corruption"
+
+
+def _get_alpaca_authentication() -> HTTPBasicAuth:
     assert project_id, "missing GCP project_id"
     client = secretmanager.SecretManagerServiceClient()
 
@@ -46,26 +60,45 @@ def get_alpaca_authentication() -> HTTPBasicAuth:
     )
 
 
-def _check_crc(arg0):
-    # Verify payload checksum.
-    crc32 = google_crc32c.Checksum()
-    crc32.update(arg0.payload.data)
-    assert arg0.payload.data_crc32c == int(crc32.hexdigest(), 16), "data corruption"
+def _get_plaid_authentication() -> Dict:
+    assert project_id, "missing GCP project_id"
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Access the secret version.
+    plaid_client_id = client.access_secret_version(
+        request={
+            "name": f"projects/{project_id}/secrets/{plaid_client_id}/versions/latest"
+        }
+    )
+    plaid_secret = client.access_secret_version(
+        request={
+            "name": f"projects/{project_id}/secrets/{plaid_secret}/versions/latest"
+        }
+    )
+
+    _check_crc(plaid_client_id)
+    _check_crc(plaid_secret)
+    return {
+        "client_id": plaid_client_id,
+        "secret": plaid_secret,
+    }
 
 
 def alpaca_proxy(method: str, url: str, payload: str | None) -> Response:
-    request_url = (
-        f"{alpaca_base_url}/{url}"
-        if alpaca_base_url[-1] != "/"
-        else f"{alpaca_base_url[:-2]}/{url}"
-    )
-
-    auth = get_alpaca_authentication()
+    request_url = _construct_url(alpaca_base_url, url)
+    auth = _get_alpaca_authentication()
     return (
         request(method=method, url=request_url, json=payload, auth=auth)
         if payload
         else request(method=method, url=request_url, auth=auth)
     )
+
+
+def plaid_proxy(method: str, url: str, payload: str | None) -> Response:
+    request_url = _construct_url(plaid_base_url, url)
+    auth = _get_plaid_authentication()
+
+    return request(method=method, url=request_url, json=payload.update(auth))
 
 
 def log(request: Request, response: Response, latency: float) -> None:
@@ -111,13 +144,16 @@ def proxy(request):
     assert project_id, "project_id not specified"
     parts = urlparse(request.url)
     directories = parts.path.strip("/").split("/")
-
-    if directories[0] == "alpaca":
-        payload = request.get_json() if request.is_json else None
-
+    payload = request.get_json() if request.is_json else None
+    if directories[0] in ["alpaca", "plaid"]:
         try:
             t = time()
-            r = alpaca_proxy(request.method, "/".join(directories[1:]), payload)
+
+            r = (
+                alpaca_proxy(request.method, "/".join(directories[1:]), payload)
+                if directories[0] == "alpaca"
+                else plaid_proxy(request.method, "/".join(directories[1:]), payload)
+            )
             if debug:
                 t1 = time()
                 log(request=request, response=r, latency=t1 - t)
