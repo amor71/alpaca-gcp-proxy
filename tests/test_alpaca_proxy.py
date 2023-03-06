@@ -1,6 +1,6 @@
 import requests
 
-base_url: str = "http://localhost:8080/proxy/alpaca"
+base_url: str = "http://localhost:8080/alpaca"
 
 account_json = {
     "enabled_assets": ["us_equity", "crypto"],
@@ -79,7 +79,7 @@ def test_proxy_post_w_payload():
     r = requests.post(url=url, json=account_json)
 
     print(r)
-    print(r.json())
+    # print(r.json())
 
     assert r.status_code == 409, "expected success"
 
@@ -89,7 +89,7 @@ def test_proxy_post_wo_payload():
 
     r = requests.get(url=url)
 
-    print(r)
-    print(r.json())
+    print(r, r.reason)
+    # print(r.json())
 
     assert r.status_code == 422, "expected failure"

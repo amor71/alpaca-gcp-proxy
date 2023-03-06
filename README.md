@@ -1,3 +1,6 @@
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
+[![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)
+
 # alpaca-gcp-proxy
 
 GCP Function to securely proxy API calls to [Alpaca Broker API](https://alpaca.markets/docs/broker/).

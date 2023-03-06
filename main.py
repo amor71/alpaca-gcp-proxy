@@ -1,16 +1,15 @@
-import os
 import json
-import functions_framework
-from sys import getsizeof
+import os
+from time import time
+from typing import Dict
 from urllib.parse import urlparse
 
-from requests.auth import HTTPBasicAuth
-from requests import request, Response, Request
-from google.cloud import secretmanager
+import functions_framework
 import google_crc32c
 from google.api_core.exceptions import NotFound
-from typing import Dict
-from time import time
+from google.cloud import secretmanager
+from requests import Request, Response, request
+from requests.auth import HTTPBasicAuth
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
@@ -26,18 +25,23 @@ plaid_base_url = os.getenv("PLAID_BASE_URL", "https://sandbox.plaid.com")
 
 
 def _construct_url(base_url: str, url: str) -> str:
-    return f"{base_url}/{url}" if base_url[-1] != "/" else f"{base_url[:-2]}/{url}"
+    return (
+        f"{base_url}/{url}"
+        if base_url[-1] != "/"
+        else f"{base_url[:-2]}/{url}"
+    )
 
 
 def _check_crc(arg0):
     # Verify payload checksum.
     crc32 = google_crc32c.Checksum()
     crc32.update(arg0.payload.data)
-    assert arg0.payload.data_crc32c == int(crc32.hexdigest(), 16), "data corruption"
+    assert arg0.payload.data_crc32c == int(
+        crc32.hexdigest(), 16
+    ), "data corruption"
 
 
 def _get_alpaca_authentication() -> HTTPBasicAuth:
-    assert project_id, "missing GCP project_id"
     client = secretmanager.SecretManagerServiceClient()
 
     # Access the secret version.
@@ -61,7 +65,6 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
 
 
 def _get_plaid_authentication() -> Dict:
-    assert project_id, "missing GCP project_id"
     client = secretmanager.SecretManagerServiceClient()
 
     # Access the secret version.
@@ -94,11 +97,15 @@ def alpaca_proxy(method: str, url: str, payload: str | None) -> Response:
     )
 
 
-def plaid_proxy(method: str, url: str, payload: str | None) -> Response:
+def plaid_proxy(method: str, url: str, payload: Dict | None) -> Response:
     request_url = _construct_url(plaid_base_url, url)
     auth = _get_plaid_authentication()
 
-    return request(method=method, url=request_url, json=payload.update(auth))
+    return request(
+        method=method,
+        url=request_url,
+        json=payload.update(auth) if payload else None,
+    )
 
 
 def log(request: Request, response: Response, latency: float) -> None:
@@ -111,7 +118,7 @@ def log(request: Request, response: Response, latency: float) -> None:
         "reason": response.reason,
         "response_url": response.url,
         "method": request.method,
-        "request_payload": request.json if request.is_json else None,
+        "request_payload": request.json,
         "response_payload": response.json(),
         "latency": latency,
     }
@@ -141,23 +148,32 @@ def log(request: Request, response: Response, latency: float) -> None:
 
 @functions_framework.http
 def proxy(request):
-    assert project_id, "project_id not specified"
+    assert project_id, "PROJECT_ID not specified"
     parts = urlparse(request.url)
     directories = parts.path.strip("/").split("/")
+    print(directories)
     payload = request.get_json() if request.is_json else None
     if directories[0] in ["alpaca", "plaid"]:
         try:
             t = time()
 
             r = (
-                alpaca_proxy(request.method, "/".join(directories[1:]), payload)
+                alpaca_proxy(
+                    request.method,
+                    "/".join(directories[1:]),
+                    payload,
+                )
                 if directories[0] == "alpaca"
-                else plaid_proxy(request.method, "/".join(directories[1:]), payload)
+                else plaid_proxy(
+                    request.method,
+                    "/".join(directories[1:]),
+                    payload,
+                )
             )
             if debug:
                 t1 = time()
                 log(request=request, response=r, latency=t1 - t)
-        except NotFound as e:
+        except NotFound:
             return ("secrets missing", 500)
 
         return (r.content, r.status_code)
