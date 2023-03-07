@@ -13,7 +13,7 @@ from requests.auth import HTTPBasicAuth
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
-plaid_client_id = "plaid_cient_id"
+plaid_client_id = "plaid_client_id"
 plaid_secret = "plaid_secret"
 
 project_id = os.getenv("PROJECT_ID", None)
@@ -68,22 +68,22 @@ def _get_plaid_authentication() -> Dict:
     client = secretmanager.SecretManagerServiceClient()
 
     # Access the secret version.
-    plaid_client_id = client.access_secret_version(
+    api_key_response = client.access_secret_version(
         request={
             "name": f"projects/{project_id}/secrets/{plaid_client_id}/versions/latest"
         }
     )
-    plaid_secret = client.access_secret_version(
+    api_secret_response = client.access_secret_version(
         request={
             "name": f"projects/{project_id}/secrets/{plaid_secret}/versions/latest"
         }
     )
 
-    _check_crc(plaid_client_id)
-    _check_crc(plaid_secret)
+    _check_crc(api_key_response)
+    _check_crc(api_secret_response)
     return {
-        "client_id": plaid_client_id,
-        "secret": plaid_secret,
+        "client_id": api_key_response.payload.data.decode("UTF-8"),
+        "secret": api_secret_response.payload.data.decode("UTF-8"),
     }
 
 
@@ -101,15 +101,18 @@ def plaid_proxy(method: str, url: str, payload: Dict | None) -> Response:
     request_url = _construct_url(plaid_base_url, url)
     auth = _get_plaid_authentication()
 
+    if payload:
+        payload.update(auth)
+
     return request(
         method=method,
         url=request_url,
-        json=payload.update(auth) if payload else None,
+        json=payload,
     )
 
 
 def log(request: Request, response: Response, latency: float) -> None:
-    # Build structured log messages as an object.
+    # Build structured log messages as an object
     global_log_fields = {
         "request_headers": dict(request.headers),
         "response_headers": dict(response.headers),
@@ -151,7 +154,6 @@ def proxy(request):
     assert project_id, "PROJECT_ID not specified"
     parts = urlparse(request.url)
     directories = parts.path.strip("/").split("/")
-    print(directories)
     payload = request.get_json() if request.is_json else None
     if directories[0] in ["alpaca", "plaid"]:
         try:
