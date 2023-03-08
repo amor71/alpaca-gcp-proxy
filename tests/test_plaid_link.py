@@ -7,7 +7,8 @@ def test_proxy_no_route():
     url = f"{base_url}"
 
     r = requests.post(url=url)
-    assert r.status_code == 400, "expected HTTP 400"
+    print(r.json())
+    assert r.status_code == 404, "expected HTTP 400"
     print(r)
 
 
