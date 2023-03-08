@@ -12,7 +12,37 @@ from plaid import plaid_proxy
 
 @functions_framework.http
 def link(request):
-    ...
+    print(request)
+
+    try:
+        payload = request.get_json()
+        public_token = payload["public_token"]
+        account_id = payload["account_id"]
+    except Exception:
+        return ("JSON body must include 'public_token' and 'account_id", 400)
+
+    r = plaid_proxy(
+        method="POST",
+        url="/item/public_token/exchange",
+        payload={"public_token": public_token},
+    )
+    log(request, r)
+
+    r = plaid_proxy(
+        method="POST",
+        url="/processor/token/create",
+        payload={
+            "access_token": r.json()["access_token"],
+            "processor": "alpaca",
+        },
+    )
+    log(request, r)
+
+    return alpaca_proxy(
+        method="POST",
+        url=f"/v1/accounts/{account_id}/ach_relationships",
+        payload={r.json()["processor_token"]},
+    )
 
 
 @functions_framework.http
@@ -48,4 +78,4 @@ def proxy(request):
 
         return (r.content, r.status_code)
 
-    return "proxy not found", 400
+    return ("proxy not found", 400)
