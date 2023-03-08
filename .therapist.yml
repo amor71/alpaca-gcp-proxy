@@ -1,0 +1,19 @@
+actions:
+    mypy:
+        run: mypy --namespace-packages --show-error-context --pretty  --strict-optional  --ignore-missing-imports {files}
+        include: "*.py"
+    bandit:
+        run: bandit -s B605,B101,B105 -ii {files}
+        include: "*.py"
+    black:
+        run: black -l 79 {files}
+        include: "*.py"
+    isort:
+        run: isort {files}
+        include: "*.py"
+    autoflake:
+        run: autoflake --in-place --remove-unused-variables {files}
+        include: "*.py"
+#    flake8:
+#        run: flake8 --ignore=E501,E231,E711,E712,C0111,E203,W503,Q000 {files}
+#        include: "*.py"

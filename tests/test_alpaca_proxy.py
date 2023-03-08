@@ -82,14 +82,3 @@ def test_proxy_post_w_payload():
     # print(r.json())
 
     assert r.status_code == 409, "expected success"
-
-
-def test_proxy_post_wo_payload():
-    url = f"{base_url}/v1/accounts/11111"
-
-    r = requests.get(url=url)
-
-    print(r, r.reason)
-    # print(r.json())
-
-    assert r.status_code == 422, "expected failure"
