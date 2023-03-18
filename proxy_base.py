@@ -5,7 +5,7 @@ def construct_url(base_url: str, url: str) -> str:
     return (
         f"{base_url}/{url}"
         if base_url[-1] != "/"
-        else f"{base_url[:-2]}/{url}"
+        else f"{base_url[:-1]}/{url}"
     )
 
 

@@ -3,7 +3,7 @@
 
 # alpaca-gcp-proxy
 
-GCP Function to securely proxy API calls to [Alpaca Broker API](https://alpaca.markets/docs/broker/), including Plaid.
+GCP Function to securely proxy API calls to [Alpaca Broker API](https://alpaca.markets/docs/broker/), including Plaid and [Stytch](https://stytch.com/)
 
 ## Proxies
 
@@ -14,6 +14,10 @@ All calls abbreviated by `/alpaca` will be forwarded to Alpaca, using the predef
 ### Plaid
 
 All calls abbreviated by `/plaid` will be forwarded to Plaid.
+
+### Stytch
+
+All calls abbreviated by `/stytch` will be forwarded to Stych.
 
 ### General
 
@@ -43,6 +47,13 @@ Obtained after registering to [Alpaca Broker API](https://broker-app.alpaca.mark
 
 Obtained after registering to [Plaid](https://dashboard.plaid.com/overview)
 
+### Stytch
+
+* _stytch_projet_id_
+* _stytch_secret_ 
+
+Obtained after registering to [Stytch](https://stytch.com/dashboard/api-keys)
+
 ### General
 
 Once deployed, the GCP Function service account needs to be added to the Secrets with role `Secret Accessor`
@@ -52,4 +63,5 @@ Once deployed, the GCP Function service account needs to be added to the Secrets
 * _PROJECT_ID_: GCP project-id hosting GCP Function and secret
 * _ALPACA_BASE_URL_: Alpaca base URL defaults to sandbox
 * _PLAID_BASE_URL_: Plaid base URL default to sandbox
+* _STYTCH_BASE_URL_: Stytch base URL default to test
 * _DEBUG_: "True"/"False" (default "True") log both request and response
