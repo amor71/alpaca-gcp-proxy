@@ -8,6 +8,7 @@ from alpaca import alpaca_proxy
 from config import debug, project_id
 from logger import log
 from plaid import plaid_proxy
+from stytch import stytch_proxy
 
 
 @functions_framework.http
@@ -52,24 +53,30 @@ def proxy(request):
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
-    if directories[0] in ["alpaca", "plaid"]:
+    print(directories)
+    if directories[0] in ["alpaca", "plaid", "stytch"]:
         try:
             t = time()
-
-            r = (
-                alpaca_proxy(
+            if directories[0] == "alpaca":
+                r = alpaca_proxy(
                     request.method,
                     "/".join(directories[1:]),
                     args,
                     payload,
                 )
-                if directories[0] == "alpaca"
-                else plaid_proxy(
+            elif directories[0] == "plaid":
+                r = plaid_proxy(
                     request.method,
                     "/".join(directories[1:]),
                     payload,
                 )
-            )
+            else:
+                r = stytch_proxy(
+                    request.method,
+                    "/".join(directories[1:]),
+                    args,
+                    payload,
+                )
             if debug:
                 t1 = time()
                 log(request=request, response=r, latency=t1 - t)
