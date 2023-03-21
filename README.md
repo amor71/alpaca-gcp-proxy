@@ -3,7 +3,7 @@
 
 # alpaca-gcp-proxy
 
-GCP Function to securely proxy API calls to [Alpaca Broker API](https://alpaca.markets/docs/broker/), including Plaid.
+GCP Function to securely proxy API calls to [Alpaca Broker API](https://alpaca.markets/docs/broker/), including Plaid. The repo is intended to simplify development of mobile / web apps on top Alpaca.
 
 ## Proxies
 
