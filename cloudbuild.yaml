@@ -1,9 +1,9 @@
 steps:
   # Install dependencies
-  - name: pip
+  - name: python311
     entrypoint: pip
     args: ["install", "--upgrade", "pip", "--user"]
-  - name: python
+  - name: python311
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
