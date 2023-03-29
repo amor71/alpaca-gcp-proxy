@@ -41,8 +41,11 @@ def _get_authentication() -> HTTPBasicAuth:
 
 
 def trigger_step_function(url: str, response: dict):
-    if "login_or_create" in url:
-        # and response["user_created"] == True:
+    if (
+        "login_or_create" in url
+        and "user_created" in response
+        and response["user_created"] == True
+    ):
         print(f"new user created with payload {response}")
 
 
