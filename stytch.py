@@ -40,10 +40,14 @@ def _get_authentication() -> HTTPBasicAuth:
     )
 
 
+def trigger_step_function(url: str, response: dict):
+    if "login_or_create" in url and response["user_created"] == True:
+        print(f"new user created with payload {response}")
+
+
 def stytch_proxy(
     method: str, url: str, args: list, payload: str | None
 ) -> Response:
-    print("here")
     request_url = construct_url(base_url, url)
     print(request_url)
     auth = _get_authentication()
@@ -58,6 +62,8 @@ def stytch_proxy(
         if payload
         else request(method=method, params=args, url=request_url, auth=auth)
     )
+
+    trigger_step_function(url, r.json())
 
     print(r.url)
 
