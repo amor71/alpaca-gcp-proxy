@@ -5,7 +5,7 @@ import functions_framework
 from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
-from config import debug, project_id
+from config import debug, project_id, topic_id
 from logger import log
 from plaid import plaid_proxy
 from stytch import stytch_proxy

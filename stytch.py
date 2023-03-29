@@ -1,10 +1,12 @@
+import json
 import os
+from concurrent import futures
 
-from google.cloud import secretmanager
+from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
-from config import project_id
+from config import project_id, topic_id
 from proxy_base import check_crc, construct_url
 
 stytch_project = "stytch_project_id"
@@ -47,6 +49,15 @@ def trigger_step_function(url: str, response: dict):
         and response["user_created"] == True
     ):
         print(f"new user created with payload {response}")
+
+        publisher = pubsub_v1.PublisherClient()
+        topic_path = publisher.topic_path(project_id, topic_id)
+        publish_future = publisher.publish(
+            topic_path, json.dumps(response).encode("utf-8")
+        )
+
+        futures.wait([publish_future])
+        print("triggered step_function")
 
 
 def stytch_proxy(
