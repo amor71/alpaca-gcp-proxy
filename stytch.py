@@ -41,7 +41,8 @@ def _get_authentication() -> HTTPBasicAuth:
 
 
 def trigger_step_function(url: str, response: dict):
-    if "login_or_create" in url and response["user_created"] == True:
+    if "login_or_create" in url:
+        # and response["user_created"] == True:
         print(f"new user created with payload {response}")
 
 
@@ -64,7 +65,4 @@ def stytch_proxy(
     )
 
     trigger_step_function(url, r.json())
-
-    print(r.url)
-
     return r
