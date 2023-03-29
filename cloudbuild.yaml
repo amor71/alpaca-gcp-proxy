@@ -34,5 +34,19 @@ steps:
       - --entry-point=link
       - --runtime=python311
       - --allow-unauthenticated
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    args:
+      - gcloud
+      - functions
+      - deploy
+      - new_user
+      - --region=us-east4
+      - --source=.
+      - --set-env-vars
+      - PROJECT_ID=development-380917
+      - --trigger-topic=new_user
+      - --entry-point=link
+      - --runtime=python311
+      - --allow-unauthenticated
 options:
   logging: CLOUD_LOGGING_ONLY

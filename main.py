@@ -11,6 +11,11 @@ from plaid import plaid_proxy
 from stytch import stytch_proxy
 
 
+@functions_framework.cloud_event
+def new_user(cloud_event):
+    print(cloud_event)
+
+
 @functions_framework.http
 def link(request):
     print(request)
