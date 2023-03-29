@@ -1,3 +1,5 @@
+import base64
+import json
 from time import time
 from urllib.parse import urlparse
 
@@ -6,6 +8,7 @@ from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
 from config import debug, project_id, topic_id
+from events.new_user import new_user_handler
 from logger import log
 from plaid import plaid_proxy
 from stytch import stytch_proxy
@@ -13,7 +16,8 @@ from stytch import stytch_proxy
 
 @functions_framework.cloud_event
 def new_user(cloud_event):
-    print(cloud_event)
+    message = json.loads(base64.b64decode(cloud_event["data"]).decode("utf-8"))
+    new_user_handler(message)
 
 
 @functions_framework.http
