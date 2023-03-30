@@ -45,7 +45,7 @@ steps:
       - --set-env-vars
       - PROJECT_ID=development-380917,TOPIC_ID=new_user
       - --trigger-topic=new_user
-      - --entry-point=link
+      - --entry-point=new_user
       - --runtime=python311
       - --allow-unauthenticated
 options:
