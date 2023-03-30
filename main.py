@@ -16,7 +16,7 @@ from stytch import stytch_proxy
 
 @functions_framework.cloud_event
 def new_user(cloud_event):
-    print("here", cloud_event)
+    print("here", cloud_event, type(cloud_event))
     print("data", cloud_event["data"])
     return
     print("base64", base64.b64decode(cloud_event["message"]["data"]))
