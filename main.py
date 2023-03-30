@@ -4,6 +4,7 @@ from time import time
 from urllib.parse import urlparse
 
 import functions_framework
+from cloudevents.http.event import CloudEvent
 from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
@@ -15,9 +16,9 @@ from stytch import stytch_proxy
 
 
 @functions_framework.cloud_event
-def new_user(cloud_event):
+def new_user(cloud_event: CloudEvent):
     print("here", cloud_event, type(cloud_event))
-    print("data", cloud_event["data"])
+    print("data", cloud_event.data)
     return
     print("base64", base64.b64decode(cloud_event["message"]["data"]))
     message = json.loads(
