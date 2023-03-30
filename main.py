@@ -1,5 +1,3 @@
-import base64
-import json
 from time import time
 from urllib.parse import urlparse
 
@@ -16,9 +14,9 @@ from stytch import stytch_proxy
 
 @functions_framework.cloud_event
 def new_user(cloud_event):
-    print("here")
-    message = json.loads(base64.b64decode(cloud_event["data"]).decode("utf-8"))
-    new_user_handler(message)
+    print("here", cloud_event)
+    # message = json.loads(base64.b64decode(cloud_event["data"]).decode("utf-8"))
+    # new_user_handler(message)
 
 
 @functions_framework.http
