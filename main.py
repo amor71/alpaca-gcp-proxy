@@ -19,10 +19,8 @@ from stytch import stytch_proxy
 def new_user(cloud_event: CloudEvent):
     print("here", cloud_event, type(cloud_event))
     print("data", cloud_event.data)
-    return
-    print("base64", base64.b64decode(cloud_event["message"]["data"]))
     message = json.loads(
-        base64.b64decode(cloud_event["message"]["data"]).decode("utf-8")
+        base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
     )
     new_user_handler(message)
 
