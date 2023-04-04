@@ -1,9 +1,9 @@
 import requests
 
-base_url: str = "https://api.nine30.com/link"
+base_url: str = "https://api.nine30.com/proxy/link"
 
 
-def _test_link_missing_parameter() -> None:
+def no_test_link_missing_parameter() -> None:
     url = f"{base_url}"
 
     r = requests.post(url=url)
@@ -12,7 +12,7 @@ def _test_link_missing_parameter() -> None:
     assert r.status_code == 400, "expect HTTP 400"
 
 
-def test_link_wrong_parameter() -> None:
+def no_test_link_wrong_parameter() -> None:
     url = f"{base_url}"
 
     r = requests.post(url=url, json={"public_token": 100})

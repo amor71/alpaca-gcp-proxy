@@ -67,7 +67,6 @@ def proxy(request):
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
-    print(directories)
     if directories[0] in ["alpaca", "plaid", "stytch", "link"]:
         try:
             t = time()
@@ -92,6 +91,7 @@ def proxy(request):
                     payload,
                 )
             else:
+                print("calling LNIK!")
                 r = link(request)
 
             if debug:
