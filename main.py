@@ -68,7 +68,7 @@ def proxy(request):
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
     print(directories)
-    if directories[0] in ["alpaca", "plaid", "stytch"]:
+    if directories[0] in ["alpaca", "plaid", "stytch", "link"]:
         try:
             t = time()
             if directories[0] == "alpaca":
@@ -84,13 +84,16 @@ def proxy(request):
                     "/".join(directories[1:]),
                     payload,
                 )
-            else:
+            elif directories[0] == "stytch":
                 r = stytch_proxy(
                     request.method,
                     "/".join(directories[1:]),
                     args,
                     payload,
                 )
+            else:
+                r = link(request)
+
             if debug:
                 t1 = time()
                 log(request=request, response=r, latency=t1 - t)
