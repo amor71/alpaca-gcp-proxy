@@ -17,8 +17,6 @@ from stytch import stytch_proxy
 
 @functions_framework.cloud_event
 def new_user(cloud_event: CloudEvent):
-    print("here", cloud_event, type(cloud_event))
-    print("data", cloud_event.data)
     message = json.loads(
         base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
     )
@@ -71,9 +69,8 @@ def failed_security(headers: dict) -> bool:
         "RU",
         "SG",
         "DE",
-    ] or headers[
-        "X-Appengine-User-Ip"
-    ] in ["143.42.55.206"]
+        "NL",
+    ] or headers["X-Appengine-User-Ip"] in ["143.42.55.206", "67.205.182.23"]
 
 
 @functions_framework.http
@@ -91,7 +88,6 @@ def proxy(request):
     payload = request.get_json() if request.is_json else None
 
     print(payload)
-    print(directories[0])
     if directories[0] in ["alpaca", "plaid", "stytch", "link"]:
         try:
             t = time()
