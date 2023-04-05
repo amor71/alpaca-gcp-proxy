@@ -71,7 +71,11 @@ def proxy(request):
     assert project_id, "PROJECT_ID not specified"
 
     print(request.headers, request)
-    if request.headers["X-Appengine-Country"] == "RU":
+    if request.headers["X-Appengine-Country"] in [
+        "RU",
+        "SG",
+        "DE",
+    ] or request.headers["X-Appengine-User-Ip"] in ["143.42.55.206"]:
         return ("fuck you", 500)
 
     parts = urlparse(request.url)
