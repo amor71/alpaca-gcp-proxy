@@ -65,12 +65,17 @@ def link(request):
 
 
 def failed_security(headers: dict) -> bool:
-    return headers["X-Appengine-Country"] in [
-        "RU",
-        "SG",
-        "DE",
-        "NL",
-    ] or headers["X-Appengine-User-Ip"] in ["143.42.55.206", "67.205.182.23"]
+    return (
+        headers["X-Appengine-Country"]
+        in [
+            "RU",
+            "SG",
+            "DE",
+            "NL",
+        ]
+        or headers["X-Appengine-User-Ip"] in ["143.42.55.206", "67.205.182.23"]
+        or headers["X-Contact"] in ["reresearch@protonmail.com"]
+    )
 
 
 @functions_framework.http
