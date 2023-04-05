@@ -41,6 +41,7 @@ def link(request):
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
     )
+    print(f"response {r} {r.json()}")
     log(request, r, time() - t)
 
     t = time()
@@ -70,6 +71,8 @@ def proxy(request):
     assert project_id, "PROJECT_ID not specified"
 
     print(request.headers, request)
+    if request.headers["X-Appengine-Country"] == "RU":
+        return ("fuck you", 500)
 
     parts = urlparse(request.url)
     args = list(request.args.items())
@@ -102,7 +105,6 @@ def proxy(request):
                     payload,
                 )
             else:
-                print("calling LNIK!")
                 r = link(request)
 
             if debug:
