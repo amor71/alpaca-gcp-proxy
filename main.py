@@ -25,7 +25,6 @@ def new_user(cloud_event: CloudEvent):
     new_user_handler(message)
 
 
-@functions_framework.http
 def link(request):
     print(request)
 
