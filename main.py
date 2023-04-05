@@ -66,17 +66,24 @@ def link(request):
     return r
 
 
+def failed_security(headers: dict) -> bool:
+    return headers["X-Appengine-Country"] in [
+        "RU",
+        "SG",
+        "DE",
+    ] or headers[
+        "X-Appengine-User-Ip"
+    ] in ["143.42.55.206"]
+
+
 @functions_framework.http
 def proxy(request):
     assert project_id, "PROJECT_ID not specified"
 
-    print(request.headers, request)
-    if request.headers["X-Appengine-Country"] in [
-        "RU",
-        "SG",
-        "DE",
-    ] or request.headers["X-Appengine-User-Ip"] in ["143.42.55.206"]:
+    if failed_security(request.headers):
         return ("fuck you", 500)
+
+    print(request.headers, request)
 
     parts = urlparse(request.url)
     args = list(request.args.items())
