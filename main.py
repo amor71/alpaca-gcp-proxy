@@ -35,16 +35,16 @@ def link(request):
     except Exception:
         return ("JSON body must include 'public_token' and 'account_id", 400)
 
-    t = time()
     r = plaid_proxy(
         method="POST",
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
     )
     print(f"response {r} {r.json()}")
-    log(request, r, time() - t)
 
-    t = time()
+    if r.status_code == 400:
+        return r
+
     r = plaid_proxy(
         method="POST",
         url="/processor/token/create",
@@ -53,15 +53,15 @@ def link(request):
             "processor": "alpaca",
         },
     )
-    log(request, r, time() - t)
 
-    t = time()
+    if r.status_code == 400:
+        return r
+
     r = alpaca_proxy(
         method="POST",
         url=f"/v1/accounts/{account_id}/ach_relationships",
         payload={r.json()["processor_token"]},
     )
-    log(request, r, time() - t)
 
     return r
 
