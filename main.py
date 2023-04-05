@@ -68,6 +68,7 @@ def link(request):
 @functions_framework.http
 def proxy(request):
     assert project_id, "PROJECT_ID not specified"
+    print(request)
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
