@@ -69,10 +69,7 @@ def link(request):
 def proxy(request):
     assert project_id, "PROJECT_ID not specified"
 
-    print(type(request.remote_addr), request.remote_addr)
-    if request.remote_addr == "169.254.1.1":
-        return ("fuck you", 500)
-    print(request.remote_addr, request)
+    print(request.headers, request)
 
     parts = urlparse(request.url)
     args = list(request.args.items())
