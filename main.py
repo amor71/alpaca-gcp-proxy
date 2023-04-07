@@ -29,7 +29,8 @@ def link(request):
     try:
         payload = request.get_json()
         public_token = payload["public_token"]
-        account_id = payload["account_id"]
+        alpaca_account_id = payload["alpaca_account_id"]
+        plaid_account_id = payload["plaid_account_id"]
     except Exception:
         return ("JSON body must include 'public_token' and 'account_id", 400)
 
@@ -49,6 +50,7 @@ def link(request):
         payload={
             "access_token": r.json()["access_token"],
             "processor": "alpaca",
+            "account_id": plaid_account_id,
         },
     )
 
@@ -57,7 +59,7 @@ def link(request):
 
     r = alpaca_proxy(
         method="POST",
-        url=f"/v1/accounts/{account_id}/ach_relationships",
+        url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
         payload={r.json()["processor_token"]},
     )
 
