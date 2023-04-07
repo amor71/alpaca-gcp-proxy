@@ -19,6 +19,7 @@ steps:
       - --trigger-http
       - --entry-point=proxy
       - --runtime=python311
+      - --ingress-settings=internal-and-gclb
       - --allow-unauthenticated
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     args:
