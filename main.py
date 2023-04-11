@@ -26,6 +26,8 @@ def new_user(cloud_event: CloudEvent):
 def link(request):
     print(request)
 
+    args = list(request.args.items())
+
     try:
         payload = request.get_json()
         public_token = payload["public_token"]
@@ -39,9 +41,8 @@ def link(request):
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
     )
-    print(f"response {r} {r.json()}")
 
-    if r.status_code == 400:
+    if r.status_code != 200:
         return r
 
     r = plaid_proxy(
@@ -54,6 +55,7 @@ def link(request):
         },
     )
 
+    print(f"response {r} {r.json()}")
     if r.status_code == 400:
         return r
 
@@ -61,6 +63,7 @@ def link(request):
         method="POST",
         url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
         payload={r.json()["processor_token"]},
+        args=args,
     )
 
     return r

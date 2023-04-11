@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from google.cloud import firestore
+from google.cloud import firestore  # type: ignore
 
 
 def new_user_handler(payload: dict):

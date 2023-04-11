@@ -27,8 +27,9 @@ def test_link_happy_parameter() -> None:
     r = requests.post(
         url=url,
         json={
-            "public_token": "public-sandbox-22c9bf9c-3296-46a7-946e-ac9f49a1b3aa",
-            "account_id": "61469dbb-21f0-427b-81eb-da5b14c56a10",
+            "public_token": "public-sandbox-5be22dbe-4adb-4709-a65b-a83b88d8801f",
+            "alpaca_account_id": "2cf894e5-38d2-4399-b50d-2b80b745a5e4",
+            "plaid_account_id": "5pjKDJwkRbHL1XB7zLp3hlML3a8Epdf38jvlw",
         },
     )
     print(r.status_code)
