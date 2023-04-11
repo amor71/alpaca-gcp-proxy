@@ -33,5 +33,5 @@ def test_link_happy_parameter() -> None:
         },
     )
     print(r.status_code)
-
+    print(r.json())
     assert r.status_code == 400, "expect HTTP 400"

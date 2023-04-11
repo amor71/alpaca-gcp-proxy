@@ -41,7 +41,7 @@ def link(request):
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
     )
-
+    print(f"response 1 {r} {r.json()}")
     if r.status_code != 200:
         return r
 
@@ -55,7 +55,7 @@ def link(request):
         },
     )
 
-    print(f"response {r} {r.json()}")
+    print(f"response 2 {r} {r.json()}")
     if r.status_code == 400:
         return r
 
@@ -66,6 +66,7 @@ def link(request):
         args=args,
     )
 
+    print(f"response 3 {r} {r.json()}")
     return r
 
 
