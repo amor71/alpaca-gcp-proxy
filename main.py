@@ -62,7 +62,7 @@ def link(request):
     r = alpaca_proxy(
         method="POST",
         url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
-        payload={r.json()["processor_token"]},
+        payload={"processor_token": r.json()["processor_token"]},
         args=args,
     )
 
