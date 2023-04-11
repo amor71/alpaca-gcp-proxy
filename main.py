@@ -96,7 +96,7 @@ def proxy(request):
     payload = request.get_json() if request.is_json else None
 
     print(payload)
-    if directories[0] in ["alpaca", "plaid", "stytch", "link"]:
+    if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         try:
             t = time()
             if directories[0] == "alpaca":
@@ -119,7 +119,7 @@ def proxy(request):
                     args,
                     payload,
                 )
-            else:
+            elif directories[1] == "link":
                 r = link(request)
 
             if debug:
