@@ -1,6 +1,6 @@
 import requests
 
-base_url: str = "https://api.nine30.com/link"
+base_url: str = "https://api.nine30.com/bank/link"
 
 
 def no_test_link_missing_parameter() -> None:
