@@ -71,3 +71,16 @@ resource "google_cloudfunctions_function" "slack_notifier" {
   entry_point = "slackNotifier"
   available_memory_mb = 128
 }
+
+
+resource "google_compute_region_backend_service" "slack_notifier_service" {
+  name        = "${local.resource_prefix}slack-notifier-service"
+  region      = var.region
+  backend {
+    group = google_cloudfunctions_function.slack_notifier.https_trigger_url
+  }
+  depends_on = [
+    google_cloudfunctions_function.slack_notifier
+  ]
+  security_policy = google_compute_security_policy.nine30_security_policy.self_link
+}
