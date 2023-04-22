@@ -1,12 +1,19 @@
 import json
 
 from requests import Request, Response
+from requests.exceptions import JSONDecodeError
 
 from config import project_id
 
 
 def log(request: Request, response: Response, latency: float) -> None:
     # Build structured log messages as an object
+
+    try:
+        json_response = response.json()
+    except JSONDecodeError:
+        json_response = ""
+
     global_log_fields = {
         "request_headers": dict(request.headers),
         "response_headers": dict(response.headers),
@@ -16,7 +23,7 @@ def log(request: Request, response: Response, latency: float) -> None:
         "response_url": response.url,
         "method": request.method,
         "request_payload": request.json if request.is_json else None,  # type: ignore
-        "response_payload": response.json(),
+        "response_payload": json_response,
         "latency": latency,
     }
 
