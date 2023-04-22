@@ -128,7 +128,7 @@ resource "google_compute_forwarding_rule" "lb_service_account" {
   name        = "app load balancer service account"
   project     = var.project_id
   description = "Service account for load balancer"
-  backend_service = google_cloud_run_service.react.url
+  backend_service = google_cloud_run_service.react.traffic.url
 }
 
 resource "google_compute_ssl_policy" "load_balancer_ssl_policy" {
