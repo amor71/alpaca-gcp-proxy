@@ -132,7 +132,7 @@ module "lb-http" {
   version           = "~> 4.5"
 
   project           = var.project_id
-  name              = "my-lb"
+  name              = "app"
 
   managed_ssl_certificate_domains = ["app.nine30.com"]
   ssl                             = true
