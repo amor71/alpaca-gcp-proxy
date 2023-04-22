@@ -79,6 +79,16 @@ resource "google_cloudfunctions_function" "slack_notifier" {
 #---------------------------
 # -- React Cloud Run      --
 #---------------------------
+
+resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
+  name                  = "cloudrun-neg"
+  network_endpoint_type = "SERVERLESS"
+  region                = "us-east4"
+  cloud_run {
+    service = google_cloud_run_service.react.name
+  }
+}
+
 resource "google_cloud_run_service" "react" {
   name     = "cloudrun-react"
   location = "us-east4"
@@ -117,44 +127,41 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 # --------------------------
 # -- Load Balancer
 # --------------------------
-resource "google_compute_managed_ssl_certificate" "load_balancer_ssl" {
-  name = "${local.resource_prefix}load-balancer-ssl"
-  managed {
-    domains = ["${local.resource_prefix}app.nine30.com"]
+module "lb-http" {
+  source            = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+  version           = "~> 4.5"
+
+  project           = var.project_id
+  name              = "my-lb"
+
+  managed_ssl_certificate_domains = ["app.nine30.com"]
+  ssl                             = true
+  https_redirect                  = true
+
+  backends = {
+    default = {
+      groups = [
+        {
+          group = google_compute_region_network_endpoint_group.cloudrun_neg.id
+        }
+      ]
+
+      enable_cdn = false
+
+      log_config = {
+        enable      = true
+        sample_rate = 1.0
+      }
+
+      iap_config = {
+        enable               = false
+        oauth2_client_id     = null
+        oauth2_client_secret = null
+      }
+
+      description             = null
+      custom_request_headers  = null
+      security_policy         = null
+    }
   }
-}
-
-resource "google_compute_forwarding_rule" "lb_service_account" {
-  name        = "app load balancer service account"
-  project     = var.project_id
-  description = "Service account for load balancer"
-  backend_service = google_cloud_run_service.react.traffic.url
-}
-
-resource "google_compute_ssl_policy" "load_balancer_ssl_policy" {
-  name = "${local.resource_prefix}load-balancer-ssl-policy"
-  profile = "MODERN"
-}
-
-resource "google_compute_url_map" "url_map" {
-  name            = "${local.resource_prefix}react-url-map"
-  default_service = google_cloud_run_service.react.url
-  host_rule {
-    hosts        = ["${local.resource_prefix}app.nine30.com"]
-    path_matcher = "react-path-matcher"
-  }
-}
-
-resource "google_compute_global_forwarding_rule" "forwarding_rule" {
-  name       = "${local.resource_prefix}forwarding-rule"
-  ip_address = "IP_ADDRESS"
-  target     = google_compute_target_https_proxy.target_proxy.self_link
-  port_range = "443"
-}
-
-resource "google_compute_target_https_proxy" "target_proxy" {
-  name         = "${local.resource_prefix}target-proxy"
-  ssl_certificates = [google_compute_managed_ssl_certificate.load_balancer_ssl.self_link]
-  ssl_policy = google_compute_ssl_policy.load_balancer_ssl_policy.self_link
-  url_map      = google_compute_url_map.url_map.self_link
 }
