@@ -79,7 +79,7 @@ resource "google_cloudfunctions_function" "slack_notifier" {
 #---------------------------
 # -- React Cloud Run      --
 #---------------------------
-resource "google_cloud_run_service" "cloudrun" {
+resource "google_cloud_run_service" "react" {
   name     = "cloudrun-react"
   location = "us-east4"
 
@@ -97,10 +97,6 @@ resource "google_cloud_run_service" "cloudrun" {
   }
 }
 
-output "react_url" {
-  value = cloudrun.url
-}
-
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
@@ -116,4 +112,49 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   service     = google_cloud_run_service.default.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
+}
+
+# --------------------------
+# -- Load Balancer
+# --------------------------
+resource "google_compute_managed_ssl_certificate" "load_balancer_ssl" {
+  name = "${local.resource_prefix}load-balancer-ssl"
+  managed {
+    domains = ["${local.resource_prefix}app.nine30.com"]
+  }
+}
+
+resource "google_compute_forwarding_rule" "lb_service_account" {
+  name        = "app load balancer service account"
+  project     = var.project_id
+  description = "Service account for load balancer"
+  backend_service = google_cloud_run_service.react.url
+}
+
+resource "google_compute_ssl_policy" "load_balancer_ssl_policy" {
+  name = "${local.resource_prefix}load-balancer-ssl-policy"
+  profile = "MODERN"
+}
+
+resource "google_compute_url_map" "url_map" {
+  name            = "${local.resource_prefix}react-url-map"
+  default_service = google_compute_region_backend_service.slack_notifier_service.self_link
+  host_rule {
+    hosts        = ["${local.resource_prefix}app.nine30.com"]
+    path_matcher = "react-path-matcher"
+  }
+}
+
+resource "google_compute_global_forwarding_rule" "forwarding_rule" {
+  name       = "${local.resource_prefix}forwarding-rule"
+  ip_address = "IP_ADDRESS"
+  target     = google_compute_target_https_proxy.target_proxy.self_link
+  port_range = "443"
+}
+
+resource "google_compute_target_https_proxy" "target_proxy" {
+  name         = "${local.resource_prefix}target-proxy"
+  ssl_certificates = [google_compute_managed_ssl_certificate.load_balancer_ssl.self_link]
+  ssl_policy = google_compute_ssl_policy.load_balancer_ssl_policy.self_link
+  url_map      = google_compute_url_map.url_map.self_link
 }
