@@ -138,7 +138,7 @@ resource "google_compute_ssl_policy" "load_balancer_ssl_policy" {
 
 resource "google_compute_url_map" "url_map" {
   name            = "${local.resource_prefix}react-url-map"
-  default_service = google_compute_region_backend_service.slack_notifier_service.self_link
+  default_service = google_cloud_run_service.react.url
   host_rule {
     hosts        = ["${local.resource_prefix}app.nine30.com"]
     path_matcher = "react-path-matcher"
