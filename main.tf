@@ -97,6 +97,10 @@ resource "google_cloud_run_service" "default" {
   }
 }
 
+output "react_url" {
+  value = cloudrun-react.url
+}
+
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
