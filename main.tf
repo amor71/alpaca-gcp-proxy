@@ -79,7 +79,7 @@ resource "google_cloudfunctions_function" "slack_notifier" {
 #---------------------------
 # -- React Cloud Run      --
 #---------------------------
-resource "google_cloud_run_service" "default" {
+resource "google_cloud_run_service" "cloudrun" {
   name     = "cloudrun-react"
   location = "us-east4"
 
@@ -98,7 +98,7 @@ resource "google_cloud_run_service" "default" {
 }
 
 output "react_url" {
-  value = cloudrun-react.url
+  value = cloudrun.url
 }
 
 data "google_iam_policy" "noauth" {
