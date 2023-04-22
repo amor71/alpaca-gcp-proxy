@@ -71,3 +71,28 @@ resource "google_cloudfunctions_function" "slack_notifier" {
   entry_point = "slackNotifier"
   available_memory_mb = 128
 }
+
+#---------------------------
+# -- FRONT END DEPLOYMENT --
+#---------------------------
+
+#---------------------------
+# -- React Cloud Run      --
+#---------------------------
+resource "google_cloud_run_service" "default" {
+  name     = "cloudrun-react"
+  location = "us-east4"
+
+  template {
+    spec {
+      containers {
+        image = "gcr.io/development-380917/react-with-cloudrun"
+      }
+    }
+  }
+
+  traffic {
+    percent         = 100
+    latest_revision = true
+  }
+}
