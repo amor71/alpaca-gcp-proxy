@@ -41,7 +41,7 @@ jobs:
       - name: Terraform Init
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform state rm
+        run: terraform state rm google_cloud_run_service_iam_policy.noauth
 
       # Generates an execution plan for Terraform
       #- name: Terraform Plan
