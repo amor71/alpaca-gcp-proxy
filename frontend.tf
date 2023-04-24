@@ -1,32 +1,3 @@
-provider "google" {
-  project     = var.project_id
-  region      = var.region
-}
-
-terraform {
-  backend "gcs" {
-    bucket  = "n30-tf-state-bucket"
-    prefix  = ""
-  }
-}
-
-variable "env" {
-    default = "dev"
-}
-
-variable "project_id" {
-    default = "development-380917"
-}
-
-variable "region" {
-    default = "us-east4"
-}
-
-locals {
-  resource_prefix = var.env == "prod" ? "" : "${var.env}-"
-}
-
-
 
 # --------------------------
 # -- Function Storage Bucket

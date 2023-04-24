@@ -40,8 +40,6 @@ resource "google_storage_bucket" "serverless_function_bucket" {
   location      = "US"
 }
 
-
-
 # --------------------------
 # -- Slack Notifier Function
 # --------------------------

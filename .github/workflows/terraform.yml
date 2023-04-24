@@ -97,4 +97,4 @@ jobs:
       - name: Terraform Apply Frontend
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply tf-fe.tf -auto-approve -input=false
+        run: terraform apply frontend.tf -auto-approve -input=false
