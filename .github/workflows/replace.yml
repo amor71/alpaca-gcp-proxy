@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   terraform:
-    name: "Terraform Replace"
+    name: "React Replace"
     runs-on: ubuntu-latest
     environment: production
 
@@ -46,4 +46,4 @@ jobs:
       - name: Terraform Apply
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply -replace=google_cloud_run_service.react
+        run: terraform apply -replace=google_cloud_run_service.react -auto-approve -input=false
