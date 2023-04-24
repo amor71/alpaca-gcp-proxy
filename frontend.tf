@@ -33,22 +33,22 @@ resource "google_cloud_run_service" "react" {
   }
 }
 
-#data "google_iam_policy" "n30-noauth" {
-#  binding {
-#    role = "roles/run.invoker"
-#    members = [
-#      "allUsers",
-#    ]
-#  }
-#}
+data "google_iam_policy" "n30-noauth" {
+  binding {
+    role = "roles/run.invoker"
+    members = [
+      "allUsers",
+    ]
+  }
+}
 
-#resource "google_cloud_run_service_iam_policy" "n30-noauth" {
-#  location    = google_cloud_run_service.react.location
-#  project     = google_cloud_run_service.react.project
-#  service     = google_cloud_run_service.react.name
-#
-#  policy_data = data.google_iam_policy.n30-noauth.policy_data
-#}
+resource "google_cloud_run_service_iam_policy" "n30-noauth" {
+  location    = google_cloud_run_service.react.location
+  project     = google_cloud_run_service.react.project
+  service     = google_cloud_run_service.react.name
+
+  policy_data = data.google_iam_policy.n30-noauth.policy_data
+}
 
 # --------------------------
 # -- Load Balancer
