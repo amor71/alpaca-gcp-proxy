@@ -10,10 +10,6 @@ terraform {
   }
 }
 
-variable "slack_notification_url" {
-    default = "https://hooks.slack.com/services/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"
-}
-
 variable "env" {
     default = "dev"
 }
@@ -39,8 +35,6 @@ resource "google_storage_bucket" "serverless_function_bucket" {
   name          = "${local.resource_prefix}serverless-function-bucket"
   location      = "US"
 }
-
-
 
 #---------------------------
 # -- FRONT END DEPLOYMENT --
@@ -94,4 +88,46 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   policy_data = data.google_iam_policy.noauth.policy_data
 
   depends_on = [google_cloud_run_service.react]
+}
+
+# --------------------------
+# -- Load Balancer
+# --------------------------
+module "lb-http" {
+  source            = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+  version           = "~> 4.5"
+
+  project           = var.project_id
+  name              = "app"
+
+  managed_ssl_certificate_domains = ["app.nine30.com"]
+  ssl                             = true
+  https_redirect                  = true
+
+  backends = {
+    default = {
+      groups = [
+        {
+          group = google_compute_region_network_endpoint_group.cloudrun_neg.id
+        }
+      ]
+
+      enable_cdn = false
+
+      log_config = {
+        enable      = true
+        sample_rate = 1.0
+      }
+
+      iap_config = {
+        enable               = false
+        oauth2_client_id     = null
+        oauth2_client_secret = null
+      }
+
+      description             = null
+      custom_request_headers  = null
+      security_policy         = null
+    }
+  }
 }
