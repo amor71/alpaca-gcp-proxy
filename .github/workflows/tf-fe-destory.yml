@@ -46,4 +46,4 @@ jobs:
       - name: Terraform Apply
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply -destory frontend.tf -auto-approve -input=false
+        run: terraform apply --destory frontend.tf -auto-approve -input=false
