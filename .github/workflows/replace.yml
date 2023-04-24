@@ -1,4 +1,4 @@
-name: "TF-FE"
+name: "Clean"
 
 on:
   workflow_dispatch:
