@@ -1,12 +1,3 @@
-
-# --------------------------
-# -- Function Storage Bucket
-# --------------------------
-resource "google_storage_bucket" "serverless_function_bucket" {
-  name          = "${local.resource_prefix}serverless-function-bucket"
-  location      = "US"
-}
-
 #---------------------------
 # -- FRONT END DEPLOYMENT --
 #---------------------------
