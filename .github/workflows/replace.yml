@@ -1,4 +1,4 @@
-name: "Clean"
+name: "Replace"
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   terraform:
-    name: "Terraform Clean"
+    name: "Terraform Replace"
     runs-on: ubuntu-latest
     environment: production
 
