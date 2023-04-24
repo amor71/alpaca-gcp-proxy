@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "TF-FE"
 
 on:
   workflow_dispatch:
