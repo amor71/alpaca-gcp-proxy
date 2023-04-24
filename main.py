@@ -6,10 +6,10 @@ from urllib.parse import urlparse
 import functions_framework
 from cloudevents.http.event import CloudEvent
 from google.api_core.exceptions import NotFound
+from new_user import new_user_handler
 
 from alpaca import alpaca_proxy
 from config import debug, project_id
-from events.new_user import new_user_handler
 from logger import log
 from plaid import plaid_proxy
 from stytch import stytch_proxy
