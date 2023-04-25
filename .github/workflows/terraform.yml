@@ -38,10 +38,10 @@ jobs:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: terraform init
 
-      - name: Terraform Init
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform force-unlock -force 1682362752857559
+      #- name: Terraform Init
+      #  env:
+      #    GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      #  run: terraform force-unlock -force 1682362752857559
 
       # Generates an execution plan for Terraform
       #- name: Terraform Plan
