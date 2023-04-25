@@ -30,7 +30,7 @@ jobs:
           cli_config_credentials_token: ${{ secrets.GCP_CREDENTIALS }}
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
+      - name: Init
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: terraform init
@@ -43,7 +43,13 @@ jobs:
 
       # On push to "master", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-      - name: Terraform Apply
+
+      - name: Apply
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        run: terraform apply -auto-approve -input=false
+
+      - name: Replace
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: terraform apply -replace=google_cloud_run_service.react -auto-approve -input=false
