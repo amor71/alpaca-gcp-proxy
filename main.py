@@ -6,10 +6,11 @@ from urllib.parse import urlparse
 import functions_framework
 from cloudevents.http.event import CloudEvent
 from google.api_core.exceptions import NotFound
-from new_user import new_user_handler
 
 from alpaca import alpaca_proxy
 from config import debug, project_id
+from events.new_user import new_user_handler
+from link import link
 from logger import log
 from plaid import plaid_proxy
 from stytch import stytch_proxy
@@ -23,61 +24,13 @@ def new_user(cloud_event: CloudEvent):
     new_user_handler(message)
 
 
-def link(request):
-    print(request)
-
-    args = list(request.args.items())
-
-    try:
-        payload = request.get_json()
-        public_token = payload["public_token"]
-        alpaca_account_id = payload["alpaca_account_id"]
-        plaid_account_id = payload["plaid_account_id"]
-    except Exception:
-        return ("JSON body must include 'public_token' and 'account_id", 400)
-
-    r = plaid_proxy(
-        method="POST",
-        url="/item/public_token/exchange",
-        payload={"public_token": public_token},
-    )
-    print(f"response 1 {r} {r.json()}")
-    if r.status_code != 200:
-        return r
-
-    r = plaid_proxy(
-        method="POST",
-        url="/processor/token/create",
-        payload={
-            "access_token": r.json()["access_token"],
-            "processor": "alpaca",
-            "account_id": plaid_account_id,
-        },
-    )
-
-    print(f"response 2 {r} {r.json()}")
-    if r.status_code == 400:
-        return r
-
-    r = alpaca_proxy(
-        method="POST",
-        url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
-        payload={"processor_token": r.json()["processor_token"]},
-        args=args,
-    )
-
-    print(f"response 3 {r} {r.json()}")
-    return r
-
-
 def failed_security(headers: dict) -> bool:
     return (
-        headers.get("X-Appengine-Country", None)
-        in ["RU", "SG", "DE", "NL", "IN"]
-        or headers.get("X-Appengine-User-Ip", None)
+        headers.get("X-Appengine-Country") in ["RU", "SG", "DE", "NL", "IN"]
+        or headers.get("X-Appengine-User-Ip")
         in ["143.42.55.206", "67.205.182.23"]
-        or headers.get("X-Contact", None) in ["reresearch@protonmail.com"]
-        or headers.get("Host", None) in ["us-predictions.live.fin.ag"]
+        or headers.get("X-Contact") in ["reresearch@protonmail.com"]
+        or headers.get("Host") in ["us-predictions.live.fin.ag"]
     )
 
 
@@ -128,6 +81,8 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        return (r.content, r.status_code)
+        # TODO:  restrict to nine30 sub-domain
+        headers = {"Access-Control-Allow-Origin": "*"}
+        return (r.content, r.status_code, headers)
 
     return ("proxy not found", 400)
