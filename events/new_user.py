@@ -2,6 +2,8 @@ from datetime import datetime, timezone
 
 from google.cloud import firestore  # type: ignore
 
+from telemetry import add_new_user_counter
+
 
 def new_user_handler(payload: dict):
     print("payload=", payload)
@@ -16,4 +18,6 @@ def new_user_handler(payload: dict):
             "create_at": datetime.now(timezone.utc),
         }
     )
+
+    add_new_user_counter()
     print("document write status=", status)
