@@ -41,14 +41,15 @@ def proxy(request):
     if failed_security(request.headers):
         return ("fuck you", 500)
 
-    print(request.headers, request)
+    print("Headers and Request", request.headers, request)
 
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
 
-    print(payload)
+    print("debug=", debug)
+    print("payload", payload)
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         try:
             t = time()
@@ -82,7 +83,10 @@ def proxy(request):
             return ("secrets missing", 500)
 
         # TODO:  restrict to nine30 sub-domain
-        headers = {"Access-Control-Allow-Origin": "*"}
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+        }
         return (r.content, r.status_code, headers)
 
     return ("proxy not found", 400)
