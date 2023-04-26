@@ -85,7 +85,7 @@ def proxy(request):
         # TODO:  restrict to nine30 sub-domain
         headers = {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Headers": "access-control-allow-headers,access-control-allow-origin,content-type",
         }
         return (r.content, r.status_code, headers)
 
