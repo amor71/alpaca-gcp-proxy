@@ -82,10 +82,10 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        # TODO:  restrict to nine30 sub-domain
+        # TODO:  restrict to nine30 sub-domain, handle headers
         headers = {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "access-control-allow-headers,access-control-allow-origin,content-type",
+            "Access-Control-Allow-Headers": "*",
         }
         return (r.content, r.status_code, headers)
 
