@@ -63,7 +63,7 @@ resource "google_cloudfunctions_function" "alpace_events" {
   description = "Handling Alpaca.Market states"
   runtime     = "python311"
   source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
-  source_archive_object = google_storage_bucket_object.slack_notifier_zip.name
+  source_archive_object = google_storage_bucket_object.alpaca_state_zip.name
   trigger_http = true
   entry_point = "alpace_state"
   available_memory_mb = 128
