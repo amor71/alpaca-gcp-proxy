@@ -9,6 +9,7 @@ from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
 from config import debug, project_id
+from events.alpaca import alpaca_state_handler
 from events.new_user import new_user_handler
 from link import link
 from logger import log
@@ -22,6 +23,14 @@ def new_user(cloud_event: CloudEvent):
         base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
     )
     new_user_handler(message)
+
+
+@functions_framework.cloud_event
+def alpaca_state(cloud_event: CloudEvent):
+    message = json.loads(
+        base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
+    )
+    alpaca_state_handler(message)
 
 
 def failed_security(headers: dict) -> bool:

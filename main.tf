@@ -40,6 +40,34 @@ resource "google_storage_bucket" "serverless_function_bucket" {
   location      = "US"
 }
 
+#---------------------------
+# Pub/Sub Events
+#---------------------------
+data "archive_file" "alpaca_state" {
+  type        = "zip"
+  output_path = "/tmp/alpaca_state.zip"
+  source_dir = "."
+}
+esource "google_storage_bucket_object" "alpaca_state_zip" {
+  name   = "alpaca_state.zip"
+  bucket = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source = data.archive_file.alpaca_state.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+
+resource "google_cloudfunctions_function" "alpace_events" {
+  name        = "alpaca_state"
+  description = "Handling Alpaca.Market states"
+  runtime     = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.slack_notifier_zip.name
+  trigger_http = true
+  entry_point = "alpace_state"
+  available_memory_mb = 128
+}
 # --------------------------
 # -- Slack Notifier Function
 # --------------------------

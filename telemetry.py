@@ -26,11 +26,22 @@ meter = metrics.get_meter(__name__)
 
 def add_new_user_counter():
     # Creates metric workload.googleapis.com/request_counter with monitored resource generic_task
-    requests_counter = meter.create_counter(
+    counter = meter.create_counter(
         name="new_users",
         description="number of users",
         unit="1",
     )
 
     staging_labels = {"environment": "development"}
-    requests_counter.add(1, staging_labels)
+    counter.add(1, staging_labels)
+
+
+def add_new_alpaca_application():
+    counter = meter.create_counter(
+        name="alpaca_application",
+        description="New Alpaca Application",
+        unit="1",
+    )
+
+    staging_labels = {"environment": "development"}
+    counter.add(1, staging_labels)
