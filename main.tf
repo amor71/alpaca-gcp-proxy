@@ -43,6 +43,10 @@ resource "google_storage_bucket" "serverless_function_bucket" {
 #---------------------------
 # Pub/Sub Events
 #---------------------------
+resource "google_pubsub_topic" "alpaca_events" {
+  name = "alpaca_events"
+}
+
 data "archive_file" "alpaca_state" {
   type        = "zip"
   output_path = "/tmp/alpaca_state.zip"
@@ -64,10 +68,17 @@ resource "google_cloudfunctions_function" "alpace_events" {
   runtime     = "python311"
   source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
   source_archive_object = google_storage_bucket_object.alpaca_state_zip.name
-  trigger_http = true
+  trigger_http = false
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "projects/${var.project_id}/topics/alpaca_events"
+  }
+  
   entry_point = "alpace_state"
   available_memory_mb = 128
 }
+
 # --------------------------
 # -- Slack Notifier Function
 # --------------------------
