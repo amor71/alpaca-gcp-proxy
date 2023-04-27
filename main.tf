@@ -68,7 +68,6 @@ resource "google_cloudfunctions_function" "alpace_events" {
   runtime     = "python311"
   source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
   source_archive_object = google_storage_bucket_object.alpaca_state_zip.name
-  trigger_http = false
 
   event_trigger {
     event_type = "google.pubsub.topic.publish"
