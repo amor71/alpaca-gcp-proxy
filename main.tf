@@ -48,7 +48,7 @@ data "archive_file" "alpaca_state" {
   output_path = "/tmp/alpaca_state.zip"
   source_dir = "."
 }
-esource "google_storage_bucket_object" "alpaca_state_zip" {
+resource "google_storage_bucket_object" "alpaca_state_zip" {
   name   = "alpaca_state.zip"
   bucket = google_storage_bucket.serverless_function_bucket.name
   content_type = "application/zip"
