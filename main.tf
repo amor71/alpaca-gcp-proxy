@@ -62,7 +62,7 @@ resource "google_storage_bucket_object" "alpaca_state_zip" {
   ]
 }
 
-resource "google_cloudfunctions_function" "alpace_events" {
+resource "google_cloudfunctions_function" "alpaca_events" {
   name        = "alpaca_state"
   description = "Handling Alpaca.Market states"
   runtime     = "python311"
@@ -74,7 +74,7 @@ resource "google_cloudfunctions_function" "alpace_events" {
     resource   = "projects/${var.project_id}/topics/alpaca_events"
   }
   
-  entry_point = "alpace_state"
+  entry_point = "alpaca_state"
   available_memory_mb = 128
 }
 
