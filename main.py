@@ -48,6 +48,7 @@ def proxy(request):
     assert project_id, "PROJECT_ID not specified"
 
     if failed_security(request.headers):
+        print("security violation", request.url)
         return ("fuck you", 500)
 
     print(f"url {request.url}")
