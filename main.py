@@ -55,6 +55,7 @@ def proxy(request):
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
 
+    print(f"url {request.url}")
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         # Set CORS headers for the preflight request
         if request.method == "OPTIONS":
