@@ -66,8 +66,8 @@ def proxy(request):
             # header and caches preflight response for an 3600s
             headers = {
                 "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET",
-                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*",
                 "Access-Control-Max-Age": "3600",
             }
 
@@ -107,7 +107,7 @@ def proxy(request):
         # TODO:  restrict to nine30 sub-domain, handle headers
         headers = {
             "Access-Control-Allow-Origin": "*",
-            # "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Headers": "*",
         }
         return (r.content, r.status_code, headers)
 
