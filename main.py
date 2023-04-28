@@ -50,15 +50,11 @@ def proxy(request):
     if failed_security(request.headers):
         return ("fuck you", 500)
 
-    print("Headers and Request", request.headers, request)
-
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
 
-    print("debug=", debug)
-    print("payload", payload)
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         try:
             t = time()

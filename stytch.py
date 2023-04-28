@@ -62,7 +62,6 @@ def stytch_proxy(
     method: str, url: str, args: list, payload: str | None
 ) -> Response:
     request_url = construct_url(base_url, url)
-    print(request_url)
     auth = _get_authentication()
     r = (
         request(
