@@ -9,6 +9,7 @@ from config import project_id
 def log(request: Request, response: Response, latency: float) -> None:
     # Build structured log messages as an object
 
+    print("here!!")
     try:
         json_response = response.json()
     except JSONDecodeError:
@@ -26,6 +27,8 @@ def log(request: Request, response: Response, latency: float) -> None:
         "response_payload": json_response,
         "latency": latency,
     }
+
+    print(global_log_fields)
 
     # Add log correlation to nest all log messages.
     # This is only relevant in HTTP-based contexts, and is ignored elsewhere.

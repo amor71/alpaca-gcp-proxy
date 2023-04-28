@@ -1,10 +1,12 @@
+import json
 import os
+from concurrent import futures
 
-from google.cloud import secretmanager
+from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
-from config import project_id
+from config import alpaca_events_topic_id, project_id
 from proxy_base import check_crc, construct_url
 
 api_key_name = "alpaca_api_key"
@@ -37,6 +39,18 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
         username=api_key_response.payload.data.decode("UTF-8"),
         password=api_secret_response.payload.data.decode("UTF-8"),
     )
+
+
+def trigger_step_function(url: str, response: dict):
+    if "/v1/accounts" in url:
+        publisher = pubsub_v1.PublisherClient()
+        topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
+        publish_future = publisher.publish(
+            topic_path, json.dumps(response).encode("utf-8")
+        )
+
+        futures.wait([publish_future])
+        print("triggered step_function")
 
 
 def alpaca_proxy(
