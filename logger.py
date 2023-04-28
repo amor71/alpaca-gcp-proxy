@@ -49,4 +49,5 @@ def log(request: Request, response: Response, latency: float) -> None:
         component="arbitrary-property",
         **global_log_fields,
     )
+    print("here2", entry)
     print(json.dumps(entry))

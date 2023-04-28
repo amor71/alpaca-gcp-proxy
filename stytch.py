@@ -34,8 +34,6 @@ def _get_authentication() -> HTTPBasicAuth:
     check_crc(api_key_response)
     check_crc(api_secret_response)
 
-    print(api_key_response.payload.data.decode("UTF-8"))
-    print(api_secret_response.payload.data.decode("UTF-8"))
     return HTTPBasicAuth(
         username=api_key_response.payload.data.decode("UTF-8"),
         password=api_secret_response.payload.data.decode("UTF-8"),
