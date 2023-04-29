@@ -8,6 +8,7 @@ from cloudevents.http.event import CloudEvent
 from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
+from auth import get_bearer_token, is_token_invalid
 from config import debug, project_id
 from events.alpaca import alpaca_state_handler
 from events.new_user import new_user_handler
@@ -52,9 +53,9 @@ def proxy(request):
         return ("fuck you", 500)
 
     print(f"url {request.url}")
-    if auth_header := request.headers.get("Authorization"):
-        auth_header = auth_header.split()
-        print(f"Bearer Token: {auth_header[0]}, {auth_header[1]}")
+    token = get_bearer_token(request)
+    if token and is_token_invalid(token):
+        return ("invalid token passed", 403)
 
     parts = urlparse(request.url)
     args = list(request.args.items())

@@ -6,6 +6,14 @@ from requests.exceptions import JSONDecodeError
 from config import project_id
 
 
+def log_error(originator: str, error_message: str) -> None:
+    entry = dict(
+        severity="ERROR",
+        message=f"{originator}: {error_message}",
+    )
+    print(json.dumps(entry))
+
+
 def log(request: Request, response: Response, latency: float) -> None:
     # Build structured log messages as an object
     try:
