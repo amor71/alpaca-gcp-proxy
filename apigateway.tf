@@ -1,16 +1,16 @@
 resource "google_api_gateway_api" "api_gw" {
   provider = google-beta
-  api_id = "api"
+  api_id   = "my-api"
 }
 
 resource "google_api_gateway_api_config" "api_gw" {
-  provider = google-beta
-  api = google_api_gateway_api.api_gw.api_id
+  provider      = google-beta
+  api           = google_api_gateway_api.api_gw.api_id
   api_config_id = "api-config"
 
   openapi_documents {
     document {
-      path = "spec.yaml"
+      path     = "spec.yaml"
       contents = filebase64("apigateway/openapi.yaml")
     }
   }
@@ -20,7 +20,7 @@ resource "google_api_gateway_api_config" "api_gw" {
 }
 
 resource "google_api_gateway_gateway" "api_gw" {
-  provider = google-beta
+  provider   = google-beta
   api_config = google_api_gateway_api_config.api_gw.id
   gateway_id = "api-gateway"
 }
