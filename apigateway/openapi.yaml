@@ -11,6 +11,8 @@ paths:
     post:
       description: "Notify creation of a new user"
       operationId: "accounts"
+      x-google-backend:
+        address: https://us-east4-algo2-260618.cloudfunctions.net/get_strategies
       responses:
         200:
           description: "Success."
