@@ -60,7 +60,6 @@ resource "google_storage_bucket_object" "alpaca_state_zip" {
   depends_on = [
     google_storage_bucket.serverless_function_bucket
   ]
-  create_before_destroy = true
 }
 
 resource "google_cloudfunctions_function" "alpaca_events" {
