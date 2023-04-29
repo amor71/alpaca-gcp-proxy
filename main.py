@@ -52,7 +52,9 @@ def proxy(request):
         return ("fuck you", 500)
 
     print(f"url {request.url}")
-    print(f"auth {request.headers.get('Authorization')}")
+    if auth_header := request.headers.get("Authorization"):
+        print(f"Bearer Token: {auth_header.get('Bearer')}")
+
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
