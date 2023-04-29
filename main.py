@@ -52,12 +52,11 @@ def proxy(request):
         return ("fuck you", 500)
 
     print(f"url {request.url}")
+    print(f"auth {request.auth}")
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
-
-    print("starting")
 
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         # Set CORS headers for the preflight request
