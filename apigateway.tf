@@ -1,5 +1,10 @@
+provider "google-beta" {
+  project = var.project_id
+  region  = var.region
+}
+
 resource "google_api_gateway_api" "api_gw" {
-  provider = google
+  provider = google-beta
   api_id   = "my-api"
 }
 
