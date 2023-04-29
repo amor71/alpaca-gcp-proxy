@@ -53,6 +53,7 @@ def proxy(request):
 
     print(f"url {request.url}")
     if auth_header := request.headers.get("Authorization"):
+        auth_header = json.loads(auth_header)
         print(f"Bearer Token: {auth_header.get('Bearer')}")
 
     parts = urlparse(request.url)
