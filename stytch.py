@@ -13,7 +13,7 @@ stytch_project = "stytch_project_id"
 stytch_secret = "stytch_secret"
 
 
-base_url = os.getenv("STYTCH_BASE_URL", "https://test.stytch.com/v1/")
+base_url = os.getenv("STYTCH_BASE_URL", "https://test.stytch.com/")
 
 
 def _get_authentication() -> HTTPBasicAuth:
