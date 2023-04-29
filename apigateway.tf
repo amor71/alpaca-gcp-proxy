@@ -1,5 +1,5 @@
 resource "google_api_gateway_api" "api_gw" {
-  provider = google-beta
+  provider = google
   api_id   = "my-api"
 }
 
