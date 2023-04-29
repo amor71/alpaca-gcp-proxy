@@ -5,7 +5,7 @@ provider "google-beta" {
 
 resource "google_api_gateway_api" "api_gw" {
   provider = google-beta
-  api_id   = "my-api"
+  api_id   = "api"
 }
 
 resource "google_api_gateway_api_config" "api_gw" {
@@ -24,8 +24,8 @@ resource "google_api_gateway_api_config" "api_gw" {
   }
 }
 
-#resource "google_api_gateway_gateway" "api_gw" {
-#  provider   = google-beta
-#  api_config = google_api_gateway_api_config.api_gw.id
-#  gateway_id = "api-gateway"
-#}
+resource "google_api_gateway_gateway" "api_gw" {
+  provider   = google-beta
+  api_config = google_api_gateway_api_config.api_gw.id
+  gateway_id = "api-gateway"
+}
