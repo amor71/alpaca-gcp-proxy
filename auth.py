@@ -22,7 +22,7 @@ def get_bearer_token(request: Request) -> str | None:
 def is_token_invalid(token: str) -> bool:
     payload = {"session_token": token}
     r = stytch_proxy(
-        method="GET",
+        method="POST",
         url="v1/sessions/authenticate",
         args=None,
         payload=json.dumps(payload),
