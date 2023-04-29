@@ -1,0 +1,19 @@
+swagger: "2.0"
+    info:
+      title: Create User
+      description: "Notify NINE30 of a newly registered user"
+      version: "1.0.0"
+    host: api.nine30.com
+    schemes:
+      - "https"
+    paths:
+      "/v1/accounts":
+        post:
+          description: "Notify creation of a new user"
+          operationId: "accounts"
+          responses:
+            200:
+              description: "Success."
+              schema:
+                type: string
+
