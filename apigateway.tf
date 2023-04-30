@@ -53,9 +53,6 @@ resource "google_api_gateway_api_config" "api_gw_config" {
       contents = filebase64("./apigateway/openapi.yaml")
     }
   }
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "google_api_gateway_gateway" "api_gw_gw" {
