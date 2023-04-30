@@ -78,7 +78,7 @@ resource "google_compute_region_network_endpoint_group" "gw_neg" {
   }
 }
 
-module "lb-http" {
+module "gw-lb" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 4.5"
 
@@ -93,7 +93,7 @@ module "lb-http" {
     default = {
       groups = [
         {
-          group = google_compute_region_network_endpoint_group.cloudrun_neg.id
+          group = google_compute_region_network_endpoint_group.gw_neg.id
         }
       ]
 
