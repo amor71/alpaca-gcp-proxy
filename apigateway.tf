@@ -64,5 +64,55 @@ resource "google_api_gateway_gateway" "api_gw" {
   gateway_id = "api-gateway"
 
   default_hostname = "api.nine30.com"
+}
 
+#---------------------------
+# App Gateway LB
+#---------------------------
+resource "google_compute_region_network_endpoint_group" "gw_neg" {
+  name                  = "cloudrun-neg"
+  network_endpoint_type = "SERVERLESS"
+  region                = "us-east4"
+  cloud_run {
+    service = google_api_gateway_gateway.api_gw.default_hostname
+  }
+}
+
+module "lb-http" {
+  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+  version = "~> 4.5"
+
+  project = var.project_id
+  name    = "gw-lb"
+
+  managed_ssl_certificate_domains = ["api.nine30.com"]
+  ssl                             = true
+  https_redirect                  = true
+
+  backends = {
+    default = {
+      groups = [
+        {
+          group = google_compute_region_network_endpoint_group.cloudrun_neg.id
+        }
+      ]
+
+      enable_cdn = false
+
+      log_config = {
+        enable      = true
+        sample_rate = 1.0
+      }
+
+      iap_config = {
+        enable               = false
+        oauth2_client_id     = null
+        oauth2_client_secret = null
+      }
+
+      description            = null
+      custom_request_headers = null
+      security_policy        = null
+    }
+  }
 }
