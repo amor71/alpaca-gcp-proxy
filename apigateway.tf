@@ -37,14 +37,6 @@ resource "google_cloudfunctions_function" "new_user" {
 #---------------------------
 # App Gateway
 #---------------------------
-resource "google_compute_managed_ssl_certificate" "api_ssl_cert" {
-  provider    = google-beta
-  name        = "api-ssl-cert"
-  project     = var.project_id
-  description = "Managed SSL certificate for API Gateway"
-  domains     = ["api.nine30.com"]
-}
-
 resource "google_api_gateway_api" "api_gw" {
   provider = google-beta
   api_id   = "api"
