@@ -65,10 +65,4 @@ resource "google_api_gateway_gateway" "api_gw" {
 
   default_hostname = "api.nine30.com"
 
-  certificate_config {
-    managed_certificate {
-      certificate_name = google_compute_managed_ssl_certificate.api_ssl_cert.name
-    }
-  }
-
 }
