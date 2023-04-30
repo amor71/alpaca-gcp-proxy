@@ -41,6 +41,7 @@ def proxy(request):
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
+    headers = request.headers()
 
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         # Set CORS headers for the preflight request
@@ -64,6 +65,7 @@ def proxy(request):
                     "/".join(directories[1:]),
                     args,
                     payload,
+                    headers,
                 )
             elif directories[0] == "plaid":
                 r = plaid_proxy(
@@ -92,6 +94,6 @@ def proxy(request):
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*",
         }
-        return (r.content, r.status_code, headers)
+        return (r.content, r.status_code, {**r.headers, **headers})
 
     return ("proxy not found", 400)
