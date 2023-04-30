@@ -9,13 +9,13 @@ provider "google-beta" {
 data "archive_file" "new_user" {
   type        = "zip"
   output_path = "/tmp/new_user.zip"
-  source_dir  = "."
+  source_dir  = "apigateway/new_user"
 }
 resource "google_storage_bucket_object" "new_user_zip" {
   name         = "new_user.zip"
   bucket       = google_storage_bucket.serverless_function_bucket.name
   content_type = "application/zip"
-  source       = data.archive_file.alpaca_state.output_path
+  source       = data.archive_file.new_user.output_path
   depends_on = [
     google_storage_bucket.serverless_function_bucket
   ]
