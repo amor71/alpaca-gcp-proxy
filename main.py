@@ -90,10 +90,12 @@ def proxy(request):
             return ("secrets missing", 500)
 
         # TODO:  restrict to nine30 sub-domain, handle headers
-        headers = {
+        cors_headers = {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "*",
         }
+        headers = {**cors_headers, **r.headers}
+        print("headers", headers)
         return (r.content, r.status_code, {**r.headers, **headers})
 
     return ("proxy not found", 400)
