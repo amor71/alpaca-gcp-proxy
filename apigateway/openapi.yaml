@@ -1,20 +1,42 @@
 swagger: "2.0"
 info:
-  title: Create User
+  title: Create a new user
   description: "Notify NINE30 of a newly registered user"
   version: "1.0.0"
 host: api.nine30.com
 schemes:
   - "https"
 paths:
-  "/v1/accounts":
+  "/v1/users":
     post:
       description: "Notify creation of a new user"
       operationId: "accounts"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/new_user
-      responses:
-        200:
-          description: "Success."
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: "new user payload"
           schema:
-            type: string
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Payload missing or incorrect
+
+definitions:
+  User:
+    type: object
+    properties:
+      user_id:
+        description: New Stytch user_id
+        type: string
+        format: string
+      email_id:
+        description: reference to the user's email address stored in Stytch
+        type: string
+        format: string

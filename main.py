@@ -5,9 +5,9 @@ import functions_framework
 from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
+from apigateway.new_user.new_user import new_user_handler
 from auth import get_bearer_token, is_token_invalid
 from config import debug, project_id
-from events.new_user import new_user_handler
 from link import link
 from logger import log
 from plaid import plaid_proxy
