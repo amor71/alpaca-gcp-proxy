@@ -96,6 +96,6 @@ def proxy(request):
         }
         headers = {**cors_headers, **r.headers}
         print("headers", headers)
-        return (r.content, r.status_code, r.headers)
+        return (r.content, r.status_code, r.headers.items())
 
     return ("proxy not found", 400)
