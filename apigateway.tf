@@ -3,36 +3,7 @@ provider "google-beta" {
   region  = var.region
 }
 
-#---------------------------
-# API Functions
-#---------------------------
-data "archive_file" "new_user" {
-  type        = "zip"
-  output_path = "/tmp/new_user.zip"
-  source_dir  = "apigateway/new_user"
-}
-resource "google_storage_bucket_object" "new_user_zip" {
-  name         = "new_user.zip"
-  bucket       = google_storage_bucket.serverless_function_bucket.name
-  content_type = "application/zip"
-  source       = data.archive_file.new_user.output_path
-  depends_on = [
-    google_storage_bucket.serverless_function_bucket
-  ]
-}
 
-resource "google_cloudfunctions_function" "new_user" {
-  name                  = "new_user"
-  description           = "new_user API"
-  runtime               = "python311"
-  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
-  source_archive_object = google_storage_bucket_object.new_user_zip.name
-
-  trigger_http = true
-
-  entry_point         = "new_user"
-  available_memory_mb = 128
-}
 
 #---------------------------
 # App Gateway
