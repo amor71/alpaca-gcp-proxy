@@ -85,7 +85,7 @@ resource "google_cloudfunctions_function" "alpaca_events" {
 data "archive_file" "new_user" {
   type        = "zip"
   output_path = "/tmp/new_user.zip"
-  source_dir  = "apigateway/new_user"
+  source_dir  = "./apigateway/new_user"
 }
 resource "google_storage_bucket_object" "new_user_zip" {
   name         = "new_user.zip"
