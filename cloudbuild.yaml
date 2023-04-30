@@ -21,19 +21,5 @@ steps:
       - --runtime=python311
       - --ingress-settings=internal-and-gclb
       - --allow-unauthenticated
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    args:
-      - gcloud
-      - functions
-      - deploy
-      - new_user
-      - --region=us-east4
-      - --source=.
-      - --set-env-vars
-      - PROJECT_ID=development-380917,TOPIC_ID=new_user
-      - --trigger-topic=new_user
-      - --entry-point=new_user
-      - --runtime=python311
-      - --allow-unauthenticated
 options:
   logging: CLOUD_LOGGING_ONLY

@@ -1,37 +1,17 @@
-import base64
-import json
 from time import time
 from urllib.parse import urlparse
 
 import functions_framework
-from cloudevents.http.event import CloudEvent
 from google.api_core.exceptions import NotFound
 
 from alpaca import alpaca_proxy
 from auth import get_bearer_token, is_token_invalid
 from config import debug, project_id
-from events.alpaca import alpaca_state_handler
 from events.new_user import new_user_handler
 from link import link
 from logger import log
 from plaid import plaid_proxy
 from stytch import stytch_proxy
-
-
-@functions_framework.cloud_event
-def new_user(cloud_event: CloudEvent):
-    message = json.loads(
-        base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
-    )
-    new_user_handler(message)
-
-
-@functions_framework.cloud_event
-def alpaca_state(cloud_event: CloudEvent):
-    message = json.loads(
-        base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
-    )
-    alpaca_state_handler(message)
 
 
 def failed_security(headers: dict) -> bool:

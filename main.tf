@@ -50,7 +50,7 @@ resource "google_pubsub_topic" "alpaca_events" {
 data "archive_file" "alpaca_state" {
   type        = "zip"
   output_path = "/tmp/alpaca_state.zip"
-  source_dir  = "."
+  source_dir  = "functions/alpaca_state"
 }
 resource "google_storage_bucket_object" "alpaca_state_zip" {
   name         = "alpaca_state.zip"
@@ -60,6 +60,7 @@ resource "google_storage_bucket_object" "alpaca_state_zip" {
   depends_on = [
     google_storage_bucket.serverless_function_bucket
   ]
+
 }
 
 resource "google_cloudfunctions_function" "alpaca_events" {
