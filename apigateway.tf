@@ -42,7 +42,7 @@ resource "google_api_gateway_api" "api_gw" {
   api_id   = "api"
 }
 
-resource "google_api_gateway_api_config" "api_gw" {
+resource "google_api_gateway_api_config" "api_gw_config" {
   provider      = google-beta
   api           = google_api_gateway_api.api_gw.api_id
   api_config_id = "api-config"
@@ -58,9 +58,9 @@ resource "google_api_gateway_api_config" "api_gw" {
   }
 }
 
-resource "google_api_gateway_gateway" "api_gw" {
+resource "google_api_gateway_gateway" "api_gw_gw" {
   provider   = google-beta
-  api_config = google_api_gateway_api_config.api_gw.id
+  api_config = google_api_gateway_api_config.api_gw_config.id
   gateway_id = "api-gateway"
 }
 
@@ -72,7 +72,7 @@ resource "google_compute_region_network_endpoint_group" "gw_neg" {
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
   cloud_run {
-    service = google_api_gateway_gateway.api_gw.default_hostname
+    service = google_api_gateway_gateway.api_gw_gw.default_hostname
   }
 }
 
