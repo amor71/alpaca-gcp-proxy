@@ -96,6 +96,10 @@ def proxy(request):
         }
         headers = {**cors_headers, **r.headers}
         print("headers", headers)
-        return (r.raw, r.status_code, r.headers.items())
+        return (
+            r.json() if r.is_json else r.content,
+            r.status_code,
+            r.headers.items(),
+        )
 
     return ("proxy not found", 400)
