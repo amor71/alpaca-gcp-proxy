@@ -99,6 +99,7 @@ def proxy(request):
             r.raise_for_status()
         except HTTPError as e:
             return (e.response.text, e.response.status_code)
+
         return (
             r.content,
             r.status_code,
