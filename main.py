@@ -91,10 +91,11 @@ def proxy(request):
             return ("secrets missing", 500)
 
         try:
+            print("encoding", r.encoding)
             encoding = r.headers.get("content-encoding")
 
             if encoding == "gzip":
-                payload = r.raw
+                payload = r.text
             else:
                 payload = r.json()
 
