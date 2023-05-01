@@ -59,7 +59,11 @@ def trigger_step_function(url: str, response: dict):
 
 
 def stytch_proxy(
-    method: str, url: str, args: list | None, payload: str | None
+    method: str,
+    url: str,
+    args: list | None,
+    payload: str | None,
+    headers: dict | None,
 ) -> Response:
     request_url = construct_url(base_url, url)
 
@@ -72,6 +76,7 @@ def stytch_proxy(
             url=request_url,
             json=payload,
             auth=auth,
+            headers=headers,
         )
         if payload
         else request(method=method, params=args, url=request_url, auth=auth)

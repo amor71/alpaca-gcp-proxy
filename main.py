@@ -82,6 +82,7 @@ def proxy(request):
                     "/".join(directories[1:]),
                     args,
                     payload,
+                    headers,
                 )
             elif directories[1] == "link":
                 r = link(request)

@@ -26,6 +26,7 @@ def is_token_invalid(token: str) -> bool:
         url="v1/sessions/authenticate",
         args=None,
         payload=json.dumps(payload),
+        headers=None,
     )
     print(r)
     print(r.json())
