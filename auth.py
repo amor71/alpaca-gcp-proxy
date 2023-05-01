@@ -3,7 +3,8 @@ import json
 from requests import Request
 
 from logger import log_error
-from proxies.stytch import stytch_proxy
+
+from .proxies.stytch import stytch_proxy
 
 
 def get_bearer_token(request: Request) -> str | None:
