@@ -74,6 +74,7 @@ def proxy(request):
                     request.method,
                     "/".join(directories[1:]),
                     payload,
+                    headers,
                 )
             elif directories[0] == "stytch":
                 r = stytch_proxy(

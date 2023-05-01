@@ -37,7 +37,12 @@ def _get_plaid_authentication() -> Dict:
     }
 
 
-def plaid_proxy(method: str, url: str, payload: Dict | None) -> Response:
+def plaid_proxy(
+    method: str,
+    url: str,
+    payload: Dict | None,
+    headers: dict | None,
+) -> Response:
     print("plaid_proxy", url, method)
     request_url = construct_url(plaid_base_url, url)
     auth = _get_plaid_authentication()
@@ -49,4 +54,5 @@ def plaid_proxy(method: str, url: str, payload: Dict | None) -> Response:
         method=method,
         url=request_url,
         json=payload,
+        headers=headers,
     )
