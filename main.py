@@ -86,7 +86,7 @@ def proxy(request):
         return (
             r.content,
             r.status_code,
-            r.headers.items(),
+            headers,
         )
 
     return ("proxy not found", 400)
