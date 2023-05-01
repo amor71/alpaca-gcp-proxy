@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 import functions_framework
 from google.api_core.exceptions import NotFound
+from requests.exceptions import JSONDecodeError
 
 from alpaca import alpaca_proxy
 from apigateway.new_user.new_user import new_user_handler
@@ -89,15 +90,12 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        # TODO:  restrict to nine30 sub-domain, handle headers
-        cors_headers = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
-        }
-        headers = {**cors_headers, **r.headers}
-        print("headers", headers)
+        try:
+            payload = r.json()
+        except JSONDecodeError:
+            payload = r.content
         return (
-            r.json() if r.is_json else r.content,
+            payload,
             r.status_code,
             r.headers.items(),
         )
