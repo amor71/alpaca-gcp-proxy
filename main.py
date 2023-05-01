@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import functions_framework
 from google.api_core.exceptions import NotFound
 from requests import Response
-from requests.exceptions import JSONDecodeError
+from requests.exceptions import HTTPError, JSONDecodeError
 
 from alpaca import alpaca_proxy
 from apigateway.new_user.new_user import new_user_handler
@@ -91,7 +91,10 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        r.raise_for_status()
+        try:
+            r.raise_for_status()
+        except HTTPError:
+            return (r.http_error_msg, r.response.status_code)
         return (
             r.text,
             r.status_code,
