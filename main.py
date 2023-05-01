@@ -6,14 +6,14 @@ from google.api_core.exceptions import NotFound
 from requests import Response
 from requests.exceptions import HTTPError, JSONDecodeError
 
-from alpaca import alpaca_proxy
 from apigateway.new_user.new_user import new_user_handler
 from auth import get_bearer_token, is_token_invalid
 from config import debug, project_id
 from link import link
 from logger import log
-from plaid import plaid_proxy
-from stytch import stytch_proxy
+from proxies.alpaca import alpaca_proxy
+from proxies.plaid import plaid_proxy
+from proxies.stytch import stytch_proxy
 
 
 def failed_security(headers: dict) -> bool:
@@ -100,7 +100,7 @@ def proxy(request):
         except HTTPError as e:
             return (e.response.text, e.response.status_code)
         return (
-            r.text,
+            r.content,
             r.status_code,
             r.headers.items(),
         )

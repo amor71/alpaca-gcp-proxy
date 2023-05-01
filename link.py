@@ -1,5 +1,5 @@
-from alpaca import alpaca_proxy
-from plaid import plaid_proxy
+from proxies.alpaca import alpaca_proxy
+from proxies.plaid import plaid_proxy
 
 
 # TODO: Remove Print Logs
@@ -7,6 +7,8 @@ def link(request):
     print(request)
 
     args = list(request.args.items())
+
+    headers = dict(request.headers)
 
     try:
         payload = request.get_json()
@@ -20,6 +22,7 @@ def link(request):
         method="POST",
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
+        headers=headers,
     )
     print(f"response 1 {r} {r.json()}")
     if r.status_code != 200:
@@ -33,6 +36,7 @@ def link(request):
             "processor": "alpaca",
             "account_id": plaid_account_id,
         },
+        headers=headers,
     )
 
     print(f"response 2 {r} {r.json()}")
@@ -44,6 +48,7 @@ def link(request):
         url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
         payload={"processor_token": r.json()["processor_token"]},
         args=args,
+        headers=headers,
     )
 
     print(f"response 3 {r} {r.json()}")
