@@ -82,7 +82,7 @@ def proxy(request):
             return ("secrets missing", 500)
 
         headers = dict(r.headers)
-        headers.pop("content-encoding")
+        headers.pop("content-encoding", None)
         return (
             r.content,
             r.status_code,
