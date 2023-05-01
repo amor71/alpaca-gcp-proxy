@@ -72,5 +72,11 @@ def alpaca_proxy(
             headers=headers,
         )
         if payload
-        else request(method=method, params=args, url=request_url, auth=auth)
+        else request(
+            method=method,
+            params=args,
+            url=request_url,
+            auth=auth,
+            headers=headers,
+        )
     )
