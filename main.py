@@ -101,7 +101,7 @@ def proxy(request):
             return (e.response.text, e.response.status_code)
 
         return (
-            r.text,
+            r.raw,
             r.status_code,
             r.headers.items(),
         )
