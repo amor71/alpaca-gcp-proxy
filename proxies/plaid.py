@@ -57,3 +57,6 @@ def plaid_proxy(
         headers=headers,
         stream=True,
     )
+
+
+# Transfer-Encoding: "chunked"
