@@ -81,7 +81,7 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        headers = r.headers.items()
+        headers = dict(r.headers)
         headers.pop("content-encoding")
         return (
             r.content,
