@@ -11,10 +11,9 @@ from auth import get_bearer_token, is_token_invalid
 from config import debug, project_id
 from link import link
 from logger import log
-
-from .proxies.alpaca import alpaca_proxy
-from .proxies.plaid import plaid_proxy
-from .proxies.stytch import stytch_proxy
+from proxies.alpaca import alpaca_proxy
+from proxies.plaid import plaid_proxy
+from proxies.stytch import stytch_proxy
 
 
 def failed_security(headers: dict) -> bool:
