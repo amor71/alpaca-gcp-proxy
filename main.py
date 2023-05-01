@@ -91,7 +91,9 @@ def proxy(request):
             return ("secrets missing", 500)
 
         try:
-            payload = r.json()
+            payload = (
+                r.raw if r.headers["content-encoding"] == "gzip" else r.json()
+            )
         except JSONDecodeError:
             payload = r.content
         return (
