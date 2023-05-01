@@ -30,4 +30,4 @@ def new_user(request):
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "*",
     }
-    return ("OK", 200, headers)
+    return ("", 200, headers)

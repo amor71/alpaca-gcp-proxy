@@ -50,12 +50,9 @@ def plaid_proxy(
     if payload:
         payload.update(auth)
 
-    print(
-        f"HERE!!, method={method}, request_url={request_url} payload={payload} headers={headers}"
-    )
     return request(
         method=method,
         url=request_url,
         json=payload,
-        # headers=headers,
+        headers=headers,
     )

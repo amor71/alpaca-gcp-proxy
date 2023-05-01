@@ -3,8 +3,7 @@ from urllib.parse import urlparse
 
 import functions_framework
 from google.api_core.exceptions import NotFound
-from requests import Response
-from requests.exceptions import HTTPError, JSONDecodeError
+from urllib3.response import HTTPResponse
 
 from apigateway.new_user.new_user import new_user_handler
 from auth import get_bearer_token, is_token_invalid
@@ -48,19 +47,6 @@ def proxy(request):
     print("headers", type(headers))
 
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
-        # Set CORS headers for the preflight request
-        # if request.method == "OPTIONS":
-        #    # Allows GET requests from any origin with the Content-Type
-        #    # header and caches preflight response for an 3600s
-        #    headers = {
-        #        "Access-Control-Allow-Origin": "*",
-        #        "Access-Control-Allow-Methods": "*",
-        #        "Access-Control-Allow-Headers": "*",
-        #        "Access-Control-Max-Age": "3600",
-        #    }
-        #
-        #    return ("", 204, headers)
-
         try:
             t = time()
             if directories[0] == "alpaca":
@@ -95,13 +81,10 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        try:
-            r.raise_for_status()
-        except HTTPError as e:
-            return (e.response.text, e.response.status_code)
-
+        headers = r.headers.items()
+        headers.pop("content-encoding")
         return (
-            r.raw,
+            r.content,
             r.status_code,
             r.headers.items(),
         )
