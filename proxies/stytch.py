@@ -3,7 +3,7 @@ import os
 from concurrent import futures
 
 from google.cloud import pubsub_v1, secretmanager  # type:ignore
-from requests import Response, request
+from requests import HTTPError, Response, request
 from requests.auth import HTTPBasicAuth
 
 from config import project_id, topic_id
@@ -81,6 +81,9 @@ def stytch_proxy(
         if payload
         else request(method=method, params=args, url=request_url, auth=auth)
     )
+
+    print(r, r.text)
+    r.raise_for_status()
 
     trigger_step_function(url, r.json())
     return r
