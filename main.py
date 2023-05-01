@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 import functions_framework
 from google.api_core.exceptions import NotFound
+from requests import Response
 from requests.exceptions import JSONDecodeError
 
 from alpaca import alpaca_proxy
@@ -90,19 +91,8 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
-        try:
-            print("encoding", r.encoding)
-            encoding = r.headers.get("content-encoding")
-
-            if encoding == "gzip":
-                payload = r.text
-            else:
-                payload = r.json()
-
-        except JSONDecodeError:
-            payload = r.content
         return (
-            payload,
+            r.text,
             r.status_code,
             r.headers.items(),
         )
