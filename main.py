@@ -43,7 +43,7 @@ def proxy(request):
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
-    headers = request.headers
+    headers: dict = dict(request.headers)
 
     print("headers", type(headers))
 
