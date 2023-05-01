@@ -91,6 +91,7 @@ def proxy(request):
         except NotFound:
             return ("secrets missing", 500)
 
+        r.raise_for_status()
         return (
             r.text,
             r.status_code,
