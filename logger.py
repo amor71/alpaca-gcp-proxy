@@ -1,6 +1,7 @@
 import json
 
-from requests import Request, Response
+from flask import Request
+from requests import Response
 from requests.exceptions import JSONDecodeError
 
 from config import project_id
@@ -32,7 +33,7 @@ def log(
         "reason": response.reason,
         "response_url": response.url,
         "method": request.method,
-        "request_payload": request.json,
+        "request_payload": request.json if request.is_json else None,
         "response_payload": json_response,
         "latency": latency,
     }
