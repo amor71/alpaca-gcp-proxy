@@ -23,6 +23,7 @@ def link(request: Request, headers: dict) -> Response:
             "JSON body must include 'public_token' and 'account_id"
         ) from e
 
+    print("public_token", public_token)
     encoded_token = base64.b64encode(bytes(public_token, "utf-8"))
     r = plaid_proxy(
         method="POST",
