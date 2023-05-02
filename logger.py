@@ -23,6 +23,7 @@ def log(
     except JSONDecodeError:
         json_response = ""
 
+    print("here!@!@!@")
     global_log_fields = {
         "request_headers": headers or dict(request.headers),
         "response_headers": dict(response.headers),
