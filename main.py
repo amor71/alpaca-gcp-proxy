@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 
 import functions_framework
 from google.api_core.exceptions import NotFound
-from urllib3.response import HTTPResponse
+from requests import HTTPError
 
 from apigateway.new_user.new_user import new_user_handler
 from auth import get_bearer_token, is_token_invalid
@@ -18,6 +18,7 @@ omitted_response_headers: list = [
     "content-encoding",
     "Content-Encoding",
     "Transfer-Encoding",
+    "transfer-encoding",
     "access-control-allow-headers",
     "Access-Control-Allow-Headers",
     "Via",
@@ -103,7 +104,10 @@ def proxy(request):
                     headers,
                 )
             elif directories[1] == "link":
-                r = link(request)
+                try:
+                    r = link(request, headers)
+                except HTTPError as e:
+                    return (str(e), 400)
 
             response_headers = dict(r.headers)
             for header in omitted_response_headers:

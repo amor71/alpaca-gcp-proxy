@@ -57,7 +57,7 @@ def alpaca_proxy(
     method: str,
     url: str,
     args: list,
-    payload: str | None,
+    payload: dict | None,
     headers: dict | None,
 ) -> Response:
     request_url = construct_url(alpaca_base_url, url)

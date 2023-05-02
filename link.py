@@ -1,22 +1,25 @@
+from flask import Request
+from requests import HTTPError, Response
+
 from proxies.alpaca import alpaca_proxy
 from proxies.plaid import plaid_proxy
 
 
 # TODO: Remove Print Logs
-def link(request):
+def link(request: Request, headers: dict) -> Response:
     print(request)
 
     args = list(request.args.items())
-
-    headers = dict(request.headers)
 
     try:
         payload = request.get_json()
         public_token = payload["public_token"]
         alpaca_account_id = payload["alpaca_account_id"]
         plaid_account_id = payload["plaid_account_id"]
-    except Exception:
-        return ("JSON body must include 'public_token' and 'account_id", 400)
+    except Exception as e:
+        raise HTTPError(
+            "JSON body must include 'public_token' and 'account_id"
+        ) from e
 
     r = plaid_proxy(
         method="POST",
