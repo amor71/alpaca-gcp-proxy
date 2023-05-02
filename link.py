@@ -15,19 +15,19 @@ def link(request: Request, headers: dict) -> Response:
 
     try:
         payload = request.get_json()
-        public_token = payload["public_token"]
-        alpaca_account_id = payload["alpaca_account_id"]
-        plaid_account_id = payload["plaid_account_id"]
+        public_token: str = payload["public_token"]
+        alpaca_account_id: str = payload["alpaca_account_id"]
+        plaid_account_id: str = payload["plaid_account_id"]
     except Exception as e:
         raise HTTPError(
             "JSON body must include 'public_token' and 'account_id"
         ) from e
 
-    encoded_token = base64.b64encode(bytes(public_token, "utf-8"))  # bytes
+    encoded_token = base64.b64encode(bytes(public_token, "utf-8"))
     r = plaid_proxy(
         method="POST",
         url="/item/public_token/exchange",
-        payload={"public_token": str(encoded_token)},
+        payload={"public_token": encoded_token},
         headers=headers,
     )
     print(f"response 1 {r} {r.json()}")
