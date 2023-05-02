@@ -25,8 +25,14 @@ def failed_security(headers: dict) -> bool:
     )
 
 
+def _keep_header(header: str) -> bool:
+    headers_to_remove: list[str] = ["X-", "Forwarded"]
+
+    return all(x not in header for x in headers_to_remove)
+
+
 def clean_headers(headers: dict) -> dict:
-    return {k: headers[k] for k in headers if "X-" not in k}
+    return {k: headers[k] for k in headers if _keep_header(k)}
 
 
 @functions_framework.http
