@@ -30,7 +30,7 @@ def log(
 
     global_log_fields = {
         "request_headers": request_headers or dict(request.headers),
-        "response_headers": response_headers or dict(response.headers),
+        "response_headers": response_headers,  # or dict(response.headers),
         "request_url": request.url,
         "status_code": response.status_code,
         "reason": response.reason,
