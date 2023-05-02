@@ -16,7 +16,11 @@ def log_error(originator: str, error_message: str) -> None:
 
 
 def log(
-    request: Request, response: Response, headers: dict | None, latency: float
+    request: Request,
+    response: Response,
+    request_headers: dict | None,
+    response_headers: dict | None,
+    latency: float,
 ) -> None:
     # Build structured log messages as an object
     try:
@@ -24,10 +28,9 @@ def log(
     except JSONDecodeError:
         json_response = ""
 
-    print("here!@!@!@")
     global_log_fields = {
-        "request_headers": headers or dict(request.headers),
-        "response_headers": dict(response.headers),
+        "request_headers": request_headers or dict(request.headers),
+        "response_headers": response_headers or dict(response.headers),
         "request_url": request.url,
         "status_code": response.status_code,
         "reason": response.reason,

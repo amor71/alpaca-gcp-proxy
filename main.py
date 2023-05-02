@@ -14,6 +14,12 @@ from proxies.alpaca import alpaca_proxy
 from proxies.plaid import plaid_proxy
 from proxies.stytch import stytch_proxy
 
+omitted_response_headers: list = [
+    "content-encoding",
+    "Content-Encoding",
+    "Transfer-Encoding",
+]
+
 
 def failed_security(headers: dict) -> bool:
     return (
@@ -92,24 +98,26 @@ def proxy(request):
             elif directories[1] == "link":
                 r = link(request)
 
+            response_headers = dict(r.headers)
+            for header in omitted_response_headers:
+                response_headers.pop(header, None)
+
             if debug:
                 t1 = time()
                 log(
                     request=request,
                     response=r,
-                    headers=headers,
+                    request_headers=headers,
+                    response_headers=response_headers,
                     latency=t1 - t,
                 )
+
+            return (
+                r.content,
+                r.status_code,
+                response_headers,
+            )
         except NotFound:
             return ("secrets missing", 500)
-
-        headers = dict(r.headers)
-        headers.pop("content-encoding", None)
-        headers.pop("Transfer-Encoding", None)
-        return (
-            r.content,
-            r.status_code,
-            headers,
-        )
 
     return ("proxy not found", 400)
