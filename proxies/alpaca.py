@@ -79,6 +79,6 @@ def alpaca_proxy(
             params=args,
             url=request_url,
             auth=auth,
-            headers=headers,
+            # headers=headers,
         )
     )
