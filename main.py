@@ -17,7 +17,7 @@ from proxies.stytch import stytch_proxy
 omitted_response_headers: list = [
     "content-encoding",
     "Content-Encoding",
-    # "Transfer-Encoding",
+    "Transfer-Encoding",
     "access-control-allow-headers",
     "Access-Control-Allow-Headers",
     "Via",
