@@ -25,6 +25,10 @@ def failed_security(headers: dict) -> bool:
     )
 
 
+def clean_headers(headers: dict) -> dict:
+    return {k: headers[k] for k in headers if "X-" not in k}
+
+
 @functions_framework.http
 def proxy(request):
     assert project_id, "PROJECT_ID not specified"
@@ -42,7 +46,7 @@ def proxy(request):
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
-    headers: dict = dict(request.headers)
+    headers: dict = clean_headers(dict(request.headers))
 
     print("headers", type(headers))
 
