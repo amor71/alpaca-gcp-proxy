@@ -34,6 +34,7 @@ def _keep_header(header: str) -> bool:
         "Function-Execution-Id",
         "User-Agent",
         "Host",
+        "Transfer-Encoding",
     ]
 
     return all(x not in header for x in headers_to_remove)
