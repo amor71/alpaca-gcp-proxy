@@ -26,7 +26,14 @@ def failed_security(headers: dict) -> bool:
 
 
 def _keep_header(header: str) -> bool:
-    headers_to_remove: list[str] = ["X-", "Forwarded"]
+    headers_to_remove: list[str] = [
+        "X-",
+        "Forwarded",
+        "Traceparent",
+        "Via",
+        "Function-Execution-Id",
+        "User-Agent",
+    ]
 
     return all(x not in header for x in headers_to_remove)
 
