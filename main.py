@@ -120,7 +120,7 @@ def proxy(request):
                 )
 
             return (
-                r.content,
+                r.text,
                 r.status_code,
                 response_headers,
             )
