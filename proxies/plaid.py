@@ -54,6 +54,6 @@ def plaid_proxy(
         method=method,
         url=request_url,
         json=payload,
-        # headers=headers,
+        headers=headers,
         # stream=headers.get("Transfer-Encoding", None) == "chunked",
     )
