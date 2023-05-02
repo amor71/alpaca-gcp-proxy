@@ -20,6 +20,10 @@ omitted_response_headers: list = [
     "Transfer-Encoding",
     "access-control-allow-headers",
     "Access-Control-Allow-Headers",
+    "Via",
+    "via",
+    "Vary",
+    "vary",
 ]
 
 
