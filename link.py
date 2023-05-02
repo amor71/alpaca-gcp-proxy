@@ -1,3 +1,5 @@
+import base64
+
 from flask import Request
 from requests import HTTPError, Response
 
@@ -21,10 +23,11 @@ def link(request: Request, headers: dict) -> Response:
             "JSON body must include 'public_token' and 'account_id"
         ) from e
 
+    encoded_token = base64.b64encode(bytes(public_token, "utf-8"))  # bytes
     r = plaid_proxy(
         method="POST",
         url="/item/public_token/exchange",
-        payload={"public_token": public_token},
+        payload={"public_token": str(encoded_token)},
         headers=headers,
     )
     print(f"response 1 {r} {r.json()}")
