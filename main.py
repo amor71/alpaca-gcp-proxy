@@ -74,6 +74,7 @@ def proxy(request):
                     payload,
                     headers,
                 )
+                print("alpaca r", r)
             elif directories[0] == "plaid":
                 r = plaid_proxy(
                     request.method,
