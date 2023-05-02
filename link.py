@@ -16,8 +16,14 @@ def link(request: Request, headers: dict) -> Response:
     try:
         payload = request.get_json()
         public_token: str = payload["public_token"]
+        if not public_token:
+            raise HTTPError("public_token can't be null")
         alpaca_account_id: str = payload["alpaca_account_id"]
+        if not alpaca_account_id:
+            raise HTTPError("alpaca_account_id can't be null")
         plaid_account_id: str = payload["plaid_account_id"]
+        if not plaid_account_id:
+            raise HTTPError("plaid_account_id can't be null")
     except Exception as e:
         raise HTTPError(
             "JSON body must include 'public_token' and 'account_id"
