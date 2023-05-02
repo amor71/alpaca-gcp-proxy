@@ -66,8 +66,6 @@ def stytch_proxy(
     headers: dict | None,
 ) -> Response:
     request_url = construct_url(base_url, url)
-
-    print("stytch", request_url)
     auth = _get_authentication()
     r = (
         request(
@@ -79,11 +77,14 @@ def stytch_proxy(
             headers=headers,
         )
         if payload
-        else request(method=method, params=args, url=request_url, auth=auth)
+        else request(
+            method=method,
+            params=args,
+            url=request_url,
+            auth=auth,
+            headers=headers,
+        )
     )
 
-    print(r, r.text)
-    r.raise_for_status()
-
-    trigger_step_function(url, r.json())
+    # trigger_step_function(url, r.json())
     return r
