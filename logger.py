@@ -14,7 +14,9 @@ def log_error(originator: str, error_message: str) -> None:
     print(json.dumps(entry))
 
 
-def log(request: Request, response: Response, latency: float) -> None:
+def log(
+    request: Request, response: Response, headers: dict | None, latency: float
+) -> None:
     # Build structured log messages as an object
     try:
         json_response = response.json()
@@ -22,14 +24,14 @@ def log(request: Request, response: Response, latency: float) -> None:
         json_response = ""
 
     global_log_fields = {
-        "request_headers": dict(request.headers),
+        "request_headers": headers or dict(request.headers),
         "response_headers": dict(response.headers),
         "request_url": request.url,
         "status_code": response.status_code,
         "reason": response.reason,
         "response_url": response.url,
         "method": request.method,
-        "request_payload": request.json if request.is_json else None,  # type: ignore
+        "request_payload": request.json,
         "response_payload": json_response,
         "latency": latency,
     }

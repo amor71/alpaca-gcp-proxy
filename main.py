@@ -48,8 +48,6 @@ def proxy(request):
     payload = request.get_json() if request.is_json else None
     headers: dict = clean_headers(dict(request.headers))
 
-    print("headers", type(headers))
-
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         try:
             t = time()
@@ -81,7 +79,12 @@ def proxy(request):
 
             if debug:
                 t1 = time()
-                log(request=request, response=r, latency=t1 - t)
+                log(
+                    request=request,
+                    response=r,
+                    headers=headers,
+                    latency=t1 - t,
+                )
         except NotFound:
             return ("secrets missing", 500)
 
