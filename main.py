@@ -18,6 +18,8 @@ omitted_response_headers: list = [
     "content-encoding",
     "Content-Encoding",
     "Transfer-Encoding",
+    "access-control-allow-headers",
+    "Access-Control-Allow-Headers",
 ]
 
 
@@ -102,7 +104,7 @@ def proxy(request):
             response_headers = dict(r.headers)
             for header in omitted_response_headers:
                 response_headers.pop(header, None)
-
+            response_headers["Access-Control-Allow-Headers"] = "*"
             if debug:
                 t1 = time()
                 log(
