@@ -78,7 +78,7 @@ def proxy(request):
     headers: dict = clean_headers(dict(request.headers))
 
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
-        add_response_headers = {"Access-Control-Allow-Header": "*"}
+        add_response_headers = {"Access-Control-Allow-Headers": "*"}
         try:
             t = time()
             if directories[0] == "alpaca":
