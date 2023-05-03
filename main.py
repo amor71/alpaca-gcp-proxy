@@ -65,6 +65,7 @@ def proxy(request):
         print("security violation", request.url)
         return ("fuck you", 500)
 
+    add_response_headers = {"Access-Control-Allow-Header": "*"}
     print(f"url {request.url}")
     token = get_bearer_token(request)
     if token and is_token_invalid(token):
@@ -105,6 +106,8 @@ def proxy(request):
                     payload,
                     headers,
                 )
+                response_headers["Access-Control-Allow-Origin"] = "*"
+
             elif directories[0] == "stytch":
                 r = stytch_proxy(
                     request.method,
@@ -134,7 +137,10 @@ def proxy(request):
             response_headers = dict(r.headers)
             for header in omitted_response_headers:
                 response_headers.pop(header, None)
-            response_headers["Access-Control-Allow-Headers"] = "*"
+
+            for k, v in add_response_headers.items():
+                response_headers[k] = v
+
             if debug:
                 t1 = time()
                 log(
