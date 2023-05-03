@@ -89,6 +89,8 @@ def proxy(request):
                     payload,
                     headers,
                 )
+                add_response_headers["Access-Control-Allow-Origin"] = "*"
+
                 print("alpaca r", r)
             elif directories[0] == "plaid":
                 if request.method == "OPTIONS":
