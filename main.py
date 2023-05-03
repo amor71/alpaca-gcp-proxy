@@ -57,6 +57,7 @@ def clean_headers(headers: dict) -> dict:
     return {k: headers[k] for k in headers if _keep_header(k)}
 
 
+# TODO: restrict CORS!
 @functions_framework.http
 def proxy(request):
     assert project_id, "PROJECT_ID not specified"
