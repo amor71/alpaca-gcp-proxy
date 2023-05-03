@@ -89,6 +89,16 @@ def proxy(request):
                 )
                 print("alpaca r", r)
             elif directories[0] == "plaid":
+                if request.method == "OPTIONS":
+                    headers = {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "*",
+                        "Access-Control-Allow-Headers": "*",
+                        "Access-Control-Max-Age": "3600",
+                    }
+
+                    return ("", 204, headers)
+
                 r = plaid_proxy(
                     request.method,
                     "/".join(directories[1:]),
