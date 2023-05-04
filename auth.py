@@ -19,16 +19,18 @@ def get_bearer_token(request: Request) -> str | None:
     return None
 
 
-def is_token_invalid(token: str) -> bool:
+def is_token_invalid(token: str, headers: dict) -> bool:
+    print("start is_token_invalid")
     payload = {"session_token": token}
     r = stytch_proxy(
         method="POST",
         url="v1/sessions/authenticate",
         args=None,
         payload=json.dumps(payload),
-        headers=None,
+        headers=headers,
     )
     print(r)
     print(r.json())
+    print("end is_token_invalid")
 
     return False

@@ -63,7 +63,6 @@ def alpaca_proxy(
     request_url = construct_url(alpaca_base_url, url)
     auth = _get_alpaca_authentication()
 
-    print("alpaca", method, request_url, args, payload, headers)
     return (
         request(
             method=method,

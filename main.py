@@ -67,15 +67,16 @@ def proxy(request):
         return ("fuck you", 500)
 
     print(f"url {request.url}")
-    token = get_bearer_token(request)
-    if token and is_token_invalid(token):
-        return ("invalid token passed", 403)
 
     parts = urlparse(request.url)
     args = list(request.args.items())
     directories = parts.path.strip("/").split("/")
     payload = request.get_json() if request.is_json else None
     headers: dict = clean_headers(dict(request.headers))
+
+    token = get_bearer_token(request)
+    if token and is_token_invalid(token, headers):
+        return ("invalid token passed", 403)
 
     if directories[0] in ["alpaca", "plaid", "stytch", "bank"]:
         add_response_headers = {"Access-Control-Allow-Headers": "*"}
@@ -90,8 +91,6 @@ def proxy(request):
                     headers,
                 )
                 add_response_headers["Access-Control-Allow-Origin"] = "*"
-
-                print("alpaca r", r)
             elif directories[0] == "plaid":
                 if request.method == "OPTIONS":
                     headers = {
