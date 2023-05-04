@@ -1,3 +1,4 @@
+import base64
 import json
 
 from requests import Request
@@ -21,7 +22,8 @@ def get_bearer_token(request: Request) -> str | None:
 
 def is_token_invalid(token: str, headers: dict) -> bool:
     print("start is_token_invalid")
-    payload = {"session_token": token}
+    encoded_token = b = base64.b64encode(bytes(token, "utf-8"))
+    payload = {"session_token": encoded_token}
     r = stytch_proxy(
         method="POST",
         url="v1/sessions/authenticate",
