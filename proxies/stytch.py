@@ -62,7 +62,7 @@ def stytch_proxy(
     method: str,
     url: str,
     args: list | None,
-    payload: str | None,
+    payload: dict | None,
     headers: dict | None,
 ) -> Response:
     request_url = construct_url(base_url, url)
@@ -72,7 +72,7 @@ def stytch_proxy(
             method=method,
             params=args,
             url=request_url,
-            json=payload,
+            data=payload,
             auth=auth,
             headers=headers,
         )

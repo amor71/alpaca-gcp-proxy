@@ -1,5 +1,4 @@
 import base64
-import json
 
 from requests import Request
 
@@ -28,7 +27,7 @@ def is_token_invalid(token: str, headers: dict) -> bool:
         method="POST",
         url="v1/sessions/authenticate",
         args=None,
-        payload=json.dumps(payload),
+        payload=payload,
         headers=headers,
     )
     print(r)
