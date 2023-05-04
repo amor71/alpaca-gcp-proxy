@@ -70,11 +70,11 @@ def stytch_proxy(
     r = (
         request(
             method=method,
-            params=args,
+            # params=args,
             url=request_url,
             data=payload,
             auth=auth,
-            headers=headers,
+            # headers=headers,
         )
         if payload
         else request(
