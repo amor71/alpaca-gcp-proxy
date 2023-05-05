@@ -21,8 +21,10 @@ def get_bearer_token(request: Request) -> str | None:
 
 def is_token_invalid(token: str, headers: dict) -> bool:
     print("start is_token_invalid", token)
-    base64.b64encode(bytes(token, "utf-8"))
-    payload = {"session_token": token}  # encoded_token.decode("utf-8")}
+    encoded_token = base64.b64encode(bytes(token, "utf-8"))
+    encoded_token_str = encoded_token.decode("utf-8")
+    print("encoded", encoded_token_str)
+    payload = {"session_token": encoded_token_str}
     r = stytch_proxy(
         method="POST",
         url="v1/sessions/authenticate",
