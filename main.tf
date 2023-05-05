@@ -53,7 +53,7 @@ data "archive_file" "alpaca_state" {
   source_dir  = "functions/alpaca_state"
 }
 resource "google_storage_bucket_object" "alpaca_state_zip" {
-  name         = "alpaca_state.zip"
+  name         = format("alpaca_state-%s-.zip", data.archive_file.alpaca_state.output_md5)
   bucket       = google_storage_bucket.serverless_function_bucket.name
   content_type = "application/zip"
   source       = data.archive_file.alpaca_state.output_path
