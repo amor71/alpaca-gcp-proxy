@@ -76,7 +76,7 @@ def stytch_proxy(
             method=method,
             # params=args,
             url=request_url,
-            data=payload,
+            json=payload,
             auth=auth,
             # headers=headers,
         )
