@@ -2,7 +2,7 @@ import base64
 
 from requests import Request
 
-from logger import log_error
+from logger import log, log_error
 from proxies.stytch import stytch_proxy
 
 
@@ -20,9 +20,9 @@ def get_bearer_token(request: Request) -> str | None:
 
 
 def is_token_invalid(token: str, headers: dict) -> bool:
-    print("start is_token_invalid")
-    encoded_token = base64.b64encode(bytes(token, "utf-8"))
-    payload = {"session_token": encoded_token.decode("utf-8")}
+    print("start is_token_invalid", token)
+    base64.b64encode(bytes(token, "utf-8"))
+    payload = {"session_token": token}  # encoded_token.decode("utf-8")}
     r = stytch_proxy(
         method="POST",
         url="v1/sessions/authenticate",

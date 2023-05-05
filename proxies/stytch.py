@@ -67,6 +67,10 @@ def stytch_proxy(
 ) -> Response:
     request_url = construct_url(base_url, url)
     auth = _get_authentication()
+
+    print("request url", request_url)
+    print("payload", payload)
+    print("auth", auth)
     r = (
         request(
             method=method,
