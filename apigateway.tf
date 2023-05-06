@@ -41,7 +41,7 @@ resource "google_api_gateway_gateway" "api_gw_gw" {
 
 resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
   name                  = "neg-gw"
-  provider              = google-beta
+  provider              = google
   network_endpoint_type = "SERVERLESS"
   region                = var.region
 
