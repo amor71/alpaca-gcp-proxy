@@ -43,7 +43,6 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
   name                  = "neg-gw"
   provider              = google-beta
   network_endpoint_type = "SERVERLESS"
-  region                = "us-east4"
 
   serverless_deployment {
     platform = "apigateway.googleapis.com"
@@ -54,8 +53,6 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
 module "lb-http-api_gw" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 4.5"
-
-  project = var.project_id
   name    = "app"
 
   managed_ssl_certificate_domains = ["api.nine30.com"]
