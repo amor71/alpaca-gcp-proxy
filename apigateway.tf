@@ -50,7 +50,7 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
   }
 }
 
-module "lb-http" {
+module "lb-http-api_gw" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 4.5"
 
