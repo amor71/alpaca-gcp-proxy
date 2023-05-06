@@ -44,9 +44,9 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
   provider              = google-beta
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
-  serverless_deployment {
-    platform = "apigateway.googleapis.com"
-    resource = google_api_gateway_gateway.api_gw_gw.name
+
+  api_gateway {
+    service = google_api_gateway_gateway.api_gw_gw.name
   }
 }
 
