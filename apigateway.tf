@@ -54,6 +54,8 @@ module "lb-http-api_gw" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 4.5"
   name    = "app"
+  project = var.project_id
+  region  = var.region
 
   managed_ssl_certificate_domains = ["api.nine30.com"]
   ssl                             = true
