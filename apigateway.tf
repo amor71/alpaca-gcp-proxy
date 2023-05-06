@@ -46,7 +46,7 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
 
   serveless_deployment {
     platform = "apigateway.googleapis.com"
-    resource = google_api_gateway_gateway.api_gw_gw.gateway_id
+    resource = google_api_gateway_gateway.api_gw_gw.id
   }
 }
 
