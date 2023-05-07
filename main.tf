@@ -8,12 +8,6 @@ terraform {
     bucket = "n30-tf-state-bucket"
     prefix = ""
   }
-
-  required_providers {
-    google = {
-      version = "~> 4.5.0"
-    }
-  }
 }
 
 
