@@ -39,13 +39,13 @@ resource "google_api_gateway_gateway" "api_gw_gw" {
 # LB
 #---------------
 
-resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
+resource "google_compute_network_endpoint_group" "gw_neg_us" {
   provider              = google-beta
   name                  = "neg-gw"
   network_endpoint_type = "SERVERLESS"
   region                = var.region
 
-  serverless {
+  serverless_deployment {
     platform = "apigateway.googleapis.com"
     resource = google_api_gateway_gateway.api_gw_gw.id
   }
