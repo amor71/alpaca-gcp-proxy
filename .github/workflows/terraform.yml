@@ -31,7 +31,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.GCP_CREDENTIALS }}
-          terraform_version: 4.5.0
+
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Init
         env:
