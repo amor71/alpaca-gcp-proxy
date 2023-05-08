@@ -36,17 +36,17 @@ resource "google_api_gateway_gateway" "api_gw_gw" {
 # LB
 #---------------
 
-resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
-  provider              = google-beta
-  name                  = "neg-gw"
-  network_endpoint_type = "SERVERLESS"
-  region                = var.region
+#resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
+#  provider              = google-beta
+#  name                  = "neg-gw"
+#  network_endpoint_type = "SERVERLESS"
+#  region                = var.region
 
-  serverless_deployment {
-    platform = "apigateway.googleapis.com"
-    resource = google_api_gateway_gateway.api_gw_gw.gateway_id
-  }
-}
+#  serverless_deployment {
+#    platform = "apigateway.googleapis.com"
+#    resource = google_api_gateway_gateway.api_gw_gw.gateway_id
+#  }
+#}
 
 #module "lb-http-api-gw" {
 #  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
