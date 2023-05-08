@@ -66,8 +66,8 @@ module "lb-http-api-gw" {
           group = google_compute_region_network_endpoint_group.api-gw_neg.id
         }
       ]
-      protocol                        = "HTTP"
-      port_name                       = "http"
+      protocol                        = "HTTPS"
+      port_name                       = "https"
       description                     = null
       enable_cdn                      = false
       custom_request_headers          = null
