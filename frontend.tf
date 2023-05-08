@@ -71,13 +71,14 @@ module "lb-http" {
           group = google_compute_region_network_endpoint_group.cloudrun_neg.id
         }
       ]
-      rotocol                         = "HTTPS"
+      protocol                        = "HTTPS"
       port_name                       = 443
       description                     = null
       enable_cdn                      = false
       custom_request_headers          = null
       custom_response_headers         = null
       security_policy                 = null
+      edge_security_policy            = null
       compression_mode                = null
       connection_draining_timeout_sec = null
       session_affinity                = null
