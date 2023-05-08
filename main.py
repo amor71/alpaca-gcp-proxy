@@ -70,7 +70,9 @@ def proxy(request):
 
     token: str = get_bearer_token(request)
     headers: dict = clean_headers(dict(request.headers))
-    if not token or is_token_invalid(token, headers):
+    if request.method != "OPTIONS" and (
+        not token or is_token_invalid(token, headers)
+    ):
         return ("invalid token passed", 403)
 
     parts = urlparse(request.url)
