@@ -48,52 +48,52 @@ resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
   }
 }
 
-module "lb-http-api-gw" {
-  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
-  version = "~> 9.0.0"
+#module "lb-http-api-gw" {
+#  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+#  version = "~> 9.0.0"
+#
+#  project = var.project_id
+#  name    = "apigw"
+#
+#  managed_ssl_certificate_domains = ["api.nine30.com"]
+#  ssl                             = true
+#  https_redirect                  = true
+#
+#  backends = {
+#    default = {
+#      groups = [
+#        {
+#          group = google_compute_region_network_endpoint_group.api-gw_neg.id
+#        }
+#      ]
+#      protocol                        = "HTTP"
+#      port_name                       = "http"
+#      description                     = null
+#      enable_cdn                      = false
+#      custom_request_headers          = null
+#      custom_response_headers         = null
+#      security_policy                 = null
+#      edge_security_policy            = null
+#      compression_mode                = null
+#      connection_draining_timeout_sec = null
+#      session_affinity                = null
+#      affinity_cookie_ttl_sec         = null
+#      create_address                  = false
+#
+#      log_config = {
+#        enable      = true
+#        sample_rate = 1.0
+#      }
 
-  project = var.project_id
-  name    = "apigw"
+#      iap_config = {
+#        enable               = false
+#        oauth2_client_id     = null
+#        oauth2_client_secret = null
+#      }
 
-  managed_ssl_certificate_domains = ["api.nine30.com"]
-  ssl                             = true
-  https_redirect                  = true
-
-  backends = {
-    default = {
-      groups = [
-        {
-          group = google_compute_region_network_endpoint_group.api-gw_neg.id
-        }
-      ]
-      protocol                        = "HTTP"
-      port_name                       = "http"
-      description                     = null
-      enable_cdn                      = false
-      custom_request_headers          = null
-      custom_response_headers         = null
-      security_policy                 = null
-      edge_security_policy            = null
-      compression_mode                = null
-      connection_draining_timeout_sec = null
-      session_affinity                = null
-      affinity_cookie_ttl_sec         = null
-      create_address                  = false
-
-      log_config = {
-        enable      = true
-        sample_rate = 1.0
-      }
-
-      iap_config = {
-        enable               = false
-        oauth2_client_id     = null
-        oauth2_client_secret = null
-      }
-
-      description            = null
-      custom_request_headers = null
-      security_policy        = null
-    }
-  }
-}
+#     description            = null
+#      custom_request_headers = null
+#      security_policy        = null
+#    }
+#  }
+#}
