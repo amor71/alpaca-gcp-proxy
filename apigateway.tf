@@ -36,7 +36,7 @@ resource "google_api_gateway_gateway" "api_gw_gw" {
 # LB
 #---------------
 
-resource "google_compute_region_network_endpoint_group" "gw_neg" {
+resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
   provider              = google-beta
   name                  = "neg-gw"
   network_endpoint_type = "SERVERLESS"
@@ -63,7 +63,7 @@ module "lb-http-api-gw" {
     default = {
       groups = [
         {
-          group = google_compute_region_network_endpoint_group.gw_neg.id
+          group = google_compute_region_network_endpoint_group.api-gw_neg.id
         }
       ]
       protocol                        = "HTTP"
