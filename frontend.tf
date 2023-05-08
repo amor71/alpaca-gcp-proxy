@@ -43,9 +43,9 @@ data "google_iam_policy" "n30-noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "n30-noauth" {
-  location    = google_cloud_run_service.react.location
-  project     = google_cloud_run_service.react.project
-  service     = google_cloud_run_service.react.name
+  location = google_cloud_run_service.react.location
+  project  = google_cloud_run_service.react.project
+  service  = google_cloud_run_service.react.name
 
   policy_data = data.google_iam_policy.n30-noauth.policy_data
 }
@@ -54,11 +54,11 @@ resource "google_cloud_run_service_iam_policy" "n30-noauth" {
 # -- Load Balancer
 # --------------------------
 module "lb-http" {
-  source            = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
-  version           = "~> 4.5"
+  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+  version = "~> 9.0.0"
 
-  project           = var.project_id
-  name              = "app"
+  project = var.project_id
+  name    = "app"
 
   managed_ssl_certificate_domains = ["app.nine30.com"]
   ssl                             = true
@@ -85,9 +85,9 @@ module "lb-http" {
         oauth2_client_secret = null
       }
 
-      description             = null
-      custom_request_headers  = null
-      security_policy         = null
+      description            = null
+      custom_request_headers = null
+      security_policy        = null
     }
   }
 }

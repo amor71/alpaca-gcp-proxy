@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket = "n30-tf-state-bucket"
+    prefix = ""
+  }
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -6,15 +13,6 @@ provider "google-beta" {
   project = var.project_id
   region  = var.region
 }
-
-terraform {
-  backend "gcs" {
-    bucket = "n30-tf-state-bucket"
-    prefix = ""
-  }
-}
-
-
 variable "slack_notification_url" {
   default = "https://hooks.slack.com/services/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"
 }

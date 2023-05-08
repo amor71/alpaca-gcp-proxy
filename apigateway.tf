@@ -42,46 +42,8 @@ resource "google_compute_region_network_endpoint_group" "gw_neg_us" {
   network_endpoint_type = "SERVERLESS"
   region                = var.region
 
-  serverlessDeployment {
+  serverless_deployment {
     platform = "apigateway.googleapis.com"
     resource = google_api_gateway_gateway.api_gw_gw.id
-  }
-}
-
-module "lb-http-api_gw" {
-  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
-  version = "~> 4.5"
-  name    = "app"
-  project = var.project_id
-
-  managed_ssl_certificate_domains = ["api.nine30.com"]
-  ssl                             = true
-  https_redirect                  = true
-
-  backends = {
-    default = {
-      groups = [
-        {
-          group = google_compute_region_network_endpoint_group.gw_neg_us.id
-        }
-      ]
-
-      enable_cdn = false
-
-      log_config = {
-        enable      = true
-        sample_rate = 1.0
-      }
-
-      iap_config = {
-        enable               = false
-        oauth2_client_id     = null
-        oauth2_client_secret = null
-      }
-
-      description            = null
-      custom_request_headers = null
-      security_policy        = null
-    }
   }
 }
