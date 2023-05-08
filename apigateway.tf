@@ -78,6 +78,7 @@ module "lb-http-api-gw" {
       connection_draining_timeout_sec = null
       session_affinity                = null
       affinity_cookie_ttl_sec         = null
+      create_address                  = false
 
       log_config = {
         enable      = true
