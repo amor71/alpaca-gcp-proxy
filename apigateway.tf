@@ -49,8 +49,9 @@ resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
 }
 
 resource "google_compute_global_address" "api-gw-address" {
-  name       = "lb-global-static-ip"
+  name       = "lb-api-gw-static-ip"
   ip_version = "IPV4"
+
 }
 
 module "lb-http-api-gw" {
@@ -64,6 +65,7 @@ module "lb-http-api-gw" {
   ssl                             = true
   https_redirect                  = true
   address                         = google_compute_global_address.api-gw-address.address
+  create_address                  = false
   backends = {
     default = {
       groups = [
@@ -83,7 +85,6 @@ module "lb-http-api-gw" {
       connection_draining_timeout_sec = null
       session_affinity                = null
       affinity_cookie_ttl_sec         = null
-      create_address                  = false
 
       log_config = {
         enable      = true
