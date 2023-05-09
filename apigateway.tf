@@ -48,6 +48,11 @@ resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
   }
 }
 
+resource "google_compute_global_address" "api-gw-address" {
+  name       = "lb-global-static-ip"
+  ip_version = "IPV4"
+}
+
 module "lb-http-api-gw" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 9.0.0"
@@ -58,14 +63,14 @@ module "lb-http-api-gw" {
   managed_ssl_certificate_domains = ["api.nine30.com"]
   ssl                             = true
   https_redirect                  = true
-
+  address                         = google_compute_global_address.api-gw-address.address
   backends = {
     default = {
       groups = [
         {
           group = google_compute_region_network_endpoint_group.api-gw_neg.id
         }
-     ]
+      ]
       protocol                        = "HTTP"
       port_name                       = "http"
       description                     = null
@@ -78,7 +83,7 @@ module "lb-http-api-gw" {
       connection_draining_timeout_sec = null
       session_affinity                = null
       affinity_cookie_ttl_sec         = null
-     create_address                  = false
+      create_address                  = false
 
       log_config = {
         enable      = true
@@ -91,7 +96,7 @@ module "lb-http-api-gw" {
         oauth2_client_secret = null
       }
 
-     description            = null
+      description            = null
       custom_request_headers = null
       security_policy        = null
     }
