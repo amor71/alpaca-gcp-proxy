@@ -20,6 +20,11 @@ def get_bearer_token(request: Request) -> str | None:
 def is_token_invalid(token: str, headers: dict) -> bool:
     print("start is_token_invalid", token)
     payload = {"session_token": token}
+
+    # TODO: make a secret
+    if token == "moti":
+        return True
+
     r = stytch_proxy(
         method="POST",
         url="v1/sessions/authenticate",
