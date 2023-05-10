@@ -51,7 +51,6 @@ resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
 resource "google_compute_global_address" "api-gw-address" {
   name       = "lb-api-gw-static-ip"
   ip_version = "IPV4"
-  #address    = "34.120.180.28"
 }
 
 module "lb-http-api-gw" {
