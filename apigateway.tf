@@ -63,7 +63,7 @@ module "lb-http-api-gw" {
 
   managed_ssl_certificate_domains = ["api.nine30.com"]
   ssl                             = true
-  https_redirect                  = true
+  https_redirect                  = false
   address                         = google_compute_global_address.api-gw-address.address
   create_address                  = false
   backends = {

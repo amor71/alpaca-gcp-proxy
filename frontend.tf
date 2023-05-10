@@ -53,6 +53,12 @@ resource "google_cloud_run_service_iam_policy" "n30-noauth" {
 # --------------------------
 # -- Load Balancer
 # --------------------------
+resource "google_compute_global_address" "app-lb-ip" {
+  name       = "app-address"
+  ip_version = "IPV4"
+  address    = "34.160.236.191"
+}
+
 module "lb-http" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 9.0.0"
@@ -63,6 +69,8 @@ module "lb-http" {
   managed_ssl_certificate_domains = ["app.nine30.com"]
   ssl                             = true
   https_redirect                  = false
+  address                         = google_compute_global_address.app-lb-ip.address
+  create_address                  = false
 
   backends = {
     default = {
