@@ -62,7 +62,7 @@ module "lb-http" {
 
   managed_ssl_certificate_domains = ["app.nine30.com"]
   ssl                             = true
-  https_redirect                  = true
+  https_redirect                  = false
 
   backends = {
     default = {
