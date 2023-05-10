@@ -71,6 +71,7 @@ module "lb-http" {
   https_redirect                  = false
   address                         = google_compute_global_address.app-lb-ip.address
   create_address                  = false
+  http_forward                    = false
 
   backends = {
     default = {
