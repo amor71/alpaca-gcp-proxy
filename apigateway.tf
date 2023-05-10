@@ -47,7 +47,7 @@ resource "google_compute_region_network_endpoint_group" "api-gw_neg" {
     resource = google_api_gateway_gateway.api_gw_gw.gateway_id
   }
 }
-
+/*
 resource "google_compute_global_address" "api-gw-address" {
   name       = "lb-api-gw-static-ip"
   ip_version = "IPV4"
@@ -103,3 +103,4 @@ module "lb-http-api-gw" {
     }
   }
 }
+*/
