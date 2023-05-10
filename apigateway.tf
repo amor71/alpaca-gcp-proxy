@@ -54,52 +54,52 @@ resource "google_compute_global_address" "api-gw-address" {
   address    = "34.120.180.28"
 }
 
-#module "lb-http-api-gw" {
-#  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
-#  version = "~> 9.0.0"
-#
-#  project = var.project_id
-#  name    = "apigw"
+module "lb-http-api-gw" {
+  source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+  version = "~> 9.0.0"
 
-#  managed_ssl_certificate_domains = ["api.nine30.com"]
-#  ssl                             = true
-#  https_redirect                  = false
-#  address                         = google_compute_global_address.api-gw-address.address
-#  create_address                  = false
-#  backends = {
-#    default = {
-#      groups = [
-#        {
-#          group = google_compute_region_network_endpoint_group.api-gw_neg.id
-#        }
-#      ]
-#      protocol                        = "HTTP"
-#      port_name                       = "http"
-#      description                     = null
-#      enable_cdn                      = false
-#      custom_request_headers          = null
-#      custom_response_headers         = null
-#      security_policy                 = null
-#      edge_security_policy            = null
-#      compression_mode                = null
-#      connection_draining_timeout_sec = null
-#      session_affinity                = null
-#      affinity_cookie_ttl_sec         = null
+  project = var.project_id
+  name    = "apigw"
 
-#      log_config = {
-#        enable      = true
-#        sample_rate = 1.0
-#      }
+  managed_ssl_certificate_domains = ["api.nine30.com"]
+  ssl                             = true
+  https_redirect                  = false
+  address                         = google_compute_global_address.api-gw-address.address
+  create_address                  = false
+  backends = {
+    default = {
+      groups = [
+        {
+          group = google_compute_region_network_endpoint_group.api-gw_neg.id
+        }
+      ]
+      protocol                        = "HTTP"
+      port_name                       = "http"
+      description                     = null
+      enable_cdn                      = false
+      custom_request_headers          = null
+      custom_response_headers         = null
+      security_policy                 = null
+      edge_security_policy            = null
+      compression_mode                = null
+      connection_draining_timeout_sec = null
+      session_affinity                = null
+      affinity_cookie_ttl_sec         = null
 
-#      iap_config = {
-#        enable               = false
-#        oauth2_client_id     = null
-#        oauth2_client_secret = null
-#      }
+      log_config = {
+        enable      = true
+        sample_rate = 1.0
+      }
 
-#      description            = null
-#      custom_request_headers = null
-#      security_policy        = null
-#    }
-#  }
-#}
+      iap_config = {
+        enable               = false
+        oauth2_client_id     = null
+        oauth2_client_secret = null
+      }
+
+      description            = null
+      custom_request_headers = null
+      security_policy        = null
+    }
+  }
+}
