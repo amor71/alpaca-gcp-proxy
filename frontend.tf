@@ -68,7 +68,7 @@ module "lb-http" {
 
   managed_ssl_certificate_domains = ["app.nine30.com"]
   ssl                             = true
-  https_redirect                  = false
+  https_redirect                  = true
   address                         = google_compute_global_address.app-lb-ip.address
   create_address                  = false
   http_forward                    = false
