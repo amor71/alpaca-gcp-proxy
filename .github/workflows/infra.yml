@@ -1,4 +1,4 @@
-name: Cloud-Functions-Infrastructure
+name: "Cloud-Functions-Infrastructure"
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   files-changed:
-    name: detect what infra files changed and update repo
+    name: Infra
     runs-on: ubuntu-20.04
     timeout-minutes: 3
   steps:
