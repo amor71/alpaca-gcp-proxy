@@ -16,15 +16,14 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 3
   steps:
-    - uses: dorny/paths-filter@v2
-    id: changes
-    with:
-      filters: |
-        infra:
-          - 'infra/**'
+    - uses: dorny/paths-filter@v2.2.1
+      id: changes
+      with:
+        filters: |
+          src:
+            - 'infra/**'
 
     # run only if some file in 'src' folder was changed
-    - if: steps.changes.outputs.src == 'true'
-    run: hello
-  
- 
+    - name: deploy package if changed
+      if: steps.changes.outputs.src == 'true'
+      run: hello
