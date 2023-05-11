@@ -21,7 +21,13 @@ jobs:
         with:
           fetch-depth: 100
 
-      - uses: lostick/path-filtering-action@main
-      - name: setup go
-        if: env.DIFF_DETECTED == 'true'
-        uses: actions/setup-go@v2
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'infra/**'
+
+        # run only if some file in 'src' folder was changed
+      - if: steps.changes.outputs.src == 'true'
+        run: "Hello World!"
