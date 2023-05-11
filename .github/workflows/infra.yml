@@ -15,8 +15,10 @@ jobs:
     name: Infra
     runs-on: ubuntu-20.04
     timeout-minutes: 3
+
   steps:
-    - uses: dorny/paths-filter@v2.2.1
+    - name: Check Changes in Infra
+      uses: dorny/paths-filter@v2.2.1
       id: changes
       with:
         filters: |
