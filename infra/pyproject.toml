@@ -1,0 +1,20 @@
+[project]
+name = "infra"
+version = "0.1.0"
+description = "Infrastructure code, shared between several GCP Functions"
+authors = [
+    {name = "Amichay Oren", email = "amichay@nine30.com"},
+]
+dependencies = [
+    "requests>=2.30.0",
+    "flask>=2.3.2",
+    "google-cloud>=0.34.0",
+    "google-crc32c>=1.5.0",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
