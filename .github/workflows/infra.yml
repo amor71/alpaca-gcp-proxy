@@ -28,6 +28,6 @@ jobs:
             src:
               - 'infra/**'
 
-        # run only if some file in 'src' folder was changed
-      - if: steps.changes.outputs.src == 'true'
+        # run only if some file in 'infra' folder was changed
+      - if: steps.changes.outputs.infra == 'true'
         run: "Hello World!"
