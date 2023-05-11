@@ -3,6 +3,8 @@ from requests import Request
 from logger import log_error
 from proxies.stytch import stytch_proxy
 
+token_bypass = "moti"
+
 
 def get_bearer_token(request: Request) -> str | None:
     if auth_header := request.headers.get("Authorization"):
@@ -22,7 +24,7 @@ def authenticate_token(token: str, headers: dict) -> bool:
     payload = {"session_token": token}
 
     # TODO: make a secret
-    if token == "moti":
+    if token == token_bypass:
         return True
 
     r = stytch_proxy(
