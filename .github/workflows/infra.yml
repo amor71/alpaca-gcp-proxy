@@ -1,0 +1,30 @@
+name: "Cloud Functions Infrastructure"
+
+on:
+  push:
+    branches: ["master"]
+
+  workflow_dispatch:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  files-changed:
+    name: detect what infra files changed and update repo
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+  steps:
+    - uses: dorny/paths-filter@v2
+    id: changes
+    with:
+      filters: |
+        infra:
+          - 'infra/**'
+
+    # run only if some file in 'src' folder was changed
+    - if: steps.changes.outputs.src == 'true'
+    run: hello
+  
+ 
