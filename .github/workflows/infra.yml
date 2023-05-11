@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 3
 
-    steps:
+    steps: 
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
@@ -30,17 +30,12 @@ jobs:
 
         # run only if some file in 'infra' folder was changed
       - if: steps.changes.outputs.infra == 'true'
-      steps:
-        - name: Setup Python
-          uses: actions/setup-python@v2
-          with:
-            python-version: "3.x"
-        - name: install pip
-          run: python -m pip install --upgrade pip
-        - name: install PDM
-          run: curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
-        - name: build package
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
           run: |
+            python -m pip install --upgrade pip
+            curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
             cd infra
             pdm build
 
