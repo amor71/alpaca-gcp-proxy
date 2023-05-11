@@ -1,9 +1,11 @@
+import os
+
 from requests import Request
 
 from logger import log_error
 from proxies.stytch import stytch_proxy
 
-token_bypass = "moti"
+token_bypass = os.getenv("TOKEN_BYPASS", "moti")
 
 
 def get_bearer_token(request: Request) -> str | None:
