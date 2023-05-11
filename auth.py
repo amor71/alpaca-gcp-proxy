@@ -23,7 +23,7 @@ def is_token_invalid(token: str, headers: dict) -> bool:
 
     # TODO: make a secret
     if token == "moti":
-        return True
+        return False
 
     r = stytch_proxy(
         method="POST",
@@ -36,4 +36,4 @@ def is_token_invalid(token: str, headers: dict) -> bool:
     print(r.json())
     print("end is_token_invalid")
 
-    return False
+    return r.status_code != 200
