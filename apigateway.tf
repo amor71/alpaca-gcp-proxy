@@ -1,3 +1,14 @@
+#-----------------
+# Python registry
+#-----------------
+resource "google_artifact_registry_repository" "py-repos" {
+  location      = var.region
+  repository_id = "python-repos"
+  description   = "Python Repositoty"
+  format        = "python"
+}
+
+
 #---------------------------
 # App Gateway
 #---------------------------
