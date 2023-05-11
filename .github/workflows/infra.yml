@@ -17,15 +17,10 @@ jobs:
     timeout-minutes: 3
 
   steps:
-    - name: Check Changes in Infra
-      uses: dorny/paths-filter@v2.2.1
-      id: changes
-      with:
-        filters: |
-          src:
-            - 'infra/**'
-
-    # run only if some file in 'src' folder was changed
-    - name: deploy package if changed
-      if: steps.changes.outputs.src == 'true'
-      run: hello
+    - uses: actions/checkout@v2
+    with:
+      fetch-depth: 100
+  - uses: lostick/path-filtering-action@main
+  - name: setup go
+    if: env.DIFF_DETECTED == 'true'
+    uses: actions/setup-go@v2
