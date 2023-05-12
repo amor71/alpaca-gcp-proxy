@@ -22,6 +22,7 @@ def log(
     response_headers: dict | None,
     latency: float,
 ) -> None:
+    """log error to GCP"""
     # Build structured log messages as an object
     try:
         json_response = response.json()

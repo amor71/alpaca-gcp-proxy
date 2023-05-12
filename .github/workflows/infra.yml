@@ -46,4 +46,4 @@ jobs:
           pdm build
           pip install twine
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/cred.json
-          twine upload --verbose --repository-url https://us-east4-python.pkg.dev/development-380917/python-repos/ dist/infra-0.1.0-py3-none-any.whl
+          twine upload --verbose --skip-existing --repository-url https://us-east4-python.pkg.dev/development-380917/python-repos/ dist/infra-0.1.0-py3-none-any.whl
