@@ -9,6 +9,7 @@ token_bypass = os.getenv("TOKEN_BYPASS", "moti")
 
 
 def get_bearer_token(request: Request) -> str | None:
+    """Extract 'Bearer' token from Authorization header"""
     if auth_header := request.headers.get("Authorization"):
         try:
             auth_header = auth_header.split()
@@ -22,6 +23,7 @@ def get_bearer_token(request: Request) -> str | None:
 
 
 def authenticate_token(token: str, headers: dict) -> bool:
+    """Authenticate session token w/ Stytch, return True is valid, otherwise False"""
     print("start authenticate_token", token)
     payload = {"session_token": token}
 
