@@ -8,6 +8,7 @@ from config import project_id
 
 
 def log_error(originator: str, error_message: str) -> None:
+    """Log error to GCP logger"""
     entry = dict(
         severity="ERROR",
         message=f"{originator}: {error_message}",
@@ -22,7 +23,7 @@ def log(
     response_headers: dict | None,
     latency: float,
 ) -> None:
-    """log error to GCP"""
+    """log error to GCP logger"""
     # Build structured log messages as an object
     try:
         json_response = response.json()
