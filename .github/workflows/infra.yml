@@ -35,9 +35,13 @@ jobs:
           python-version: "3.x"
 
       - if: steps.changes.outputs.infra == 'true' 
+        env:
+          PDM_PUBLISH_USERNAME: ${{ secrets.GCP_USERNAME }}
+          PDM_PUBLISH_PASSWORD: ${{ secrets.GCP_PASSWORD }}
         run: |
           python -m pip install --upgrade pip
           curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
           cd infra
           pdm build
+          pdm publish -r https://us-east4-python.pkg.dev/development-380917/python-repos/ 
 
