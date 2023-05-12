@@ -39,7 +39,6 @@ def authenticate_token(token: str, headers: dict) -> bool:
         headers=headers,
     )
     print(r)
-    print(r.json())
     print("end authenticate_token")
 
     return r.status_code == 200
