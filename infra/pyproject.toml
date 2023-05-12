@@ -1,21 +1,21 @@
 [project]
-name = "infra"
-version = "0.1.0"
-description = "Infrastructure code, shared between several GCP Functions"
 authors = [
-    {name = "Amichay Oren", email = "amichay@nine30.com"},
+  {name = "Amichay Oren", email = "amichay@nine30.com"},
 ]
 dependencies = [
-    "requests>=2.30.0",
-    "flask>=2.3.2",
-    "google-cloud>=0.34.0",
-    "google-crc32c>=1.5.0",
-    "keyrings-google-artifactregistry-auth>=1.1.2",
+  "requests>=2.30.0",
+  "flask>=2.3.2",
+  "google-cloud>=0.34.0",
+  "google-crc32c>=1.5.0",
+  "keyrings-google-artifactregistry-auth>=1.1.2",
 ]
-requires-python = ">=3.11"
-readme = "README.md"
+description = "Infrastructure code, shared between several GCP Functions"
 license = {text = "MIT"}
+name = "infra"
+readme = "README.md"
+requires-python = ">=3.11"
+version = "0.1.1"
 
 [build-system]
-requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+requires = ["pdm-backend"]
