@@ -124,6 +124,29 @@ version = "0.34.0"
 summary = "API Client library for Google Cloud"
 
 [[package]]
+name = "google-cloud-core"
+version = "2.3.2"
+requires_python = ">=3.7"
+summary = "Google Cloud API client core library"
+dependencies = [
+    "google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0dev,>=1.31.6",
+    "google-auth<3.0dev,>=1.25.0",
+]
+
+[[package]]
+name = "google-cloud-firestore"
+version = "2.11.1"
+requires_python = ">=3.7"
+summary = "Google Cloud Firestore API client library"
+dependencies = [
+    "google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.0",
+    "google-cloud-core<3.0.0dev,>=1.4.1",
+    "proto-plus<2.0.0dev,>=1.22.0",
+    "proto-plus<2.0.0dev,>=1.22.2; python_version >= \"3.11\"",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+]
+
+[[package]]
 name = "google-cloud-monitoring"
 version = "2.14.2"
 requires_python = ">=3.7"
@@ -416,7 +439,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default"]
-content_hash = "sha256:e1c79b4a4560041eeeaff2f7304855cab6fe625f174508ff4bf79545416a6b4c"
+content_hash = "sha256:4af2ba4ff091a108dc26f9333ace6ce8c35e00d04926e46b6cb17f192c5fa5c8"
 
 [metadata.files]
 "blinker 1.6.2" = [
@@ -622,6 +645,14 @@ content_hash = "sha256:e1c79b4a4560041eeeaff2f7304855cab6fe625f174508ff4bf795454
 "google-cloud 0.34.0" = [
     {url = "https://files.pythonhosted.org/packages/47/0e/8bf108fa9e3e036fe37a86598f1315e7b8de90b89012fd65704dc30ac6ad/google-cloud-0.34.0.tar.gz", hash = "sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3"},
     {url = "https://files.pythonhosted.org/packages/ba/b1/7c54d1950e7808df06642274e677dbcedba57f75307adf2e5ad8d39e5e0e/google_cloud-0.34.0-py2.py3-none-any.whl", hash = "sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf"},
+]
+"google-cloud-core 2.3.2" = [
+    {url = "https://files.pythonhosted.org/packages/40/4b/f4cebb92fe965f02f4a9c06f16355cf83a61a2d5db110df9af71191c830a/google-cloud-core-2.3.2.tar.gz", hash = "sha256:b9529ee7047fd8d4bf4a2182de619154240df17fbe60ead399078c1ae152af9a"},
+    {url = "https://files.pythonhosted.org/packages/ac/4d/bae84e736080ed465a6b02e9f447c89c60c00fcdade2eb6911fecf3f46aa/google_cloud_core-2.3.2-py2.py3-none-any.whl", hash = "sha256:8417acf6466be2fa85123441696c4badda48db314c607cf1e5d543fa8bdc22fe"},
+]
+"google-cloud-firestore 2.11.1" = [
+    {url = "https://files.pythonhosted.org/packages/77/2d/4777a0541730fd76846ff4e53c4baddac28901aadcb3e97735546ef62ca5/google-cloud-firestore-2.11.1.tar.gz", hash = "sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d"},
+    {url = "https://files.pythonhosted.org/packages/c8/64/3fd8a948fe42936a81a23a93a08c63d96625373ab55c3a20041dcb082325/google_cloud_firestore-2.11.1-py2.py3-none-any.whl", hash = "sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e"},
 ]
 "google-cloud-monitoring 2.14.2" = [
     {url = "https://files.pythonhosted.org/packages/cb/03/2cf12a4a297a11f26c2765aa647c2731e37940091c9296c59f4db0415ab8/google-cloud-monitoring-2.14.2.tar.gz", hash = "sha256:e6fda130979e2e8d759ab70d6427b5948481948c96f5fd4a42370ba96a11959b"},
