@@ -346,7 +346,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default"]
-content_hash = "sha256:4cbfad8b54326e7153bd9a1d137f341599769acad14097b776e213ee8dbc39bb"
+content_hash = "sha256:3d9b0f24bc079e54b85ae17c711fd715ec43fb4c3a81da42b177933d5d447a69"
 
 [metadata.files]
 "cachetools 5.3.0" = [
