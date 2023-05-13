@@ -15,6 +15,7 @@ dependencies = [
     "keyrings-google-artifactregistry-auth>=1.1.2",
     "cachetools==5.3.0",
     "SecretStorage>=3.3.3",
+    "flask>=2.3.2",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
