@@ -12,6 +12,7 @@ dependencies = [
     "opentelemetry-exporter-gcp-monitoring>=1.4.0a0",
     "opentelemetry-sdk>=1.17.0",
     "opentelemetry-semantic-conventions>=0.38b0",
+    "keyrings-google-artifactregistry-auth>=1.1.2",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
