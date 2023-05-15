@@ -111,6 +111,10 @@ resource "google_cloudfunctions_function" "new_user" {
 
   entry_point         = "new_user"
   available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID = var.project_id
+  }
 }
 
 # --------------------------
