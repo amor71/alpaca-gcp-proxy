@@ -4,7 +4,7 @@ from typing import Dict
 from google.cloud import secretmanager
 from requests import Response, request
 
-from proxies.proxy_base import check_crc, construct_url
+from ..proxies.proxy_base import check_crc, construct_url
 
 plaid_base_url = os.getenv("PLAID_BASE_URL", "https://sandbox.plaid.com")
 

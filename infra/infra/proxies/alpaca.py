@@ -6,8 +6,8 @@ from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
-from config import alpaca_events_topic_id, project_id
-from proxies.proxy_base import check_crc, construct_url
+from ..config import alpaca_events_topic_id, project_id
+from ..proxies.proxy_base import check_crc, construct_url
 
 api_key_name = "alpaca_api_key"
 api_secret_name = "alpaca_api_secret"
