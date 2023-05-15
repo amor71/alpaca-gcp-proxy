@@ -201,6 +201,9 @@ google-cloud-monitoring==2.14.2 \
 google-cloud-pubsub==2.17.0 \
     --hash=sha256:8288d0323800f26b331b154fd1fb31ce92fe9a26f3f8483737209c7bfe50ade9 \
     --hash=sha256:85db40ce1c03ad604fe2f299906f49f2bf36abbe2320863a3e19bdc746a904f7
+google-cloud-secret-manager==2.16.1 \
+    --hash=sha256:149d11ce9be7ea81d4ac3544d3fcd4c716a9edb2cb775d9c075231570b079fbb \
+    --hash=sha256:dad28c24921fb62961aafe808be0e7935a99096f03ac29eeeefa04b85534c1f3
 google-crc32c==1.5.0 \
     --hash=sha256:024894d9d3cfbc5943f8f230e23950cd4906b2fe004c72e29b209420a1e6b05a \
     --hash=sha256:02c65b9817512edc6a4ae7c7e987fea799d2e0ee40c53ec573a692bee24de876 \
