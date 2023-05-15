@@ -4,7 +4,7 @@ from flask import Request
 from requests import Response
 from requests.exceptions import JSONDecodeError
 
-from config import project_id
+from .config import project_id
 
 
 def log_error(originator: str, error_message: str) -> None:
