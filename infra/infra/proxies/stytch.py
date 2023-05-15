@@ -6,8 +6,9 @@ from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import HTTPError, Response, request
 from requests.auth import HTTPBasicAuth
 
-from config import project_id, topic_id
 from proxies.proxy_base import check_crc, construct_url
+
+from ..config import project_id, topic_id
 
 stytch_project = "stytch_project_id"
 stytch_secret = "stytch_secret"
