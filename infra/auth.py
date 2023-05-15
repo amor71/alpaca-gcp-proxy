@@ -1,6 +1,6 @@
 import os
 
-from requests import Request
+from flask import Request
 
 from logger import log_error
 from proxies.stytch import stytch_proxy
@@ -12,10 +12,10 @@ def get_bearer_token(request: Request) -> str | None:
     """Extract 'Bearer' token from Authorization header"""
     if auth_header := request.headers.get("Authorization"):
         try:
-            auth_header = auth_header.split()
+            auth_headers = auth_header.split()
 
-            if auth_header[0] == "Bearer":
-                return auth_header[1]
+            if auth_headers[0] == "Bearer":
+                return auth_headers[1]
         except Exception as e:
             log_error("get_bearer_token()", str(e))
 

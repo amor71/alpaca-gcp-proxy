@@ -1,20 +1,13 @@
 import functions_framework
 
+from infra import auth
+
 from .new_user import new_user_handler
 
 
 @functions_framework.http
+@auth
 def new_user(request):
-    if request.method == "OPTIONS":
-        headers = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "*",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Max-Age": "3600",
-        }
-
-        return ("", 204, headers)
-
     payload = request.get_json() if request.is_json else None
 
     if (
