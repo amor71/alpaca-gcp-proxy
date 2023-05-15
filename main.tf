@@ -110,7 +110,7 @@ resource "google_cloudfunctions_function" "new_user" {
   trigger_http = true
 
   entry_point         = "new_user"
-  available_memory_mb = 128
+  available_memory_mb = 256
 
   environment_variables = {
     PROJECT_ID = var.project_id
