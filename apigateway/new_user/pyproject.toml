@@ -19,6 +19,7 @@ dependencies = [
     "google-crc32c>=1.5.0",
     "google-cloud-firestore>=2.11.1",
     "types-requests>=2.30.0.0",
+    "google-cloud-pubsub>=2.17.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
