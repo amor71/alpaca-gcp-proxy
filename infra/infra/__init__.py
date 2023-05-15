@@ -1,4 +1,4 @@
-from flask import Request, Response
+from flask import Request
 
 from .auth import authenticate_token, get_bearer_token
 

@@ -2,8 +2,8 @@ import os
 
 from flask import Request
 
-from logger import log_error
-from proxies.stytch import stytch_proxy
+from .logger import log_error
+from .proxies.stytch import stytch_proxy
 
 token_bypass = os.getenv("TOKEN_BYPASS", "moti")
 
