@@ -1,9 +1,6 @@
-import time
-
 from flask import Request
 
 from .auth import authenticate_token, get_bearer_token
-from .logger import log
 
 
 def _keep_header(header: str) -> bool:
@@ -44,15 +41,6 @@ def auth(func):
         if not token or not authenticate_token(token, headers):
             return ("invalid token passed", 403)
 
-        t0 = time.time()
-        response = func(request)
-        log(
-            request=request,
-            response=response,
-            request_headers=request.headers,
-            response_headers=response[2] if len(response) == 3 else {},
-            latency=time.time() - t0,
-        )
-        return response
+        return func(request)
 
     return handler
