@@ -5,12 +5,14 @@ from flask import Request
 from .logger import log_error
 from .proxies.stytch import stytch_proxy
 
+# TODO: remove bypass from code-base
 token_bypass = os.getenv("TOKEN_BYPASS", "moti")
+authorization_header = os.getenv("AUTH_HEADER", "X-Authorization")
 
 
 def get_bearer_token(request: Request) -> str | None:
     """Extract 'Bearer' token from Authorization header"""
-    if auth_header := request.headers.get("Authorization"):
+    if auth_header := request.headers.get(authorization_header):
         try:
             auth_headers = auth_header.split()
 
@@ -23,6 +25,7 @@ def get_bearer_token(request: Request) -> str | None:
     return None
 
 
+# TODO: remove prints
 def authenticate_token(token: str, headers: dict) -> bool:
     """Authenticate session token w/ Stytch, return True is valid, otherwise False"""
     print("start authenticate_token", token, token_bypass)
