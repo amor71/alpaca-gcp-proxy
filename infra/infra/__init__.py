@@ -1,6 +1,9 @@
+import time
+
 from flask import Request
 
 from .auth import authenticate_token, get_bearer_token
+from .logger import log
 
 
 def _keep_header(header: str) -> bool:
@@ -25,7 +28,7 @@ def clean_headers(headers: dict) -> dict:
 def auth(func):
     def handler(request: Request):
         print(f"url {request.url}")
-
+        print(f"headers {request.headers}")
         if request.method == "OPTIONS":
             return_headers = {
                 "Access-Control-Allow-Origin": "*",
@@ -41,6 +44,15 @@ def auth(func):
         if not token or not authenticate_token(token, headers):
             return ("invalid token passed", 403)
 
-        return func(request)
+        t0 = time.time()
+        response = func(request)
+        log(
+            request=request,
+            response=response,
+            request_headers=request.headers,
+            response_headers=response.headers,
+            latency=time.time() - t0,
+        )
+        return response
 
     return handler
