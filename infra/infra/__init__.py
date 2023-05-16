@@ -50,7 +50,7 @@ def auth(func):
             request=request,
             response=response,
             request_headers=request.headers,
-            response_headers=response.headers,
+            response_headers=response[2] if len(response) == 3 else {},
             latency=time.time() - t0,
         )
         return response
