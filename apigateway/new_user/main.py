@@ -18,9 +18,4 @@ def new_user(request):
         return ("Missing or invalid payload", 400)
 
     new_user_handler(user_id, email_id)
-
-    headers = {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "*",
-    }
-    return ("OK", 200, headers)
+    return ("OK", 200)

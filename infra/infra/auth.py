@@ -14,8 +14,6 @@ def get_bearer_token(request: Request) -> str | None:
     if auth_header := request.headers.get(authorization_header):
         try:
             auth_headers = auth_header.split()
-
-            print("auth headers", auth_headers)
             if auth_headers[0] == "Bearer":
                 return auth_headers[1]
         except Exception as e:
@@ -24,13 +22,11 @@ def get_bearer_token(request: Request) -> str | None:
     return None
 
 
-# TODO: remove prints
 def authenticate_token(token: str, headers: dict) -> bool:
     """Authenticate session token w/ Stytch, return True is valid, otherwise False"""
-    print("start authenticate_token", token, token_bypass)
+
     payload = {"session_token": token}
 
-    # TODO: make a secret
     if token == token_bypass:
         return True
 
@@ -41,7 +37,8 @@ def authenticate_token(token: str, headers: dict) -> bool:
         payload=payload,
         headers=headers,
     )
-    print(r)
-    print("end authenticate_token")
+
+    # TODO: remove after debug
+    print(f"Stytch authenticate_token returned {r} w/ {r.text}")
 
     return r.status_code == 200
