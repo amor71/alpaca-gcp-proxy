@@ -34,7 +34,7 @@ locals {
 }
 
 variable "token_bypass" {
-  type = "string"
+  type = string
 }
 
 # --------------------------
@@ -115,7 +115,7 @@ resource "google_cloudfunctions_function" "new_user" {
   available_memory_mb = 256
 
   environment_variables = {
-    PROJECT_ID = var.project_id
+    PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
   }
 }
