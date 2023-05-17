@@ -52,4 +52,4 @@ jobs:
       - name: Replace
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply -replace=google_cloud_run_service.react -auto-approve -input=false
+        run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -replace=google_cloud_run_service.react -auto-approve -input=false
