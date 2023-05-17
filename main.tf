@@ -33,7 +33,9 @@ locals {
   resource_prefix = var.env == "prod" ? "" : "${var.env}-"
 }
 
-
+variable "token_bypass" {
+  type = "string"
+}
 
 # --------------------------
 # -- Function Storage Bucket
@@ -114,6 +116,7 @@ resource "google_cloudfunctions_function" "new_user" {
 
   environment_variables = {
     PROJECT_ID = var.project_id
+    TOKEN_BYPASS = var.token_bypass
   }
 }
 

@@ -5,8 +5,7 @@ from flask import Request
 from .logger import log_error
 from .proxies.stytch import stytch_proxy
 
-# TODO: remove bypass from code-base
-token_bypass = os.getenv("TOKEN_BYPASS", "moti")
+token_bypass = os.getenv("TOKEN_BYPASS")
 authorization_header = os.getenv("AUTH_HEADER", "X-Authorization")
 
 
