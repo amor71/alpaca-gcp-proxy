@@ -24,9 +24,14 @@ resource "google_cloud_run_service" "react" {
       containers {
         image = "gcr.io/development-380917/react-with-cloudrun"
 
-        # Specify the container's listen port
-        ports {
-          container_port = 80
+        startup_probe {
+          initial_delay_seconds = 0
+          timeout_seconds       = 1
+          period_seconds        = 3
+          failure_threshold     = 1
+          tcp_socket {
+            port = 80
+          }
         }
       }
     }
