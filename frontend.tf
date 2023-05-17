@@ -23,6 +23,11 @@ resource "google_cloud_run_service" "react" {
     spec {
       containers {
         image = "gcr.io/development-380917/react-with-cloudrun"
+
+        # Specify the container's listen port
+        ports {
+          container_port = 80
+        }
       }
     }
   }
