@@ -41,10 +41,6 @@ resource "google_cloud_run_service" "react" {
     percent         = 100
     latest_revision = true
   }
-
-  environment_variables = {
-    PORT   = 80
-  }
 }
 
 data "google_iam_policy" "n30-noauth" {
