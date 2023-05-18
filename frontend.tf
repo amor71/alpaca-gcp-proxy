@@ -25,7 +25,7 @@ resource "google_cloud_run_service" "react" {
         image = "gcr.io/development-380917/react-with-cloudrun"
 
         ports {
-          container_port = 3000
+          container_port = 80
         }
       }
     }
