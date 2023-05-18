@@ -5,7 +5,7 @@ from proxies.stytch import stytch_proxy
 
 
 def get_bearer_token(request: Request) -> str | None:
-    if auth_header := request.headers.get("Authorization"):
+    if auth_header := request.headers.get("X-Authorization"):
         try:
             auth_header = auth_header.split()
 
