@@ -27,6 +27,14 @@ paths:
           description: OK
         "400":
           description: Payload missing or incorrect
+    options:
+      description: "CORS support"
+      operationId: "accounts"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/new_user
+      responses:
+        "204":
+          description: OK
 
 definitions:
   User:
