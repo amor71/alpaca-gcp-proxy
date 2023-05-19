@@ -29,7 +29,7 @@ paths:
           description: Payload missing or incorrect
     options:
       description: "CORS support"
-      operationId: "accounts"
+      operationId: "accounts-cors"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/new_user
       responses:
