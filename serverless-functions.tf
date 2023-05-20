@@ -111,7 +111,7 @@ resource "google_cloudfunctions_function" "proxy" {
   entry_point         = "proxy"
   available_memory_mb = 256
 
-  ingress_settings = "ALLOW_INTERNAL_ONLY"
+  #ingress_settings = "ALLOW_INTERNAL_ONLY"
 
   environment_variables = {
     PROJECT_ID   = var.project_id
