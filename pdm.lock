@@ -801,7 +801,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:8b6fd32a4be85fd3ff0a486fcad07a521d736a9778391d1907ddcdf887bc275b"
+content_hash = "sha256:a459b86a3c10c9daf97e33a450e4473ed40fe44fa3e572408a2eab01eb8a915e"
 
 [metadata.files]
 "autoflake 2.1.1" = [
