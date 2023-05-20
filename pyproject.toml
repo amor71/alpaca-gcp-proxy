@@ -35,6 +35,7 @@ dependencies = [
     "urllib3>=1.26.15",
     "keyrings-google-artifactregistry-auth>=1.1.2",
     "SecretStorage>=3.3.3",
+    "flask>=2.3.2",
 ]
 requires-python = ">=3.9"
 license = {text = "MIT"}
