@@ -1,7 +1,8 @@
 from flask import Request
-from proxies.alpaca import alpaca_proxy
-from proxies.plaid import plaid_proxy
 from requests import HTTPError, Response
+
+from infra.proxies.alpaca import alpaca_proxy
+from infra.proxies.plaid import plaid_proxy
 
 
 # TODO: Remove Print Logs
