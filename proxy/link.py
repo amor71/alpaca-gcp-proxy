@@ -5,6 +5,7 @@ from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
 
 
+# TODO: move to api
 # TODO: Remove Print Logs
 def link(request: Request, headers: dict) -> Response:
     print(request)
