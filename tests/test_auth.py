@@ -1,4 +1,4 @@
-from auth import is_token_invalid
+from proxy.auth import is_token_invalid
 
 
 def test_authenticate():

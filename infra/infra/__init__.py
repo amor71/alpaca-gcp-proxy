@@ -24,6 +24,7 @@ def _keep_header(header: str) -> bool:
 
 
 def clean_headers(headers: dict) -> dict:
+    """Sanitize request headers"""
     return {k: headers[k] for k in headers if _keep_header(k)}
 
 
@@ -49,7 +50,10 @@ def _handle_cors_headers(response: tuple) -> tuple:
     return response[:2] + (return_headers,)
 
 
+# TODO: restrict CORS!
 def auth(func):
+    """Decorator to authenticate request and add CORS support"""
+
     def handler(request: Request) -> tuple:
         print(f"url {request.url}")
 
