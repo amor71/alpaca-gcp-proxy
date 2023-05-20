@@ -21,7 +21,7 @@ module "lb-http" {
   version = "~> 9.0.0"
 
   project = var.project_id
-  name    = "app"
+  name    = "proxies"
 
   managed_ssl_certificate_domains = ["proxies.nine30.com"]
   ssl                             = true
