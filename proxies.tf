@@ -5,7 +5,7 @@ resource "google_compute_region_network_endpoint_group" "proxies_neg" {
   name                  = "cloudrun-neg"
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
-  cloud_functions {
+  cloud_function {
     service = google_cloudfunctions_function.proxy.name
   }
 }
