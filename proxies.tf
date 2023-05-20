@@ -13,7 +13,7 @@ resource "google_compute_region_network_endpoint_group" "proxies_neg" {
 resource "google_compute_global_address" "proxies-lb-ip" {
   name       = "proxies-address"
   ip_version = "IPV4"
-  address    = "34.160.102.164"
+  #address    = "34.160.102.164"
 }
 
 module "proxies-lb-http" {
