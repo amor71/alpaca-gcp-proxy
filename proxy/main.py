@@ -7,7 +7,7 @@ from google.api_core.exceptions import NotFound
 from link import link
 from requests import HTTPError
 
-from infra import auth, clean_headers
+from infra import auth, clean_headers  # type: ignore
 from infra.config import debug
 from infra.logger import log
 from infra.proxies.alpaca import alpaca_proxy
@@ -93,10 +93,10 @@ def _proxy_dispatcher(
 
 @functions_framework.http
 @auth
-def proxy(request):
+def proxy(request: Request) -> tuple:
     """proxy endpoint"""
 
-    t0 = time.time()
+    t0 = time()
 
     headers: dict = clean_headers(dict(request.headers))
     r = _proxy_dispatcher(
