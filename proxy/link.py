@@ -33,6 +33,7 @@ def link(request: Request, headers: dict) -> Response:
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
         headers=headers,
+        args=None,
     )
     print(f"response 1 {r} {r.json()}")
     if r.status_code != 200:
@@ -47,6 +48,7 @@ def link(request: Request, headers: dict) -> Response:
             "account_id": plaid_account_id,
         },
         headers=headers,
+        args=None,
     )
 
     print(f"response 2 {r} {r.json()}")
