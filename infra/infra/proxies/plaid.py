@@ -40,6 +40,7 @@ def _get_plaid_authentication() -> Dict:
 def plaid_proxy(
     method: str,
     url: str,
+    args: list | None,
     payload: Dict | None,
     headers: dict | None,
 ) -> Response:
