@@ -1,4 +1,3 @@
-from time import time
 from urllib.parse import urlparse
 
 import functions_framework
@@ -96,10 +95,8 @@ def _proxy_dispatcher(
 def proxy(request: Request) -> tuple:
     """proxy endpoint"""
 
-    t0 = time()
-
     headers: dict = clean_headers(dict(request.headers))
-    r = _proxy_dispatcher(
+    return _proxy_dispatcher(
         method=request.method,
         directories=urlparse(request.url).path.strip("/").split("/"),
         args=list(request.args.items()),
@@ -107,15 +104,3 @@ def proxy(request: Request) -> tuple:
         headers=headers,
         request=request,
     )
-
-    if debug:
-        t1 = time()
-        log(
-            request=request,
-            response=r,
-            request_headers=headers,
-            response_headers=r[2] if len(r) == 3 else {},
-            latency=t1 - t0,
-        )
-
-    return r
