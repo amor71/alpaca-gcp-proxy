@@ -2,7 +2,7 @@
 # -- Load Balancer
 # --------------------------
 resource "google_compute_region_network_endpoint_group" "proxies_neg" {
-  name                  = "cloudrun-neg"
+  name                  = "proxies-neg"
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
   cloud_function {
