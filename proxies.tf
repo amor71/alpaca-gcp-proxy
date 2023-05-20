@@ -16,7 +16,7 @@ resource "google_compute_global_address" "proxies-lb-ip" {
   address    = "34.160.102.164"
 }
 
-module "lb-http" {
+module "proxies-lb-http" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 9.0.0"
 

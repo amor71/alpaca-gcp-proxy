@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "Terraform Deployment"
 
 on:  
   workflow_run:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Terraform Deployment"
     runs-on: ubuntu-latest
     environment: production
 
