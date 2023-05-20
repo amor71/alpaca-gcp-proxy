@@ -233,6 +233,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "google-cloud"
+version = "0.34.0"
+summary = "API Client library for Google Cloud"
+
+[[package]]
 name = "google-cloud-core"
 version = "2.3.2"
 requires_python = ">=3.7"
@@ -808,7 +813,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:2b44018c8c86cc64051b1105a8487c045d65ae6e91495026d9bbc10d82e32c4f"
+content_hash = "sha256:b41602d33cbd5ff311f095cfc4d7c631c3bd4edd47a6ab6b53815eba70f7a686"
 
 [metadata.files]
 "autoflake 2.1.1" = [
@@ -1077,6 +1082,10 @@ content_hash = "sha256:2b44018c8c86cc64051b1105a8487c045d65ae6e91495026d9bbc10d8
 "google-auth-httplib2 0.1.0" = [
     {url = "https://files.pythonhosted.org/packages/ba/db/721e2f3f32339080153995d16e46edc3a7657251f167ddcb9327e632783b/google_auth_httplib2-0.1.0-py2.py3-none-any.whl", hash = "sha256:31e49c36c6b5643b57e82617cb3e021e3e1d2df9da63af67252c02fa9c1f4a10"},
     {url = "https://files.pythonhosted.org/packages/c6/b5/a9e956fd904ecb34ec9d297616fe98fa4106fc12f3b0a914dec983c267b9/google-auth-httplib2-0.1.0.tar.gz", hash = "sha256:a07c39fd632becacd3f07718dfd6021bf396978f03ad3ce4321d060015cc30ac"},
+]
+"google-cloud 0.34.0" = [
+    {url = "https://files.pythonhosted.org/packages/47/0e/8bf108fa9e3e036fe37a86598f1315e7b8de90b89012fd65704dc30ac6ad/google-cloud-0.34.0.tar.gz", hash = "sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3"},
+    {url = "https://files.pythonhosted.org/packages/ba/b1/7c54d1950e7808df06642274e677dbcedba57f75307adf2e5ad8d39e5e0e/google_cloud-0.34.0-py2.py3-none-any.whl", hash = "sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf"},
 ]
 "google-cloud-core 2.3.2" = [
     {url = "https://files.pythonhosted.org/packages/40/4b/f4cebb92fe965f02f4a9c06f16355cf83a61a2d5db110df9af71191c830a/google-cloud-core-2.3.2.tar.gz", hash = "sha256:b9529ee7047fd8d4bf4a2182de619154240df17fbe60ead399078c1ae152af9a"},
