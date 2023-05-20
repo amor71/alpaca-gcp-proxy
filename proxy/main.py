@@ -11,6 +11,11 @@ from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
 from infra.proxies.stytch import stytch_proxy
 
+proxy_mapper: dict = {
+    "alpaca": alpaca_proxy,
+    "plaid": plaid_proxy,
+    "stytch": stytch_proxy,
+}
 omitted_response_headers: list = [
     "content-encoding",
     "Content-Encoding",
@@ -52,23 +57,8 @@ def _proxy_dispatcher(
     if not _supported_proxies(directories[0]):
         return ("proxy not found", 400)
 
-    if directories[0] == "alpaca":
-        r = alpaca_proxy(
-            method,
-            "/".join(directories[1:]),
-            args,
-            payload,
-            headers,
-        )
-    elif directories[0] == "plaid":
-        r = plaid_proxy(
-            method,
-            "/".join(directories[1:]),
-            payload,
-            headers,
-        )
-    elif directories[0] == "stytch":
-        r = stytch_proxy(
+    if directories[0] in proxy_mapper:
+        r = proxy_mapper[directories[0]](
             method,
             "/".join(directories[1:]),
             args,
