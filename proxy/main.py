@@ -2,12 +2,10 @@ from urllib.parse import urlparse
 
 import functions_framework
 from flask import Request
-from google.api_core.exceptions import NotFound
 from link import link
-from requests import HTTPError
+from requests import HTTPError, Response
 
 from infra import auth, clean_headers  # type: ignore
-from infra.config import debug
 from infra.logger import log
 from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
@@ -31,6 +29,18 @@ def _supported_proxies(requested_proxy: str) -> bool:
     return requested_proxy in {"alpaca", "plaid", "stytch", "bank"}
 
 
+def _build_response(response: Response) -> tuple:
+    response_headers = dict(response.headers)
+    for header in omitted_response_headers:
+        response_headers.pop(header, None)
+
+    return (
+        response.content,
+        response.status_code,
+        response_headers,
+    )
+
+
 def _proxy_dispatcher(
     method: str,
     directories: list,
@@ -42,8 +52,6 @@ def _proxy_dispatcher(
     if not _supported_proxies(directories[0]):
         return ("proxy not found", 400)
 
-    add_response_headers = {"Access-Control-Allow-Headers": "*"}
-
     if directories[0] == "alpaca":
         r = alpaca_proxy(
             method,
@@ -52,7 +60,6 @@ def _proxy_dispatcher(
             payload,
             headers,
         )
-        add_response_headers["Access-Control-Allow-Origin"] = "*"
     elif directories[0] == "plaid":
         r = plaid_proxy(
             method,
@@ -60,8 +67,6 @@ def _proxy_dispatcher(
             payload,
             headers,
         )
-        add_response_headers["Access-Control-Allow-Origin"] = "*"
-
     elif directories[0] == "stytch":
         r = stytch_proxy(
             method,
@@ -76,18 +81,7 @@ def _proxy_dispatcher(
         except HTTPError as e:
             return (str(e), 400)
 
-    response_headers = dict(r.headers)
-    for header in omitted_response_headers:
-        response_headers.pop(header, None)
-
-    for k, v in add_response_headers.items():
-        response_headers[k] = v
-
-    return (
-        r.content,
-        r.status_code,
-        response_headers,
-    )
+    return _build_response(response=r)
 
 
 @functions_framework.http
@@ -95,12 +89,11 @@ def _proxy_dispatcher(
 def proxy(request: Request) -> tuple:
     """proxy endpoint"""
 
-    headers: dict = clean_headers(dict(request.headers))
     return _proxy_dispatcher(
         method=request.method,
         directories=urlparse(request.url).path.strip("/").split("/"),
         args=list(request.args.items()),
         payload=request.get_json() if request.is_json else None,
-        headers=headers,
+        headers=clean_headers(dict(request.headers)),
         request=request,
     )
