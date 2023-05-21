@@ -7,34 +7,34 @@ host: api.nine30.com
 schemes:
   - "https"
 paths:
-  /v1/users:
-    post:
-      description: "Notify creation of a new user"
-      operationId: "accounts"
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/new_user
-      consumes:
-        - application/json
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: "new user payload"
-          schema:
-            $ref: "#/definitions/User"
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Payload missing or incorrect
-    options:
-      description: "CORS support"
-      operationId: "accounts-cors"
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/new_user
-      responses:
-        "204":
-          description: OK
+  #/v1/users:
+  #  post:
+  #    description: "Notify creation of a new user"
+  #    operationId: "accounts"
+  #    x-google-backend:
+  #      address: https://us-east4-development-380917.cloudfunctions.net/new_user
+  #    consumes:
+  #      - application/json
+  #    parameters:
+  #      - name: body
+  #        in: body
+  #        required: true
+  #        description: "new user payload"
+  #        schema:
+  #          $ref: "#/definitions/User"
+  #    responses:
+  #      "200":
+  #        description: OK
+  #      "400":
+  #        description: Payload missing or incorrect
+  #  options:
+  #    description: "CORS support"
+  #    operationId: "accounts-cors"
+  #    x-google-backend:
+  #      address: https://us-east4-development-380917.cloudfunctions.net/new_user
+  #    responses:
+  #      "204":
+  #        description: OK
 
   /v1/users/{userId}/topup:
     put:
