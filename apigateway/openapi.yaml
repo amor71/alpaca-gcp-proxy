@@ -7,7 +7,7 @@ host: api.nine30.com
 schemes:
   - "https"
 paths:
-  "/v1/users":
+  /v1/users:
     post:
       description: "Notify creation of a new user"
       operationId: "accounts"
@@ -35,7 +35,7 @@ paths:
       responses:
         "204":
           description: OK
-  "/v1/users/{userId}/topup":
+  /v1/users/{userId}/topup:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "update-topup"
