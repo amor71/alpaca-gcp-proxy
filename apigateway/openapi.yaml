@@ -35,6 +35,39 @@ paths:
       responses:
         "204":
           description: OK
+  "/v1/users/{userId}/topup":
+    put:
+      description: "Update User top-up schedule and amount"
+      operationId: "update-topup"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/topup
+      consumes:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          description: Id of user to update
+        - name: body
+          in: body
+          required: true
+          description: "update topup payload"
+          schema:
+            $ref: "#/definitions/UpdateUserTopup"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Payload missing or incorrect
+    options:
+      description: "CORS support"
+      operationId: "accounts-cors"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/new_user
+      responses:
+        "204":
+          description: OK
 
 definitions:
   User:
@@ -48,3 +81,16 @@ definitions:
         description: reference to the user's email address stored in Stytch
         type: string
         format: string
+  UpdateUserTopup:
+    type: object
+    properties:
+      Amount:
+        description: Set "top-up" amount
+        type: string
+        format: string
+      Frequency:
+        description: How often to top-up the account
+        type: string
+        enum:
+          - weekly
+          - monthly
