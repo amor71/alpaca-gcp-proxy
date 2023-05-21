@@ -46,7 +46,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: userId
+          name: "userId"
           required: true
           type: string
           description: Id of user to update
