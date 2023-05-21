@@ -91,7 +91,7 @@ definitions:
     properties:
       Amount:
         description: Set 'top-up' amount
-        type: string
+        type: float
       Frequency:
         description: How often to top-up the account
         type: string
