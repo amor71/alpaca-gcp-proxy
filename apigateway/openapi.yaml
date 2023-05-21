@@ -48,6 +48,7 @@ paths:
           in: path
           required: true
           type: string
+          format: string
           description: Id of user to update
         - name: body
           in: body
@@ -64,7 +65,7 @@ paths:
       description: "CORS support"
       operationId: "update-topup-cors"
       x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/new_user
+        address: https://us-east4-development-380917.cloudfunctions.net/topup
       responses:
         "204":
           description: OK
