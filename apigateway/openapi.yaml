@@ -35,7 +35,7 @@ paths:
       responses:
         "204":
           description: OK
-  /v1/users/{"userId"}/topup:
+  /v1/users/{userId}/topup:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
@@ -85,6 +85,10 @@ definitions:
   UpdateUserTopup:
     type: object
     properties:
+      UserId:
+        description: user to update
+        type: string
+        format: string
       Amount:
         description: Set "top-up" amount
         type: string
