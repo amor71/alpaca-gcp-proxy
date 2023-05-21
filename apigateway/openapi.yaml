@@ -36,7 +36,7 @@ paths:
         "204":
           description: OK
 
-  /v1/users/{Id}/topup:
+  /v1/users/{userId}/topup:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
@@ -46,7 +46,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: Id
+          name: userId
           required: true
           type: string
           description: Id of user to update
@@ -68,7 +68,7 @@ paths:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       parameters:
         - in: path
-          name: Id
+          name: userId
           required: true
           type: string
           description: Id of user to update
