@@ -36,12 +36,12 @@ paths:
   #      "204":
   #        description: OK
 
-  "/v1/users/{Id}/topup":
+  /v1/users/{Id}/topup:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/topup
+      #x-google-backend:
+      #  address: https://us-east4-development-380917.cloudfunctions.net/topup
       #consumes:
       #  - application/json
       parameters:
