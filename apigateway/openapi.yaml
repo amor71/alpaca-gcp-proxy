@@ -47,9 +47,10 @@ paths:
         - in: path
           name: "userId"
           required: true
-          schema:
-            type: string
-            format: path
+          #schema:
+          #  type: string
+          #  format: path
+          type: string
           description: Id of user to update
         - in: body
           name: topupPayload
