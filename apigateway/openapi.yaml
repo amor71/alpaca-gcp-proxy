@@ -90,8 +90,9 @@ definitions:
     type: object
     properties:
       Amount:
-        description: Set 'top-up' amount
-        type: float
+        description: Set 'top-up' amount, multiplied by 100 (for cents)
+        type: number
+        format: int
       Frequency:
         description: How often to top-up the account
         type: string
