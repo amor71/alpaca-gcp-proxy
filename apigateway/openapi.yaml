@@ -35,6 +35,7 @@ paths:
       responses:
         "204":
           description: OK
+
   /v1/users/{userId}/topup:
     put:
       description: "Update User top-up schedule and amount"
