@@ -81,6 +81,42 @@ resource "google_cloudfunctions_function" "new_user" {
   }
 }
 
+# --------------
+# -- topup --
+# --------------
+data "archive_file" "topup" {
+  type        = "zip"
+  output_path = "/tmp/topup.zip"
+  source_dir  = "apigateway/topup"
+}
+resource "google_storage_bucket_object" "topup_zip" {
+  name         = format("topup-%s.zip", data.archive_file.topup.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.topup.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+
+resource "google_cloudfunctions_function" "topup" {
+  name                  = "topup"
+  description           = "Set user's top-up schedule and amount"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.topup_zip.name
+
+  trigger_http = true
+
+  entry_point         = "topup"
+  available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID   = var.project_id
+    TOKEN_BYPASS = var.token_bypass
+  }
+}
+
 # -----------
 # -- proxy --
 # -----------
