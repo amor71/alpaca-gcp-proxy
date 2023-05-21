@@ -35,7 +35,7 @@ paths:
       responses:
         "204":
           description: OK
-  /v1/users/topup:
+  /v1/topup/{userId}:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "update-topup"
@@ -44,12 +44,12 @@ paths:
       consumes:
         - application/json
       parameters:
-        #- in: path
-        #  name: userId
-        #  required: true
-        #  type: string
-        #  format: string
-        #  description: Id of user to update
+        - in: path
+          name: userId
+          required: true
+          type: string
+          format: string
+          description: Id of user to update
         - in: body
           name: topup-payload
           required: true
