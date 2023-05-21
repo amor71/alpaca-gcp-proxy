@@ -42,11 +42,11 @@ paths:
       operationId: "updateTopup"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
-      consumes:
-        - application/json
+      #consumes:
+      #  - application/json
       parameters:
         - in: path
-          name: "userId"
+          name: userId
           required: true
           type: string
           description: Id of user to update
