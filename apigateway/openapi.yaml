@@ -38,20 +38,20 @@ paths:
   /v1/users/{"userId"}/topup:
     put:
       description: "Update User top-up schedule and amount"
-      operationId: "update-topup"
+      operationId: "updateTopup"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       consumes:
         - application/json
       parameters:
         - in: path
-          name: "userId"
+          name: userId
           required: true
           type: string
           format: string
           description: Id of user to update
         - in: body
-          name: topup-payload
+          name: topupPayload
           required: true
           description: "update topup payload"
           schema:
