@@ -36,7 +36,7 @@ paths:
   #      "204":
   #        description: OK
 
-  /v1/users/{Id}/topup:
+  "/v1/users/{Id}/topup":
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
