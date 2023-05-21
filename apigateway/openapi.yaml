@@ -45,11 +45,8 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: "userId"
+          name: userId
           required: true
-          #schema:
-          #  type: string
-          #  format: path
           type: string
           description: Id of user to update
         - in: body
@@ -79,22 +76,15 @@ definitions:
       user_id:
         description: New Stytch user_id
         type: string
-        format: string
       email_id:
         description: reference to the user's email address stored in Stytch
         type: string
-        format: string
   UpdateUserTopup:
     type: object
     properties:
-      UserId:
-        description: user to update
-        type: string
-        format: string
       Amount:
-        description: Set "top-up" amount
+        description: Set 'top-up' amount
         type: string
-        format: string
       Frequency:
         description: How often to top-up the account
         type: string
