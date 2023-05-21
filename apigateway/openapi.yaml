@@ -37,10 +37,10 @@ paths:
           description: OK
   "/v1/users/{userId}/topup":
     put:
-      description: "Update User details"
-      operationId: "update-account"
+      description: "Update User top-up schedule and amount"
+      operationId: "update-topup"
       x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/update_user_topup
+        address: https://us-east4-development-380917.cloudfunctions.net/topup
       consumes:
         - application/json
       parameters:
@@ -52,7 +52,7 @@ paths:
         - name: body
           in: body
           required: true
-          description: "update user payload"
+          description: "update topup payload"
           schema:
             $ref: "#/definitions/UpdateUserTopup"
       responses:
@@ -84,16 +84,13 @@ definitions:
   UpdateUserTopup:
     type: object
     properties:
-      topUpAmount:
+      Amount:
         description: Set "top-up" amount
         type: string
         format: string
-      topUpFrequency:
+      Frequency:
         description: How often to top-up the account
         type: string
         enum:
-        - weekly
-        - monthly
-      
-
-
+          - weekly
+          - monthly
