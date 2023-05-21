@@ -66,6 +66,12 @@ paths:
       operationId: "update-topup-cors"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
+      parameters:
+        - in: path
+          name: Id
+          required: true
+          type: string
+          description: Id of user to update
       responses:
         "204":
           description: OK
