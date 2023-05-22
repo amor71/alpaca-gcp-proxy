@@ -17,13 +17,12 @@ def process(email_id: str, amount: int, frequency: Frequency) -> None:
 
     db = firestore.Client()
 
-    topup_ref = db.collection("topups")
-    user = topup_ref.child(email_id)
-    status = user.push(
+    document_ref = db.collection("users").document(email_id)
+    topups_ref = document_ref.collection("topups")
+    status = topups_ref.document(time.time_ns()).set(
         {
             "amount": amount,
             "frequency": str(frequency),
-            "create_at": time.time_ns(),
         }
     )
 
