@@ -89,11 +89,11 @@ definitions:
   UpdateUserTopup:
     type: object
     properties:
-      Amount:
+      amount:
         description: Set 'top-up' amount, multiplied by 100 (for cents)
         type: integer
         format: int32
-      Frequency:
+      frequency:
         description: How often to top-up the account
         type: string
         enum:
