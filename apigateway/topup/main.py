@@ -36,7 +36,6 @@ def topup(request):
     """Implement PUT /users/{emailId}/topup end-point"""
 
     email_id = request.args.get("emailId")
-    print(f"Received user_id: {email_id}")
 
     # validate API
     payload = request.get_json() if request.is_json else None

@@ -47,10 +47,14 @@ paths:
           name: emailId
           required: true
           type: string
-          description: Id of user to update     
+          description: Id of user to update
       responses:
         "200":
           description: OK
+        "404":
+          description: user does not exist
+        "405":
+          description: invalid route parameters
 
     options:
       description: "CORS support"
@@ -66,7 +70,7 @@ paths:
       responses:
         "204":
           description: OK
-    
+
   /v1/users/{emailId}/topup:
     put:
       description: "Update User top-up schedule and amount"
