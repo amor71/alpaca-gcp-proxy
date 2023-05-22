@@ -117,6 +117,42 @@ resource "google_cloudfunctions_function" "topup" {
   }
 }
 
+# ----------------------
+# -- get_user_details --
+# ----------------------
+data "archive_file" "get_user_details" {
+  type        = "zip"
+  output_path = "/tmp/topup.zip"
+  source_dir  = "apigateway/get_user_details"
+}
+resource "google_storage_bucket_object" "get_user_details" {
+  name         = format("get_user_details-%s.zip", data.archive_file.get_user_details.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.get_user_details.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+
+resource "google_cloudfunctions_function" "get_user_details" {
+  name                  = "get_user_details"
+  description           = "Set user's top-up schedule and amount"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.get_user_details.name
+
+  trigger_http = true
+
+  entry_point         = "get_user_details"
+  available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID   = var.project_id
+    TOKEN_BYPASS = var.token_bypass
+  }
+}
+
 # -----------
 # -- proxy --
 # -----------

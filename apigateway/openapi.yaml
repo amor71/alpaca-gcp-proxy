@@ -36,6 +36,37 @@ paths:
         "204":
           description: OK
 
+  /v1/users/{emailId}:
+    get:
+      description: "Get user state and details"
+      operationId: "getUserDetails"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
+      parameters:
+        - in: path
+          name: emailId
+          required: true
+          type: string
+          description: Id of user to update     
+      responses:
+        "200":
+          description: OK
+
+    options:
+      description: "CORS support"
+      operationId: "getUserDetails-cors"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
+      parameters:
+        - in: path
+          name: emailId
+          required: true
+          type: string
+          description: Id of user to update
+      responses:
+        "204":
+          description: OK
+    
   /v1/users/{emailId}/topup:
     put:
       description: "Update User top-up schedule and amount"
