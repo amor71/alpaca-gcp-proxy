@@ -19,10 +19,11 @@ def process(email_id: str, amount: int, frequency: Frequency) -> None:
 
     document_ref = db.collection("users").document(email_id)
     topups_ref = document_ref.collection("topups")
-    status = topups_ref.document(time.time_ns()).set(
+    status = topups_ref.document().set(
         {
             "amount": amount,
             "frequency": str(frequency),
+            "created": time.time_ns(),
         }
     )
 
