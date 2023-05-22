@@ -122,7 +122,7 @@ resource "google_cloudfunctions_function" "topup" {
 # ----------------------
 data "archive_file" "get_user_details" {
   type        = "zip"
-  output_path = "/tmp/topup.zip"
+  output_path = "/tmp/get_user_details.zip"
   source_dir  = "apigateway/get_user_details"
 }
 resource "google_storage_bucket_object" "get_user_details" {
