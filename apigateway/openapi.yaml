@@ -68,7 +68,7 @@ paths:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       parameters:
         - in: path
-          name: userId
+          name: emailId
           required: true
           type: string
           description: Id of user to update
