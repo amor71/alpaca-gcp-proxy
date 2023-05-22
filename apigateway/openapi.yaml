@@ -36,7 +36,7 @@ paths:
         "204":
           description: OK
 
-  /v1/users/{userId}/topup:
+  /v1/users/{emailId}/topup:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
@@ -46,7 +46,7 @@ paths:
         - application/json
       parameters:
         - in: path
-          name: userId
+          name: emailId
           required: true
           type: string
           description: Id of user to update

@@ -1,6 +1,8 @@
+import time
 from enum import Enum
 
 import functions_framework
+from google.cloud import firestore  # type: ignore
 
 from infra import auth  # type: ignore
 
@@ -10,17 +12,30 @@ class Frequency(Enum):
     Monthly = 2
 
 
-def process(amount: int, frequency: Frequency) -> None:
-    print(f"process: {amount}, {frequency}")
+def process(email_id: str, amount: int, frequency: Frequency) -> None:
+    print(f"process: {email_id} {amount}, {frequency}")
+
+    db = firestore.Client()
+
+    doc_ref = db.collection("users").document(email_id)
+    status = doc_ref.child("topup").push(
+        {
+            "amount": amount,
+            "frequency": str(frequency),
+            "create_at": time.time_ns(),
+        }
+    )
+
+    print("document write status=", status)
 
 
 @functions_framework.http
 @auth
 def topup(request):
-    """Implement PUT /users/{userId}/topup end-point"""
+    """Implement PUT /users/{emailId}/topup end-point"""
 
-    user_id = request.args.get("userId")
-    print(f"Received user_id: {user_id}")
+    email_id = request.args.get("emailId")
+    print(f"Received user_id: {email_id}")
 
     # validate API
     payload = request.get_json() if request.is_json else None
@@ -46,6 +61,6 @@ def topup(request):
     except Exception:
         return ("frequency needs to be 'Weekly' or 'Monthly'", 400)
 
-    process(amount, frequency)
+    process(email_id, amount, frequency)
 
     return ("OK", 200)
