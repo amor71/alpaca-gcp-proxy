@@ -17,8 +17,8 @@ def process(email_id: str, amount: int, frequency: Frequency) -> None:
 
     db = firestore.Client()
 
-    doc_ref = db.collection("users").document(email_id)
-    status = doc_ref.child("topup").push(
+    doc_ref = db.collection("topup").document(email_id)
+    status = doc_ref.push(
         {
             "amount": amount,
             "frequency": str(frequency),
