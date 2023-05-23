@@ -6,7 +6,7 @@ from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
-from .. import request_email_id
+from .. import authenticated_email_id
 from ..config import alpaca_events_topic_id, project_id
 from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
@@ -88,7 +88,7 @@ def alpaca_proxy(
     )
 
     try:
-        email_id = request_email_id.get()  # type: ignore
+        email_id = authenticated_email_id.get()  # type: ignore
         print(f"looked up email_id {email_id}")
         if email_id:
             trigger_step_function(email_id, url, r.json())
