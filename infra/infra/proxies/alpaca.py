@@ -90,15 +90,10 @@ def alpaca_proxy(
 
     try:
         email_id: str = ContextVar("email_id").get()  # type: ignore
+        print(f"looked up email_id {email_id}")
+        if email_id:
+            trigger_step_function(email_id, url, r.json())
     except LookupError:
         log_error("alpaca_proxy", "failed to lookup 'email_id' in Context")
-
-    if email_id:
-        trigger_step_function(email_id, url, r.json())
-    else:
-        log_error(
-            "alpaca_proxy",
-            "`email_id` if None, can't trigger alpaca step function",
-        )
 
     return r
