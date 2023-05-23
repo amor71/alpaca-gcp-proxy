@@ -7,6 +7,7 @@ from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
 from ..config import alpaca_events_topic_id, project_id
+from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
 
 api_key_name = "alpaca_api_key"
@@ -16,6 +17,8 @@ api_secret_name = "alpaca_api_secret"
 alpaca_base_url = os.getenv(
     "ALPACA_BASE_URL", "https://broker-api.sandbox.alpaca.markets"
 )
+
+from contextvars import ContextVar
 
 
 def _get_alpaca_authentication() -> HTTPBasicAuth:
@@ -41,12 +44,15 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
     )
 
 
-def trigger_step_function(url: str, response: dict):
+def trigger_step_function(email_id: str, url: str, response: dict):
     if "/v1/accounts" in url:
         publisher = pubsub_v1.PublisherClient()
         topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
         publish_future = publisher.publish(
-            topic_path, json.dumps(response).encode("utf-8")
+            topic_path,
+            json.dumps({"email_id": email_id, "payload": response}).encode(
+                "utf-8"
+            ),
         )
 
         futures.wait([publish_future])
@@ -63,7 +69,7 @@ def alpaca_proxy(
     request_url = construct_url(alpaca_base_url, url)
     auth = _get_alpaca_authentication()
 
-    return (
+    r = (
         request(
             method=method,
             params=args,
@@ -81,3 +87,18 @@ def alpaca_proxy(
             # headers=headers,
         )
     )
+
+    try:
+        email_id: str = ContextVar("email_id").get()  # type: ignore
+    except LookupError:
+        log_error("alpaca_proxy", "failed to lookup 'email_id' in Context")
+
+    if email_id:
+        trigger_step_function(email_id, url, r.json())
+    else:
+        log_error(
+            "alpaca_proxy",
+            "`email_id` if None, can't trigger alpaca step function",
+        )
+
+    return r

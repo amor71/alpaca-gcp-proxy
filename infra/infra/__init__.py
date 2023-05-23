@@ -1,3 +1,5 @@
+from contextvars import ContextVar
+
 from flask import Request
 
 from .auth import authenticate_token, get_bearer_token
@@ -64,6 +66,9 @@ def auth(func):
             return ("invalid token passed", 403)
 
         email_id = request.args.get("emailId")
+
+        ContextVar("email_id", default=email_id)
+
         headers: dict = clean_headers(dict(request.headers))
         authenticated_user = authenticate_token(token, headers)
 

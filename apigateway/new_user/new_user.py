@@ -16,7 +16,6 @@ def new_user_handler(user_id: str, email_id: str):
     status = doc_ref.set(
         {
             "user_id": user_id,
-            "state": 0,
             "create_at": datetime.now(timezone.utc),
         }
     )

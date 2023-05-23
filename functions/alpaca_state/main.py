@@ -12,4 +12,4 @@ def alpaca_state(cloud_event: CloudEvent):
     message = json.loads(
         base64.b64decode(cloud_event.data["message"]["data"]).decode("utf-8")
     )
-    alpaca_state_handler(message)
+    alpaca_state_handler(message["email_id"], message["payload"])

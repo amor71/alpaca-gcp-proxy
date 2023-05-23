@@ -1,5 +1,3 @@
-from datetime import datetime, timezone
-
 from google.cloud import firestore  # type: ignore
 from opentelemetry import metrics
 from opentelemetry.exporter.cloud_monitoring import \
@@ -38,19 +36,21 @@ def add_new_alpaca_application():
     counter.add(1, staging_labels)
 
 
-def alpaca_state_handler(payload: dict):
+def alpaca_state_handler(email_id: str, payload: dict):
     print("payload=", payload)
 
     db = firestore.Client()
 
-    doc_ref = db.collection("users").document(payload["email_id"])
-    status = doc_ref.set(
-        {
-            "user_id": payload["user_id"],
-            "state": 1,
-            "modified_at": datetime.now(timezone.utc),
-        }
-    )
+    doc_ref = db.collection("users").document(email_id)
 
-    add_new_alpaca_application()
-    print("document write status=", status)
+    update_data = {"alpaca_account_id": payload.get("id")}
+
+    if status := payload.get("status"):
+        update_data["alpaca_status"] = status
+    if crypto_status := payload.get("crypto_status"):
+        update_data["alpaca_crypto_status"] = crypto_status
+    if account_type := payload.get("account_type"):
+        update_data["alpaca_account_type"] = account_type
+    status = doc_ref.update(update_data)
+
+    print("document update status=", status)
