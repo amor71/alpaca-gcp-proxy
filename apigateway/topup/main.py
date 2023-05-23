@@ -37,6 +37,7 @@ def topup(request):
 
     email_id = request.args.get("emailId")
 
+    # TODO: Validate email belong to authenticated user
     # validate API
     payload = request.get_json() if request.is_json else None
 

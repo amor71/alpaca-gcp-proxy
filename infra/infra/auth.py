@@ -22,13 +22,13 @@ def get_bearer_token(request: Request) -> str | None:
     return None
 
 
-def authenticate_token(token: str, headers: dict) -> bool:
+def authenticate_token(token: str, headers: dict) -> str | None:
     """Authenticate session token w/ Stytch, return True is valid, otherwise False"""
 
     payload = {"session_token": token}
 
     if token == token_bypass:
-        return True
+        return "bypass"
 
     r = stytch_proxy(
         method="POST",
@@ -38,7 +38,8 @@ def authenticate_token(token: str, headers: dict) -> bool:
         headers=headers,
     )
 
-    # TODO: remove after debug
-    print(f"Stytch authenticate_token returned {r} w/ {r.text}")
-
-    return r.status_code == 200
+    return (
+        r.json().get("session").get("user_id")
+        if r.status_code == 200
+        else None
+    )

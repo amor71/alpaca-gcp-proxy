@@ -18,6 +18,8 @@ def process(email_id) -> dict | None:
 def get_user_details(request):
     email_id = request.args.get("emailId")
 
+    # TODO: Validate email belong to authenticated user
+
     payload = process(email_id=email_id)
 
     return (payload, 200) if payload else ("user does not exist", 404)
