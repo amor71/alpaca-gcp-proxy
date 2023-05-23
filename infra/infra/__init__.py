@@ -68,10 +68,14 @@ def auth(func):
         authenticated_user = authenticate_token(token, headers)
 
         print(f"authenticated_user={authenticated_user} email_id={email_id}")
-        if not authenticated_user or authenticated_user not in [
-            email_id,
-            "bypass",
-        ]:
+        if not authenticated_user or (
+            email_id
+            and authenticated_user
+            not in [
+                email_id,
+                "bypass",
+            ]
+        ):
             return ("invalid token passed", 403)
 
         response: tuple = func(request)
