@@ -67,7 +67,8 @@ def auth(func):
 
         email_id = request.args.get("emailId")
 
-        ContextVar("email_id", default=email_id)
+        var: ContextVar = ContextVar("email_id")
+        var.set(email_id)
 
         headers: dict = clean_headers(dict(request.headers))
         authenticated_user = authenticate_token(token, headers)
