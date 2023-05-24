@@ -24,6 +24,7 @@ def new_user_handler(user_id: str, email_id: str):
     print("document write status=", status)
 
 
+"""
 metrics.set_meter_provider(
     MeterProvider(
         metric_readers=[
@@ -53,3 +54,4 @@ def add_new_user_counter():
 
     staging_labels = {"environment": "development"}
     counter.add(1, staging_labels)
+"""
