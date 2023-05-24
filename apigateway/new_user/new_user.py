@@ -12,10 +12,10 @@ from opentelemetry.sdk.resources import Resource
 def new_user_handler(user_id: str, email_id: str):
     db = firestore.Client()
 
-    doc_ref = db.collection("users").document(email_id)
+    doc_ref = db.collection("users").document(user_id)
     status = doc_ref.set(
         {
-            "user_id": user_id,
+            "email_id": email_id,
             "create_at": datetime.now(timezone.utc),
         }
     )

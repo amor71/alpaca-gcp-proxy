@@ -14,4 +14,4 @@ def alpaca_state(cloud_event: CloudEvent):
     )
     print(f"alpaca_state message={message}")
 
-    alpaca_state_handler(message["email_id"], message["payload"])
+    alpaca_state_handler(message["user_id"], message["payload"])

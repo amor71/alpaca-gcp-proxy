@@ -9,7 +9,7 @@ cors_response_headers = {
     "Access-Control-Allow-Headers": "*",
 }
 
-authenticated_email_id: ContextVar = ContextVar("authenticated_email_id")
+authenticated_user_id: ContextVar = ContextVar("authenticated_email_id")
 
 
 def _keep_header(header: str) -> bool:
@@ -72,8 +72,8 @@ def auth(func):
         headers: dict = clean_headers(dict(request.headers))
         authenticated_user = authenticate_token(token, headers)
 
-        authenticated_email_id.set(authenticated_user)
-        print(f"set authenticated_email_id {authenticated_email_id}")
+        authenticated_user_id.set(authenticated_user)
+        print(f"set authenticated_user_id {authenticated_user_id}")
 
         print(f"authenticated_user={authenticated_user} email_id={email_id}")
         if not authenticated_user or (

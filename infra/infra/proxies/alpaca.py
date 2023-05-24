@@ -6,7 +6,7 @@ from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 from requests.auth import HTTPBasicAuth
 
-from .. import authenticated_email_id
+from .. import authenticated_user_id
 from ..config import alpaca_events_topic_id, project_id
 from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
@@ -43,14 +43,14 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
     )
 
 
-def trigger_step_function(email_id: str, url: str, response: dict):
-    print(f"trigger_step_function {email_id}, {url}, {response}")
+def trigger_step_function(user_id: str, url: str, response: dict):
+    print(f"trigger_step_function {user_id}, {url}, {response}")
     if "v1/accounts" in url:
         publisher = pubsub_v1.PublisherClient()
         topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
         publish_future = publisher.publish(
             topic_path,
-            json.dumps({"email_id": email_id, "payload": response}).encode(
+            json.dumps({"user_id": user_id, "payload": response}).encode(
                 "utf-8"
             ),
         )
@@ -89,10 +89,10 @@ def alpaca_proxy(
     )
 
     try:
-        email_id = authenticated_email_id.get()  # type: ignore
-        print(f"looked up email_id {email_id}")
-        if email_id:
-            trigger_step_function(email_id, url, r.json())
+        user_id = authenticated_user_id.get()  # type: ignore
+        print(f"looked up user_id {user_id}")
+        if user_id:
+            trigger_step_function(user_id, url, r.json())
     except LookupError:
         log_error("alpaca_proxy", "failed to lookup 'email_id' in Context")
 

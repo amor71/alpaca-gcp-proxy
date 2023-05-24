@@ -36,12 +36,12 @@ def add_new_alpaca_application():
     counter.add(1, staging_labels)
 
 
-def alpaca_state_handler(email_id: str, payload: dict):
-    print(f"email={email_id}, payload={payload}")
+def alpaca_state_handler(user_id: str, payload: dict):
+    print(f"email={user_id}, payload={payload}")
 
     db = firestore.Client()
 
-    doc_ref = db.collection("users").document(email_id)
+    doc_ref = db.collection("users").document(user_id)
 
     update_data = {"alpaca_account_id": payload.get("id")}
 
