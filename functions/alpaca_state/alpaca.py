@@ -37,7 +37,7 @@ def add_new_alpaca_application():
 
 
 def alpaca_state_handler(email_id: str, payload: dict):
-    print("payload=", payload)
+    print(f"email={email_id}, payload={payload}")
 
     db = firestore.Client()
 
