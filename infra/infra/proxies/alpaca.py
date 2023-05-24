@@ -45,7 +45,7 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
 
 def trigger_step_function(email_id: str, url: str, response: dict):
     print(f"trigger_step_function {email_id}, {url}, {response}")
-    if "/v1/accounts" in url:
+    if "v1/accounts" in url:
         publisher = pubsub_v1.PublisherClient()
         topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
         publish_future = publisher.publish(
