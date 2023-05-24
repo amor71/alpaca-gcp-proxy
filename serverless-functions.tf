@@ -42,7 +42,7 @@ resource "google_cloudfunctions_function" "alpaca_events" {
   }
 
   entry_point         = "alpaca_state"
-  available_memory_mb = 128
+  available_memory_mb = 256
 }
 
 # --------------
