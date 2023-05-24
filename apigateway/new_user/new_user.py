@@ -20,7 +20,7 @@ def new_user_handler(user_id: str, email_id: str):
         }
     )
 
-    add_new_user_counter()
+    # add_new_user_counter()
     print("document write status=", status)
 
 
