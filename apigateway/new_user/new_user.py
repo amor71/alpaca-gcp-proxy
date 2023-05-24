@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+import time
 
 from google.cloud import firestore  # type: ignore
 from opentelemetry import metrics
@@ -16,7 +16,7 @@ def new_user_handler(user_id: str, email_id: str):
     status = doc_ref.set(
         {
             "email_id": email_id,
-            "create_at": datetime.now(timezone.utc),
+            "created": time.time_ns(),
         }
     )
 
