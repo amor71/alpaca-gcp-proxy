@@ -52,7 +52,7 @@ resource "google_pubsub_topic" "plaid_events" {
   name = "plaid_events"
 }
 
-data "archive_file" "alpaca_state" {
+data "archive_file" "plaid_state" {
   type        = "zip"
   output_path = "/tmp/plaid_state.zip"
   source_dir  = "functions/plaid_state"
@@ -70,7 +70,7 @@ resource "google_storage_bucket_object" "plaid_state_zip" {
 
 resource "google_cloudfunctions_function" "plaid_state" {
   name                  = "plaid_state"
-  description           = "Handling Alpaca.Market states"
+  description           = "Handling Plaid states"
   runtime               = "python311"
   source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
   source_archive_object = google_storage_bucket_object.plaid_state_zip.name
