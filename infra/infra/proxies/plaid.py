@@ -44,18 +44,16 @@ def _get_plaid_authentication() -> Dict:
 
 def trigger_step_function(user_id: str, url: str, response: dict):
     print(f"trigger_step_function {user_id}, {url}, {response}")
-    if "v1/accounts" in url:
-        publisher = pubsub_v1.PublisherClient()
-        topic_path = publisher.topic_path(project_id, plaid_events_topic_id)
-        publish_future = publisher.publish(
-            topic_path,
-            json.dumps({"user_id": user_id, "payload": response}).encode(
-                "utf-8"
-            ),
-        )
 
-        futures.wait([publish_future])
-        print("triggered step_function")
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, plaid_events_topic_id)
+    publish_future = publisher.publish(
+        topic_path,
+        json.dumps({"user_id": user_id, "payload": response}).encode("utf-8"),
+    )
+
+    futures.wait([publish_future])
+    print("triggered step_function")
 
 
 def plaid_proxy(
