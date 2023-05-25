@@ -18,15 +18,19 @@ def alpaca_state_handler(user_id: str, payload: dict):
 
     update_data = {
         "alpaca_account_id": payload.get("id"),
-        "updated": time.time_ns(),
+        "alpca_updated": time.time_ns(),
     }
 
     if status := payload.get("status"):
         update_data["alpaca_status"] = status
+    if account_number := payload.get("account_number"):
+        update_data["alpaca_account_number"] = account_number
     if crypto_status := payload.get("crypto_status"):
         update_data["alpaca_crypto_status"] = crypto_status
     if account_type := payload.get("account_type"):
         update_data["alpaca_account_type"] = account_type
+    if account_id := payload.get("account_id"):
+        update_data["linked_bank_account_id"] = account_id
     status = doc_ref.update(update_data)
 
     print("document update status=", status)

@@ -1,9 +1,14 @@
+import json
 import os
+from concurrent import futures
 from typing import Dict
 
-from google.cloud import secretmanager
+from google.cloud import pubsub_v1, secretmanager  # type:ignore
 from requests import Response, request
 
+from .. import authenticated_user_id
+from ..config import plaid_events_topic_id, project_id
+from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
 
 plaid_base_url = os.getenv("PLAID_BASE_URL", "https://sandbox.plaid.com")
@@ -37,6 +42,22 @@ def _get_plaid_authentication() -> Dict:
     }
 
 
+def trigger_step_function(user_id: str, url: str, response: dict):
+    print(f"trigger_step_function {user_id}, {url}, {response}")
+    if "v1/accounts" in url:
+        publisher = pubsub_v1.PublisherClient()
+        topic_path = publisher.topic_path(project_id, plaid_events_topic_id)
+        publish_future = publisher.publish(
+            topic_path,
+            json.dumps({"user_id": user_id, "payload": response}).encode(
+                "utf-8"
+            ),
+        )
+
+        futures.wait([publish_future])
+        print("triggered step_function")
+
+
 def plaid_proxy(
     method: str,
     url: str,
@@ -51,9 +72,19 @@ def plaid_proxy(
     if payload:
         payload.update(auth)
 
-    return request(
+    r = request(
         method=method,
         url=request_url,
         json=payload,
         headers=headers,
     )
+
+    try:
+        user_id = authenticated_user_id.get()  # type: ignore
+        print(f"looked up user_id {user_id}")
+        if user_id:
+            trigger_step_function(user_id, url, r.json())
+    except LookupError:
+        log_error("plaid_proxy", "failed to lookup 'email_id' in Context")
+
+    return r

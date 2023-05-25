@@ -45,6 +45,45 @@ resource "google_cloudfunctions_function" "alpaca_events" {
   available_memory_mb = 256
 }
 
+# -----------------
+# -- plaid_state --
+# -----------------
+resource "google_pubsub_topic" "plaid_events" {
+  name = "plaid_events"
+}
+
+data "archive_file" "alpaca_state" {
+  type        = "zip"
+  output_path = "/tmp/plaid_state.zip"
+  source_dir  = "functions/plaid_state"
+}
+resource "google_storage_bucket_object" "plaid_state_zip" {
+  name         = format("plaid_state-%s.zip", data.archive_file.plaid_state.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.plaid_state.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+
+}
+
+resource "google_cloudfunctions_function" "plaid_state" {
+  name                  = "plaid_state"
+  description           = "Handling Alpaca.Market states"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.plaid_state_zip.name
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "projects/${var.project_id}/topics/plaid_events"
+  }
+
+  entry_point         = "plaid_state"
+  available_memory_mb = 256
+}
+
 # --------------
 # -- new_user --
 # --------------
