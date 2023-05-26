@@ -1,0 +1,17 @@
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Amichay Oren", email = "amichay@nine30.com"},
+]
+dependencies = [
+    "jupyter>=1.0.0",
+    "nb-clean>=2.4.0",
+    "alpaca-py>=0.8.2",
+    "jupyter-black>=0.3.4",
+    "nbqa>=1.7.0",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
