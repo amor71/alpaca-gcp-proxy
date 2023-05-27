@@ -47,6 +47,16 @@ paths:
         "200":
           description: OK
 
+    get:
+      description: "Slackbot"
+      operationId: "slack-get"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/slackbot
+
+      responses:
+        "200":
+          description: OK
+
   /v1/chatbot:
     post:
       description: "Interface with Chatbot"

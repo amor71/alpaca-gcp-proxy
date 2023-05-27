@@ -37,7 +37,7 @@ def send_slack_message(channel, message):
 
 @functions_framework.http
 def slackbot(request):
-    """Implement POST /v1/slackbot"""
+    """Implement GET/POST /v1/slackbot"""
 
     print(request.headers)
 
