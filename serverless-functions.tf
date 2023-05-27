@@ -193,6 +193,43 @@ resource "google_cloudfunctions_function" "get_user_details" {
 }
 
 # -------------
+# -- slackbot --
+# -------------
+
+data "archive_file" "slackbot" {
+  type        = "zip"
+  output_path = "/tmp/slackbot.zip"
+  source_dir  = "apigateway/slackbot"
+}
+resource "google_storage_bucket_object" "slackbot" {
+  name         = format("slackbot-%s.zip", data.archive_file.slackbot.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.slackbot.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+
+resource "google_cloudfunctions_function" "slackbot" {
+  name                  = "slackbot"
+  description           = "Converse with slackbot"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.slackbot.name
+
+  trigger_http = true
+
+  entry_point         = "slackbot"
+  available_memory_mb = 256
+
+  environment_variables = {
+    PROJECT_ID   = var.project_id
+    TOKEN_BYPASS = var.token_bypass
+  }
+}
+
+# -------------
 # -- chatbot --
 # -------------
 
