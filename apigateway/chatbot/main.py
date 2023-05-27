@@ -38,7 +38,19 @@ def _get_credentials() -> tuple:
 def chatbot(request):
     """Implement POST /v1/chatbot"""
 
-    openai.api_key, openai.organization = _get_credentials()
-    print(openai.Model.list())
+    # Validate inputs
+    payload = request.get_json() if request.is_json else None
 
-    return ("OK", 200)
+    if not payload or not (question := payload.get("question")):
+        return ("Missing or invalid payload", 400)
+
+    openai.api_key, openai.organization = _get_credentials()
+
+    chat_completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": f"{question}"}],
+    )
+    answer = chat_completion.choices[0].message.content
+    payload: dict = {"answer": answer}
+
+    return (payload, 200)
