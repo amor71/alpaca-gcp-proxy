@@ -26,7 +26,7 @@ def _get_credentials() -> tuple:
     )
 
     check_crc(api_key_response)
-    check_crc(org_id)
+    check_crc(org_id_response)
     return (
         api_key_response.payload.data.decode("UTF-8"),
         org_id_response.payload.data.decode("UTF-8"),
