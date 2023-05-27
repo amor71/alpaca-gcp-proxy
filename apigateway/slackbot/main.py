@@ -7,6 +7,10 @@ def slackbot(request):
 
     # Validate inputs
     payload = request.get_json() if request.is_json else None
+    args = request.args
+    print(f"payload={payload}, args={args}")
 
-    print("payload", payload)
-    return (payload["challenge"], 200)
+    if "challenge" in payload:
+        return (payload["challenge"], 200)
+
+    return ("OK", 200)
