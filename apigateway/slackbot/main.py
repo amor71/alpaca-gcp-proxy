@@ -10,7 +10,7 @@ def slackbot(request):
     args = request.args
     print(f"payload={payload}, args={args}")
 
-    if "challenge" in payload:
+    if payload and "challenge" in payload:
         return (payload["challenge"], 200)
 
     return ("OK", 200)
