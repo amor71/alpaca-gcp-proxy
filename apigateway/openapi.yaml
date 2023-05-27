@@ -36,6 +36,34 @@ paths:
         "204":
           description: OK
 
+  /v1/chatbot:
+    post:
+      description: "Interface with Chatbot"
+      operationId: "chatbot-post"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/chatbot
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: "chat input"
+          schema:
+            $ref: "#/definitions/ChatIn"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/ChatOut"
+    
+    options:
+      description: "CORS support"
+      operationId: "chatbot-cors"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/chatbot
+      responses:
+        "204":
+          description: OK
+
   /v1/users/{emailId}:
     get:
       description: "Get user state and details"
@@ -121,6 +149,21 @@ definitions:
       email_id:
         description: reference to the user's email address stored in Stytch
         type: string
+
+  ChatIn:
+    type: object
+    properties:
+      question:
+        description: Input Question
+        type: string
+
+  ChatOut:
+    type: object
+    properties:
+      answer:
+        description: Chatbot Answer
+        type: string
+
   UpdateUserTopup:
     type: object
     properties:
