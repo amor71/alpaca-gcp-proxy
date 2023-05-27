@@ -47,15 +47,6 @@ paths:
         "200":
           description: OK
 
-    options:
-      description: "CORS support"
-      operationId: "slack-cors"
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/chatbot
-      responses:
-        "204":
-          description: OK
-
   /v1/chatbot:
     post:
       description: "Interface with Chatbot"
