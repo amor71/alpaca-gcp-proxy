@@ -8,4 +8,5 @@ def slackbot(request):
     # Validate inputs
     payload = request.get_json() if request.is_json else None
 
+    print("payload", payload)
     return (payload["challenge"], 200)

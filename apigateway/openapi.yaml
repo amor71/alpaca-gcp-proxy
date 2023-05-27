@@ -36,7 +36,7 @@ paths:
         "204":
           description: OK
 
-  /v1/niner:
+  /v1/slackbot:
     post:
       description: "Slackbot"
       operationId: "slack-post"
