@@ -39,6 +39,12 @@ def send_slack_message(channel, message):
 def slackbot(request):
     """Implement POST /v1/slackbot"""
 
+    print(request.headers)
+
+    if not request.data:
+        print(f"args={request.args}")
+        return ("OK", 200)
+
     event_data = json.loads(request.data.decode("utf-8"))
 
     # Check if the event is a message event
