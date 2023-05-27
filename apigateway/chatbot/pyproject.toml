@@ -16,6 +16,13 @@ dependencies = [
     "SecretStorage>=3.3.3",
     "google-cloud-pubsub>=2.17.1",
     "google-cloud-secret-manager>=2.16.1",
+    "bandit>=1.7.5",
+    "isort>=5.12.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "autoflake>=2.1.1",
+]
