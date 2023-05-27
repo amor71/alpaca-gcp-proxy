@@ -10,6 +10,7 @@ dependencies = [
     "openapi>=1.1.0",
     "functions-framework>=3.4.0",
     "requests>=2.31.0",
+    "google-cloud>=0.34.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}

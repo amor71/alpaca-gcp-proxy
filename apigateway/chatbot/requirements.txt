@@ -101,6 +101,9 @@ flask==2.3.2 \
 functions-framework==3.4.0 \
     --hash=sha256:c05639bcdd19f11a2eef1b6dabde5998f7d67cbddbffdf2f06ca56dc13c54e95 \
     --hash=sha256:e22f30a66aab7180373f9a81f88114da088915b3622c62dcd6ec972ac908e0c4
+google-cloud==0.34.0 \
+    --hash=sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3 \
+    --hash=sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf
 gunicorn==20.1.0 \
     --hash=sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e \
     --hash=sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8
@@ -243,7 +246,6 @@ watchdog==3.0.0 \
 Werkzeug==2.3.4 \
     --hash=sha256:1d5a58e0377d1fe39d061a5de4469e414e78ccb1e1e59c0f5ad6fa1c36c52b76 \
     --hash=sha256:48e5e61472fee0ddee27ebad085614ebedb7af41e88f687aaf881afb723a162f
-
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
 infra==0.1.28 \

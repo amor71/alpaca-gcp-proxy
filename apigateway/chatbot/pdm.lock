@@ -83,6 +83,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "google-cloud"
+version = "0.34.0"
+summary = "API Client library for Google Cloud"
+
+[[package]]
 name = "gunicorn"
 version = "20.1.0"
 requires_python = ">=3.5"
@@ -198,7 +203,7 @@ dependencies = [
 lock_version = "4.2"
 cross_platform = true
 groups = ["default"]
-content_hash = "sha256:66bcdda7aefe88424a63b5106e9542934b8359a7e5c5e86553986eaa33b63ad7"
+content_hash = "sha256:58a0c30651d9249202cbbf005bbd4e957c7a7d989845a63f31aaf90604b8c32e"
 
 [metadata.files]
 "attrs 23.1.0" = [
@@ -313,6 +318,10 @@ content_hash = "sha256:66bcdda7aefe88424a63b5106e9542934b8359a7e5c5e86553986eaa3
 "functions-framework 3.4.0" = [
     {url = "https://files.pythonhosted.org/packages/6c/e5/8a50f46e0fe439fc59a27ffced0729d2121a1702b21a18e17eb67414d813/functions_framework-3.4.0-py3-none-any.whl", hash = "sha256:e22f30a66aab7180373f9a81f88114da088915b3622c62dcd6ec972ac908e0c4"},
     {url = "https://files.pythonhosted.org/packages/d3/f1/9be8f433498f3223985820893d48dbe9ab2cd92d721496120ab98956bdba/functions-framework-3.4.0.tar.gz", hash = "sha256:c05639bcdd19f11a2eef1b6dabde5998f7d67cbddbffdf2f06ca56dc13c54e95"},
+]
+"google-cloud 0.34.0" = [
+    {url = "https://files.pythonhosted.org/packages/47/0e/8bf108fa9e3e036fe37a86598f1315e7b8de90b89012fd65704dc30ac6ad/google-cloud-0.34.0.tar.gz", hash = "sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3"},
+    {url = "https://files.pythonhosted.org/packages/ba/b1/7c54d1950e7808df06642274e677dbcedba57f75307adf2e5ad8d39e5e0e/google_cloud-0.34.0-py2.py3-none-any.whl", hash = "sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf"},
 ]
 "gunicorn 20.1.0" = [
     {url = "https://files.pythonhosted.org/packages/28/5b/0d1f0296485a6af03366604142ea8f19f0833894db3512a40ed07b2a56dd/gunicorn-20.1.0.tar.gz", hash = "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"},
