@@ -8,6 +8,16 @@ resource "google_artifact_registry_repository" "py-repos" {
   format        = "python"
 }
 
+#-----------------
+# Docker registry
+#-----------------
+resource "google_artifact_registry_repository" "docker-repo" {
+  location      = var.region
+  repository_id = "docker-repository"
+  description   = "Docker repository"
+  format        = "DOCKER"
+}
+
 
 #---------------------------
 # App Gateway

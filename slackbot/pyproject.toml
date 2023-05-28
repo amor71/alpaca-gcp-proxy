@@ -1,0 +1,14 @@
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Amichay Oren", email = "amichay@nine30.com"},
+]
+dependencies = [
+    "slack-bolt>=1.18.0",
+    "requests>=2.31.0",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
