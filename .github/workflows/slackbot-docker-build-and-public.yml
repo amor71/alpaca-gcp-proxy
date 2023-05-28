@@ -37,4 +37,4 @@ jobs:
           CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: |
           echo $CREDENTIALS > /tmp/cred.json
-          cat /tmp/cred.json | docker login -u _json_key_base64 --password-stdin https://us-east4-docker.pkg.dev
+          cat /tmp/cred.json | docker login -u _json_key_base64 --password-stdin https://us-east4-docker.pkg.dev/development-380917/docker-repository
