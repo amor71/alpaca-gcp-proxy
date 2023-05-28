@@ -31,7 +31,7 @@ resource "google_cloud_run_service" "slackbot" {
         ports {
           container_port = 8080
         }
-        environment_variables = {
+        env {
           SLACK_SIGNING_SECRET = var.slack_signing_secret
           SLACK_BOT_TOKEN      = var.slack_bot_token
         }
