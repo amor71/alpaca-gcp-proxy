@@ -35,9 +35,9 @@ jobs:
       - if: steps.changes.outputs.infra == 'true' 
         env:
           CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
         run: |
+          #TODO: do not hard code project & location
           echo $CREDENTIALS > /tmp/cred.json
-          cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository
-          docker tag slackbot:bolt us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository/slackbot
-          docker push us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository/slackbot
+          cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/development-380917/docker-repository
+          docker tag slackbot:bolt us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
+          docker push us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
