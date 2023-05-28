@@ -22,7 +22,7 @@ resource "google_cloud_run_service" "slackbot" {
         image = "us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot"
 
         ports {
-          container_port = 3000
+          container_port = 8080
         }
       }
     }
@@ -48,6 +48,7 @@ resource "google_cloud_run_service_iam_policy" "slackbot-noauth" {
 resource "google_compute_global_address" "slackbot-lb-ip" {
   name       = "slackbot-address"
   ip_version = "IPV4"
+  address    = "34.36.225.200"
 }
 
 module "slackbot-lb-http" {
