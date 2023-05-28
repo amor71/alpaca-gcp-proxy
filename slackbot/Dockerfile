@@ -10,4 +10,4 @@ COPY . .
 EXPOSE 3000
 CMD ["python3", "app.py"]
 
-# v7
+# v8
