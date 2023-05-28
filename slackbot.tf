@@ -2,6 +2,13 @@
 #------------------------------
 # -- Slackbot Cloud Run      --
 #------------------------------
+variable "slack_signing_secret" {
+  type = string
+}
+
+variable "slack_bot_token" {
+  type = string
+}
 
 resource "google_compute_region_network_endpoint_group" "slackbot-cloudrun_neg" {
   name                  = "slackbot-cloudrun-neg"
@@ -24,6 +31,10 @@ resource "google_cloud_run_service" "slackbot" {
         ports {
           container_port = 8080
         }
+        environment_variables = {
+          SLACK_SIGNING_SECRET = var.slack_signing_secret
+          SLACK_BOT_TOKEN      = var.slack_bot_token
+        }
       }
     }
   }
@@ -31,6 +42,11 @@ resource "google_cloud_run_service" "slackbot" {
   traffic {
     percent         = 100
     latest_revision = true
+  }
+
+  environment_variables = {
+    PROJECT_ID   = var.project_id
+    TOKEN_BYPASS = var.token_bypass
   }
 }
 
