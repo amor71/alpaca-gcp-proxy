@@ -1,0 +1,40 @@
+name: Build and Publish "slackbot" docker image
+
+on:
+  push:
+    branches: ["master"]
+
+  workflow_dispatch:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  files-changed:
+    name: slackbot
+    runs-on: ubuntu-20.04
+    timeout-minutes: 3
+
+    steps: 
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            infra:
+              - 'slackbot/**'
+
+      # run only if some file in 'infra' folder was changed
+      - if: steps.changes.outputs.infra == 'true'
+        run: docker build -t "slackbot:bolt"
+
+      - if: steps.changes.outputs.infra == 'true' 
+        env:
+          CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+        run: |
+          echo $CREDENTIALS > /tmp/cred.json
+          cat /tmp/cred.json | docker login -u _json_key_base64 --password-stdin https://us-east4-docker.pkg.dev
