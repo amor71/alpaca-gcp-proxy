@@ -3,7 +3,7 @@
 # -- Slackbot Cloud Run      --
 #------------------------------
 
-resource "google_compute_region_network_endpoint_group" "slackbot_cloudrun_neg" {
+resource "google_compute_region_network_endpoint_group" "slackbot-cloudrun_neg" {
   name                  = "slackbot_cloudrun-neg"
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
@@ -68,7 +68,7 @@ module "slackbot-lb-http" {
     default = {
       groups = [
         {
-          group = google_compute_region_network_endpoint_group.slackbot_cloudrun_neg.id
+          group = google_compute_region_network_endpoint_group.slackbot-cloudrun_neg.id
         }
       ]
       protocol                        = "HTTP"
