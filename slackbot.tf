@@ -46,7 +46,7 @@ resource "google_cloud_run_service_iam_policy" "slackbot-noauth" {
 # -- Load Balancer
 # --------------------------
 resource "google_compute_global_address" "slackbot-lb-ip" {
-  name       = "app-address"
+  name       = "slackbot-address"
   ip_version = "IPV4"
 }
 
@@ -55,7 +55,7 @@ module "slackbot-lb-http" {
   version = "~> 9.0.0"
 
   project = var.project_id
-  name    = "app"
+  name    = "slackbot"
 
   managed_ssl_certificate_domains = ["slackbot.nine30.com"]
   ssl                             = true
