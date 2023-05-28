@@ -30,7 +30,7 @@ jobs:
 
       # run only if some file in 'infra' folder was changed
       - if: steps.changes.outputs.infra == 'true'
-        run: docker build -t "slackbot:bolt"
+        run: docker build -t "slackbot:bolt" .
 
       - if: steps.changes.outputs.infra == 'true' 
         env:
