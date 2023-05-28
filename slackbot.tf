@@ -47,11 +47,6 @@ resource "google_cloud_run_service" "slackbot" {
     percent         = 100
     latest_revision = true
   }
-
-  environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-  }
 }
 
 resource "google_cloud_run_service_iam_policy" "slackbot-noauth" {
