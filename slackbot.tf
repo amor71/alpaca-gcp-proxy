@@ -4,7 +4,7 @@
 #------------------------------
 
 resource "google_compute_region_network_endpoint_group" "slackbot-cloudrun_neg" {
-  name                  = "slackbot_cloudrun-neg"
+  name                  = "slackbot-cloudrun-neg"
   network_endpoint_type = "SERVERLESS"
   region                = "us-east4"
   cloud_run {
