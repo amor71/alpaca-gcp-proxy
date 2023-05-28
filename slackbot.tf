@@ -50,7 +50,7 @@ resource "google_compute_global_address" "slackbot-lb-ip" {
   ip_version = "IPV4"
 }
 
-module "lb-http" {
+module "slackbot-lb-http" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 9.0.0"
 
