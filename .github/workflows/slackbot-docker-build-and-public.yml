@@ -38,6 +38,6 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
         run: |
           echo $CREDENTIALS > /tmp/cred.json
-          cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository
-          docker tag slackbot:bolt us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository/slackbot
-          docker push https://us-east4-docker.pkg.dev/$PROJECT_ID/docker-repository/slackbot
+          cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/${{ secrets.PROJECT_ID }}/docker-repository
+          docker tag slackbot:bolt us-east4-docker.pkg.dev/${{ secrets.PROJECT_ID }}/docker-repository/slackbot
+          docker push us-east4-docker.pkg.dev/${{ secrets.PROJECT_ID }}/docker-repository/slackbot
