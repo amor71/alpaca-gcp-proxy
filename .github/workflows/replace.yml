@@ -47,9 +47,9 @@ jobs:
       - name: Apply
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -auto-approve -input=false
+        run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -var="slack_signing_secret=${{ secrets.SLACK_SIGNING_SECRET }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN}}" -auto-approve -input=false
 
       - name: Replace
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -replace=google_cloud_run_service.react -auto-approve -input=false
+        run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -var="slack_signing_secret=${{ secrets.SLACK_SIGNING_SECRET }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN}}" -replace=google_cloud_run_service.react -replace=google_cloud_run_service.slackbot -auto-approve -input=false
