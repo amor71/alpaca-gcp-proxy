@@ -11,7 +11,7 @@ app = App(
 
 
 # TBD4
-@app.event()
+@app.event({"type": "message"})
 def message(*args):
     print("message", *args)
     return
