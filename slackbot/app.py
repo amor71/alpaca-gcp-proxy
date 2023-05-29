@@ -1,6 +1,4 @@
-import logging
 import os
-from typing import Callable
 
 # Use the package we installed
 from slack_bolt import App, BoltContext, Say
@@ -12,72 +10,15 @@ app = App(
 )
 
 
-@app.middleware
-def log_request(logger: logging.Logger, body: dict, next: Callable):
-    logger.debug(body)
-    return next()
-
-
 # https://api.slack.com/events/message
 # Newly posted messages only
 # or @app.event("message")
 @app.event({"type": "message", "subtype": None})
 def reply_in_thread(body: dict, say: Say):
+    print(f"body={body}")
     event = body["event"]
     thread_ts = event.get("thread_ts", None) or event["ts"]
     say(text="Hey, what's up?", thread_ts=thread_ts)
-
-
-# TBD7
-@app.event({"type": "message"})
-def message(*args):
-    print("message", *args)
-    return
-    try:
-        print("event:", event)
-        # views.publish is the method that your app uses to push a view to the Home tab
-        client.views_publish(
-            # the user that opened your app's app home
-            user_id=event["user"],
-            # the view object that appears in the app home
-            view={
-                "type": "home",
-                "callback_id": "home_view",
-                # body of the view
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "*Welcome to your _App's Home_* :tada:",
-                        },
-                    },
-                    {"type": "divider"},
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "This button won't do much for now but you can set up a listener for it using the `actions()` method and passing its unique `action_id`. See an example in the `examples` folder within your Bolt app.",
-                        },
-                    },
-                    {
-                        "type": "actions",
-                        "elements": [
-                            {
-                                "type": "button",
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": "Click me!",
-                                },
-                            }
-                        ],
-                    },
-                ],
-            },
-        )
-
-    except Exception as e:
-        logger.error(f"Error publishing home tab: {e}")
 
 
 # Start your app
