@@ -10,7 +10,7 @@ app = App(
 )
 
 
-@app.event("message.im")
+@app.event("message")
 def message_im(client, event, logger):
     try:
         print("event:", event)
