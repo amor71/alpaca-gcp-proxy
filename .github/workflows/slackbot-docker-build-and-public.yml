@@ -41,3 +41,9 @@ jobs:
           cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/development-380917/docker-repository
           docker tag slackbot:bolt us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
           docker push us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
+          
+       - if: steps.changes.outputs.infra == 'true' 
+         env:
+            CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+         run: terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -var="slack_signing_secret=${{ secrets.SLACK_SIGNING_SECRET }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN}}" -replace=google_cloud_run_service.slackbot -auto-approve -input=false
+
