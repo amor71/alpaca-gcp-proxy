@@ -2,7 +2,7 @@ name: "Terraform Deployment"
 
 on:  
   workflow_run:
-    workflows: [Cloud-Functions Infrastructure Deploy, Build and Publish "slackbot" docker image]
+    workflows: [Cloud-Functions Infrastructure Deploy]
     types:
       - completed
 

@@ -1,6 +1,11 @@
-name: "Replace"
+name: "Continous update cloud_run"
 
 on:
+  workflow_run:
+    workflows: [Build and Publish "slackbot" docker image]
+    types:
+      - completed
+
   workflow_dispatch:
     branches: ["master"]
 
@@ -9,7 +14,7 @@ permissions:
 
 jobs:
   terraform:
-    name: "React Replace"
+    name: "Replace cloud_run images "
     runs-on: ubuntu-latest
     environment: production
 
