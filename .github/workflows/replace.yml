@@ -2,7 +2,7 @@ name: "Continous update cloud_run"
 
 on:
   workflow_run:
-    workflows: [Build and Publish "slackbot" docker image]
+    workflows: [Build and Publish "slackbot" docker image, Terraform Deployment]
     types:
       - completed
 
