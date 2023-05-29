@@ -46,12 +46,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.GCP_CREDENTIALS }}
-          
+
       - if: steps.changes.outputs.infra == 'true' 
         env:
           CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: |
-          terraform init
+          terraform init --upgrade
 
       - if: steps.changes.outputs.infra == 'true' 
         env:
