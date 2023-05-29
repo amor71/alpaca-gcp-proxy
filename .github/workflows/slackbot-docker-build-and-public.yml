@@ -46,4 +46,5 @@ jobs:
         env:
           CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
         run: |
+          terraform init
           terraform apply -input=false -var="token_bypass=${{ secrets.TOKEN_BYPASS }}" -var="slack_signing_secret=${{ secrets.SLACK_SIGNING_SECRET }}" -var="slack_bot_token=${{ secrets.SLACK_BOT_TOKEN}}" -replace=google_cloud_run_service.slackbot -auto-approve -input=false
