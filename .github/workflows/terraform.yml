@@ -47,7 +47,7 @@ jobs:
       - name: Unlock
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-        run: terraform force-unlock 1685350252766491
+        run: terraform force-unlock -force 1685350252766491
         
       #- name: Terraform Init
       #  env:
