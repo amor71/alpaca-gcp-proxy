@@ -10,8 +10,10 @@ app = App(
 )
 
 
-@app.event("message")
-def message(client, event, logger):
+@app.event()
+def message(*args):
+    print("message", *args)
+    return
     try:
         print("event:", event)
         # views.publish is the method that your app uses to push a view to the Home tab
