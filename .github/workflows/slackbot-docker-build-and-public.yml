@@ -35,9 +35,17 @@ jobs:
       - if: steps.changes.outputs.infra == 'true' 
         env:
           CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         run: |
           #TODO: do not hard code project & location
           echo $CREDENTIALS > /tmp/cred.json
           cat /tmp/cred.json | docker login -u _json_key --password-stdin https://us-east4-docker.pkg.dev/development-380917/docker-repository
           docker tag slackbot:bolt us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
-          docker push us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot
+          docker push us-east4-docker.pkg.dev/development-380917/docker-repository/slackbot- name: "Trigger TF Replace"
+          curl -v -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $REPO_TOKEN"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/amor71/alpaca-gcp-proxy/actions/workflows/replace.yml/dispatches \
+            -d '{"ref":"master"}'
