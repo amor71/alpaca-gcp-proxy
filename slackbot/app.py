@@ -2,6 +2,7 @@ import logging
 import os
 from typing import Callable
 
+import requests
 # Use the package we installed
 from slack_bolt import App, BoltContext, Say
 
@@ -25,10 +26,18 @@ def log_request(logger: logging.Logger, body: dict, next: Callable):
 # or @app.event("message")
 @app.event({"type": "message", "subtype": None})
 def reply_in_thread(body: dict, say: Say):
-    print(f"body={body}")
     event = body["event"]
+
+    base_url: str = "https://api.nine30.com"
+    headers = {"X-Authorization": "Bearer moti"}
+
+    url = f"{base_url}/v1/chatbot"
+
+    payload = {"question": event["text"]}
+    r = requests.post(url=url, headers=headers, json=payload)
+
     thread_ts = event.get("thread_ts", None) or event["ts"]
-    say(text="Hey, what's up?", thread_ts=thread_ts)
+    say(text=r.json()["answer"], thread_ts=thread_ts)
 
 
 # Start your app
