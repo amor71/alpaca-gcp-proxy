@@ -11,7 +11,7 @@ app = App(
 
 
 @app.event("message")
-def message_im(client, event, logger):
+def message(client, event, logger):
     try:
         print("event:", event)
         # views.publish is the method that your app uses to push a view to the Home tab
