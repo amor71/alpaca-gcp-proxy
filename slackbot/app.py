@@ -9,13 +9,11 @@ app = App(
     signing_secret=os.environ.get("SLACK_SIGNING_SECRET"),
 )
 
-# Add functionality here
-# @app.event("app_home_opened") etc
 
-
-@app.event("app_home_opened")
-def update_home_tab(client, event, logger):
+@app.event("message.im")
+def message_im(client, event, logger):
     try:
+        print("event:", event)
         # views.publish is the method that your app uses to push a view to the Home tab
         client.views_publish(
             # the user that opened your app's app home
