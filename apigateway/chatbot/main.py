@@ -61,7 +61,7 @@ def chatbot(request):
         }
     ]
     chat_completion = openai.ChatCompletion.create(
-        model="gpt-4-0613",
+        model="gpt-3.5-turbo-0613",
         messages=messages,
         functions=functions,
         function_call="auto",
