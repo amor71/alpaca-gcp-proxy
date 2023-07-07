@@ -98,9 +98,12 @@ def chatbot(request):
             "get_portfolio_details": _get_portfolio_details,
         }  # only one function in this example, but you can have multiple
         function_name = response_message["function_call"]["name"]
-        fuction_to_call = available_functions[function_name]
-        json.loads(response_message["function_call"]["arguments"])
-        function_response = fuction_to_call()
+        function_to_call = available_functions[function_name]
+        # function_args = json.loads(response_message["function_call"]["arguments"])
+
+        function_response = function_to_call()
+
+        print(f"function response: {function_response}")
 
         # Step 4: send the info on the function call and function response to GPT
         messages.append(
@@ -117,7 +120,9 @@ def chatbot(request):
             model="gpt-3.5-turbo-0613",
             messages=messages,
         )  # get a new response from GPT where it can see the function response
-        answer = second_response
+
+        print(f"second response {second_response}")
+        answer = second_response["choices"][0]["message"]
 
     else:
         answer = response_message.content
