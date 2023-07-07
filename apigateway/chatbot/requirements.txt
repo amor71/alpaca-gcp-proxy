@@ -98,9 +98,9 @@ async-timeout==4.0.2 \
 attrs==23.1.0 \
     --hash=sha256:1f28b4522cdc2fb4256ac1a020c78acf9cba2c6b461ccd2c126f3aa8e8335d04 \
     --hash=sha256:6279836d581513a26f1bf235f9acd333bc9115683f14f7e8fae46c98fc50e015
-autoflake==2.1.1 \
-    --hash=sha256:75524b48d42d6537041d91f17573b8a98cb645642f9f05c7fcc68de10b1cade3 \
-    --hash=sha256:94e330a2bcf5ac01384fb2bf98bea60c6383eaa59ea62be486e376622deba985
+autoflake==2.2.0 \
+    --hash=sha256:62e1f74a0fdad898a96fee6f99fe8241af90ad99c7110c884b35855778412251 \
+    --hash=sha256:de409b009a34c1c2a7cc2aae84c4c05047f9773594317c6a6968bd497600d4a0
 bandit==1.7.5 \
     --hash=sha256:75665181dc1e0096369112541a056c59d1c5f66f9bb74a8d686c3c362b83f549 \
     --hash=sha256:bdfc739baa03b880c2d15d0431b31c658ffc348e907fe197e54e0389dd59e11e
@@ -382,9 +382,9 @@ google-cloud==0.34.0 \
 google-cloud-pubsub==2.17.1 \
     --hash=sha256:0593428ecbb0249cb5e741b403e95c3d421b4697c83eb7ed4c1684dff176c753 \
     --hash=sha256:bc07475496735378736b50cddd87be94bb7e44d60d76a5c6ab19bc306a0340e5
-google-cloud-secret-manager==2.16.1 \
-    --hash=sha256:149d11ce9be7ea81d4ac3544d3fcd4c716a9edb2cb775d9c075231570b079fbb \
-    --hash=sha256:dad28c24921fb62961aafe808be0e7935a99096f03ac29eeeefa04b85534c1f3
+google-cloud-secret-manager==2.16.2 \
+    --hash=sha256:596521091c39b94a260d814776421c8a009f6463b392880041efa80283b5fd29 \
+    --hash=sha256:9814c1bf75d44e4d03d5b79a1ccb2b121b27348de8d09ba2deedb7ca5c6d76de
 google-crc32c==1.5.0 \
     --hash=sha256:024894d9d3cfbc5943f8f230e23950cd4906b2fe004c72e29b209420a1e6b05a \
     --hash=sha256:02c65b9817512edc6a4ae7c7e987fea799d2e0ee40c53ec573a692bee24de876 \
@@ -680,9 +680,9 @@ multidict==6.0.4 \
     --hash=sha256:f70b98cd94886b49d91170ef23ec5c0e8ebb6f242d734ed7ed677b24d50c82cf \
     --hash=sha256:fc35cb4676846ef752816d5be2193a1e8367b4c1397b74a565a9d0389c433a1d \
     --hash=sha256:ff959bee35038c4624250473988b24f846cbeb2c6639de3602c073f10410ceba
-openai==0.27.7 \
-    --hash=sha256:788fb7fa85bf7caac6c1ed7eea5984254a1bdaf09ef485acf0e5718c8b2dc25a \
-    --hash=sha256:bca95fd4c3054ef38924def096396122130454442ec52005915ecf8269626b1d
+openai==0.27.8 \
+    --hash=sha256:2483095c7db1eee274cebac79e315a986c4e55207bb4fa7b82d185b3a2ed9536 \
+    --hash=sha256:e0a7c2f7da26bdbe5354b03c6d4b82a2f34bd4458c7a17ae1a7092c3e397e03c
 openapi==1.1.0 \
     --hash=sha256:ec5c0947b59a8f3f45bd5a6520354809169ae3f0a25e6f9f7706e968fe5b8c1d
 packaging==23.1 \
@@ -935,6 +935,3 @@ zipp==3.15.0 \
     --hash=sha256:112929ad649da941c23de50f356a2b5570c954b65150642bccdd66bf194d224b \
     --hash=sha256:48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556
 
---extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
-infra==0.1.28 \
-    --hash=sha256:8e6ade72f26e0e30f836f2309c9c63c07ee5b27db3ccb52cec1373bc64790adf
