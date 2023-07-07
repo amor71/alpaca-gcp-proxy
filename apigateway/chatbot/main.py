@@ -60,6 +60,8 @@ def chatbot(request):
             "description": "Get the list of equities in my portfolio",
             "parameters": {
                 "type": "object",
+                "properties": {},
+                "required": [],
             },
         }
     ]
