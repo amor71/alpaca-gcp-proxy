@@ -58,7 +58,9 @@ def chatbot(request):
         {
             "name": "get_portfolio_details",
             "description": "Get the list of equities in my portfolio",
-            "parameters": {},
+            "parameters": {
+                "type": "object",
+            },
         }
     ]
     chat_completion = openai.ChatCompletion.create(
