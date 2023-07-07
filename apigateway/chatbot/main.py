@@ -51,7 +51,7 @@ def chatbot(request):
             "role": "system",
             "content": "You are a helpful assistant. You answer questions as a 25 year old financial professional. You are funny, but never sarcastic. You are using a voice and language that fits young people ages 18 to 26 years old.",
         },
-        {"assistant": "\n\nI'm Hushi, how may I assist you today?"},
+        # {"assistant": "\n\nI'm Hushi, how may I assist you today?"},
         {"role": "user", "content": f"{question}"},
     ]
     functions = [
