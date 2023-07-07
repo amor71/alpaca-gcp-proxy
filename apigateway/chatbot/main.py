@@ -1,3 +1,5 @@
+import json
+
 import functions_framework
 import openai
 from google.cloud import secretmanager  # type:ignore
@@ -31,6 +33,19 @@ def _get_credentials() -> tuple:
         api_key_response.payload.data.decode("UTF-8"),
         org_id_response.payload.data.decode("UTF-8"),
     )
+
+
+def _get_portfolio_details() -> str:
+    """Return portfolio composition for a specific user"""
+    portfolio_composition = {
+        "AAPL": 10,
+        "TSLA": 5,
+        "NVDA": 10,
+        "SPY": 3,
+        "GLD": 3,
+    }
+
+    return json.dumps(portfolio_composition)
 
 
 @functions_framework.http
@@ -77,9 +92,33 @@ def chatbot(request):
     response_message = chat_completion["choices"][0]["message"]
 
     if response_message.get("function_call"):
+        # Step 3: call the function
+        # Note: the JSON response may not always be valid; be sure to handle errors
+        available_functions = {
+            "get_portfolio_details": _get_portfolio_details,
+        }  # only one function in this example, but you can have multiple
         function_name = response_message["function_call"]["name"]
+        fuction_to_call = available_functions[function_name]
+        json.loads(response_message["function_call"]["arguments"])
+        function_response = fuction_to_call()
 
-        answer = f"call the function {function_name}"
+        # Step 4: send the info on the function call and function response to GPT
+        messages.append(
+            response_message
+        )  # extend conversation with assistant's reply
+        messages.append(
+            {
+                "role": "function",
+                "name": function_name,
+                "content": function_response,
+            }
+        )  # extend conversation with function response
+        second_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0613",
+            messages=messages,
+        )  # get a new response from GPT where it can see the function response
+        answer = second_response
+
     else:
         answer = response_message.content
 
