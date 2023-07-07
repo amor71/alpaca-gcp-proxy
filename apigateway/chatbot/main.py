@@ -122,7 +122,7 @@ def chatbot(request):
         )  # get a new response from GPT where it can see the function response
 
         print(f"second response {second_response}")
-        answer = second_response["choices"][0]["message"]
+        answer = second_response["choices"][0]["message"].content
 
     else:
         answer = response_message.content
