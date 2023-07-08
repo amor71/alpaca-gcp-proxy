@@ -4,7 +4,7 @@ import functions_framework
 import openai
 from google.cloud import secretmanager  # type:ignore
 
-from infra import auth  # type:ignore
+from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
@@ -60,7 +60,8 @@ def chatbot(request):
         return ("Missing or invalid payload", 400)
 
     openai.api_key, openai.organization = _get_credentials()
-
+    user_id = authenticated_user_id.get()  # type: ignore
+    print(f"chatbot request for user_id={user_id}")
     messages = [
         {
             "role": "system",
@@ -80,11 +81,13 @@ def chatbot(request):
             },
         }
     ]
+
     chat_completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0613",
         messages=messages,
         functions=functions,
         function_call="auto",
+        user_id=user_id,
     )
 
     print(chat_completion)
@@ -119,6 +122,7 @@ def chatbot(request):
         second_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-0613",
             messages=messages,
+            user_id=user_id,
         )  # get a new response from GPT where it can see the function response
 
         print(f"second response {second_response}")
