@@ -18,7 +18,7 @@ def alpaca_state_handler(user_id: str, payload: dict):
 
     update_data = {
         "alpaca_account_id": payload.get("id"),
-        "alpca_updated": time.time_ns(),
+        "alpaca_updated": time.time_ns(),
     }
 
     if status := payload.get("status"):

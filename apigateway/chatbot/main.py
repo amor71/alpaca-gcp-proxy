@@ -6,6 +6,7 @@ from google.cloud import secretmanager  # type:ignore
 
 from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
+from infra.data.chats import save_chat  # type:ignore
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
 api_key = "openai_api_key"
@@ -131,6 +132,7 @@ def chatbot(request):
     else:
         answer = response_message.content
 
-    payload: dict = {"answer": answer}
+    session_id = save_chat(question=question, answer=answer, id=None)
+    payload: dict = {"sessionId": session_id, "answer": answer}
 
     return (payload, 200)
