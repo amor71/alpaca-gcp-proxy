@@ -132,7 +132,9 @@ def chatbot(request):
     else:
         answer = response_message.content
 
-    session_id = save_chat(question=question, answer=answer, id=None)
+    session_id = save_chat(
+        user_id=user_id, question=question, answer=answer, id=None
+    )
     payload: dict = {"sessionId": session_id, "answer": answer}
 
     return (payload, 200)
