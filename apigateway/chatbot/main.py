@@ -87,7 +87,7 @@ def chatbot(request):
         messages=messages,
         functions=functions,
         function_call="auto",
-        user_id=user_id,
+        user=user_id,
     )
 
     print(chat_completion)
