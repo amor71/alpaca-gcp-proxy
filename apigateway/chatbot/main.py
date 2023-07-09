@@ -61,7 +61,9 @@ def chatbot(request):
         return ("Missing or invalid payload", 400)
 
     request_session_id = payload.get("sessionId")
-
+    request_session_id = (
+        str(request_session_id) if request_session_id else request_session_id
+    )
     openai.api_key, openai.organization = _get_credentials()
     user_id = authenticated_user_id.get()  # type: ignore
     print(f"chatbot request for user_id={user_id}")
