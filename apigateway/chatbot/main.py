@@ -60,6 +60,8 @@ def chatbot(request):
     if not payload or not (question := payload.get("question")):
         return ("Missing or invalid payload", 400)
 
+    request_session_id = payload.get("sessionId")
+
     openai.api_key, openai.organization = _get_credentials()
     user_id = authenticated_user_id.get()  # type: ignore
     print(f"chatbot request for user_id={user_id}")
@@ -133,7 +135,10 @@ def chatbot(request):
         answer = response_message.content
 
     session_id = save_chat(
-        user_id=user_id, question=question, answer=answer, id=None
+        user_id=user_id,
+        question=question,
+        answer=answer,
+        id=request_session_id,
     )
     payload: dict = {"sessionId": session_id, "answer": answer}
 
