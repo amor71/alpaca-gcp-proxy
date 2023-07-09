@@ -6,11 +6,11 @@ from google.cloud import firestore  # type: ignore
 def save_chat(user_id: str, question: str, answer: str, id: str | None) -> str:
     db = firestore.Client()
 
+    timestamp: int = time.time_ns()
     base_ref = db.collection("chats").document(user_id)
-    session_ref = base_ref.collection(id) if id else base_ref.collection()
-    session_id = session_ref.id
+    session_id = id or str(timestamp)
+    session_ref = base_ref.collection(session_id)
 
-    timestamp = time.time_ns()
     meta_data = {
         "updated": timestamp,
     }
