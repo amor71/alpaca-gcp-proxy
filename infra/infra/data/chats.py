@@ -11,10 +11,8 @@ def save_chat(user_id: str, question: str, answer: str, id: str | None) -> str:
     session_id = id or str(timestamp)
     session_ref = base_ref.collection(session_id)
 
-    meta_data = {
-        "updated": timestamp,
-    }
-    status = session_ref.document("meta_data").update(meta_data)
+    meta_data = {"updated": timestamp, "summary": answer[:100]}
+    status = session_ref.document("meta_data").set(meta_data)
     print("save_chat() : document update status=", status)
 
     status = session_ref.document().set(
