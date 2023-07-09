@@ -226,6 +226,29 @@ version = "0.34.0"
 summary = "API Client library for Google Cloud"
 
 [[package]]
+name = "google-cloud-core"
+version = "2.3.3"
+requires_python = ">=3.7"
+summary = "Google Cloud API client core library"
+dependencies = [
+    "google-api-core!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.0,<3.0.0dev,>=1.31.6",
+    "google-auth<3.0dev,>=1.25.0",
+]
+
+[[package]]
+name = "google-cloud-firestore"
+version = "2.11.1"
+requires_python = ">=3.7"
+summary = "Google Cloud Firestore API client library"
+dependencies = [
+    "google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.0",
+    "google-cloud-core<3.0.0dev,>=1.4.1",
+    "proto-plus<2.0.0dev,>=1.22.0",
+    "proto-plus<2.0.0dev,>=1.22.2; python_version >= \"3.11\"",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+]
+
+[[package]]
 name = "google-cloud-pubsub"
 version = "2.17.1"
 requires_python = ">=3.7"
@@ -662,7 +685,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:b6a8d56934eb4e17fb4341eba53074bfc3ca2277ddb36ffdc99f592de5b22d7d"
+content_hash = "sha256:9ee070d4b5c9a7aac72059795b00919c49899805107b6ff6303df40805fe148d"
 
 [metadata.files]
 "aiohttp 3.8.4" = [
@@ -1069,6 +1092,14 @@ content_hash = "sha256:b6a8d56934eb4e17fb4341eba53074bfc3ca2277ddb36ffdc99f592de
 "google-cloud 0.34.0" = [
     {url = "https://files.pythonhosted.org/packages/47/0e/8bf108fa9e3e036fe37a86598f1315e7b8de90b89012fd65704dc30ac6ad/google-cloud-0.34.0.tar.gz", hash = "sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3"},
     {url = "https://files.pythonhosted.org/packages/ba/b1/7c54d1950e7808df06642274e677dbcedba57f75307adf2e5ad8d39e5e0e/google_cloud-0.34.0-py2.py3-none-any.whl", hash = "sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf"},
+]
+"google-cloud-core 2.3.3" = [
+    {url = "https://files.pythonhosted.org/packages/6b/60/dcc26e42d3754ac57c51a524f53c988f2aa755faec4cc00a232bb0077637/google-cloud-core-2.3.3.tar.gz", hash = "sha256:37b80273c8d7eee1ae816b3a20ae43585ea50506cb0e60f3cf5be5f87f1373cb"},
+    {url = "https://files.pythonhosted.org/packages/a2/40/02045f776fdb6e44194f34b6375a26ce8a61bd9bd03cd8930ed91cf51a62/google_cloud_core-2.3.3-py2.py3-none-any.whl", hash = "sha256:fbd11cad3e98a7e5b0343dc07cb1039a5ffd7a5bb96e1f1e27cee4bda4a90863"},
+]
+"google-cloud-firestore 2.11.1" = [
+    {url = "https://files.pythonhosted.org/packages/77/2d/4777a0541730fd76846ff4e53c4baddac28901aadcb3e97735546ef62ca5/google-cloud-firestore-2.11.1.tar.gz", hash = "sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d"},
+    {url = "https://files.pythonhosted.org/packages/c8/64/3fd8a948fe42936a81a23a93a08c63d96625373ab55c3a20041dcb082325/google_cloud_firestore-2.11.1-py2.py3-none-any.whl", hash = "sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e"},
 ]
 "google-cloud-pubsub 2.17.1" = [
     {url = "https://files.pythonhosted.org/packages/30/8c/8102d1a98d3d03487d063e424f6f4ad164a5a5e1d21ebd1a3229dd29cbae/google-cloud-pubsub-2.17.1.tar.gz", hash = "sha256:0593428ecbb0249cb5e741b403e95c3d421b4697c83eb7ed4c1684dff176c753"},
