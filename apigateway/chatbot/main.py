@@ -122,7 +122,7 @@ def chatbot(request):
         second_response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-0613",
             messages=messages,
-            user_id=user_id,
+            user=user_id,
         )  # get a new response from GPT where it can see the function response
 
         print(f"second response {second_response}")
