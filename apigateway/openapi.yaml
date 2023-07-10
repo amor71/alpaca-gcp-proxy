@@ -76,6 +76,16 @@ paths:
           schema:
             $ref: "#/definitions/ChatOut"
 
+    get:
+      description: "Get list of past chats"
+      operationId: "chatbot-get"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/chatbot
+
+      responses:
+        "200":
+          description: OK
+
     options:
       description: "CORS support"
       operationId: "chatbot-cors"
@@ -173,7 +183,12 @@ definitions:
 
   ChatIn:
     type: object
+    required:  # List the required properties here
+      - question
     properties:
+      sessionId:
+        description: optional identification of the chat session, if not provided a new id will be generate
+        type: string
       question:
         description: Input Question
         type: string
@@ -181,6 +196,9 @@ definitions:
   ChatOut:
     type: object
     properties:
+      sessionId:
+        description: identification of the chat session
+        type: string
       answer:
         description: Chatbot Answer
         type: string
