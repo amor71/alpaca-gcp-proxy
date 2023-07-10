@@ -81,6 +81,9 @@ def get_chat_session_details(user_id: str, sessionId: str) -> list | None:
         return None
 
     for document in docs:
+        if document.id == "meta_data":
+            continue
+
         content = document.to_dict()
         print(f"content={content}")
 
