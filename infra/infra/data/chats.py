@@ -43,7 +43,7 @@ def get_chats_sessions(user_id: str) -> list[dict] | None:
 
     for collection in collections:
         try:
-            meta_data = collection.document("meta_data").get()
+            meta_data = collection.document("meta_data").get().to_dict()
         except exceptions.NotFound:
             log_error(
                 "get_chats_sessions",
