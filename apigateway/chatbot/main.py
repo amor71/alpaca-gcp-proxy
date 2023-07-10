@@ -6,7 +6,8 @@ from google.cloud import secretmanager  # type:ignore
 
 from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
-from infra.data.chats import get_chats_sessions, save_chat  # type:ignore
+from infra.data.chats import (get_chat_session_details,  # type:ignore
+                              get_chats_sessions, save_chat)
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
 api_key = "openai_api_key"
@@ -151,12 +152,28 @@ def handle_get(request):
     user_id = authenticated_user_id.get()  # type: ignore
     print(f"GET request for user_id={user_id}")
 
-    chats_list = get_chats_sessions(user_id=user_id)
+    sessionId = request.args.get("sessionId", type=str)
+
+    if not sessionId:
+        chats_list = get_chats_sessions(user_id=user_id)
+
+        return (
+            (chats_list, 200)
+            if chats_list
+            else ("an error while getting chats data, check logs", 404)
+        )
+
+    chat_session_content = get_chat_session_details(
+        user_id=user_id, sessionId=sessionId
+    )
 
     return (
-        (chats_list, 200)
-        if chats_list
-        else ("an error while getting chats data, check logs", 404)
+        (chat_session_content, 200)
+        if chat_session_content
+        else (
+            f"an error while getting session {sessionId} content, check logs",
+            404,
+        )
     )
 
 

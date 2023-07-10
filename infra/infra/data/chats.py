@@ -60,3 +60,31 @@ def get_chats_sessions(user_id: str) -> list[dict] | None:
             )
 
     return sessions
+
+
+def get_chat_session_details(user_id: str, sessionId: str) -> list | None:
+    chat_content = []
+    db = firestore.Client()
+
+    try:
+        collection = (
+            db.collection("chats").document(user_id).collection(sessionId)
+        )
+    except exceptions.NotFound:
+        log_error(
+            "get_chat_session_details",
+            f"document {user_id}->collection({sessionId}) not found",
+        )
+        return None
+
+    for document_ref in collection:
+        document = document_ref.get().to_dict()
+        chat_content.append(
+            {
+                "updated": document["updated"],
+                "question": document["question"],
+                "answer": document["answer"],
+            }
+        )
+
+    return chat_content
