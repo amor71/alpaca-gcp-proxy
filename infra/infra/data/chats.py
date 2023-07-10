@@ -83,12 +83,15 @@ def get_chat_session_details(user_id: str, sessionId: str) -> list | None:
     for document in docs:
         content = document.to_dict()
         print(f"content={content}")
-        chat_content.append(
-            {
-                "created": content["created"],
-                "question": content["question"],
-                "answer": content["answer"],
-            }
-        )
+
+        payload = {
+            "question": content["question"],
+            "answer": content["answer"],
+        }
+        if "created" in content:
+            payload["created"] = content["created"]
+        if "updated" in content:
+            payload["updated"] = content["updated"]
+        chat_content.append(payload)
 
     return chat_content
