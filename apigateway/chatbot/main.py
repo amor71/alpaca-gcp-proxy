@@ -49,9 +49,7 @@ def _get_portfolio_details() -> str:
     return json.dumps(portfolio_composition)
 
 
-@functions_framework.http
-@auth
-def chatbot(request):
+def handle_post(request):
     """Implement POST /v1/chatbot"""
 
     # Validate inputs
@@ -145,3 +143,25 @@ def chatbot(request):
     payload: dict = {"sessionId": session_id, "answer": answer}
 
     return (payload, 200)
+
+
+def handle_get(request):
+    """Implement POST /v1/chatbot"""
+
+    user_id = authenticated_user_id.get()  # type: ignore
+    print(f"GET request for user_id={user_id}")
+
+    return ("", 200)
+
+
+@functions_framework.http
+@auth
+def chatbot(request):
+    """Implement /v1/chatbot"""
+
+    if request.method == "POST":
+        return handle_post(request)
+    elif request.method == "GET":
+        return handle_get(request)
+
+    return (f"{request.method} not yet implemented", 405)
