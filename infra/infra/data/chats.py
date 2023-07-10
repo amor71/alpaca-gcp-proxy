@@ -82,6 +82,7 @@ def get_chat_session_details(user_id: str, sessionId: str) -> list | None:
 
     for document in docs:
         content = document.to_dict()
+        print(f"content={content}")
         chat_content.append(
             {
                 "created": content["created"],
