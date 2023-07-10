@@ -1,6 +1,8 @@
 import time
 
-from google.cloud import firestore  # type: ignore
+from google.cloud import exceptions, firestore  # type: ignore
+
+from ..logger import log_error
 
 
 def save_chat(user_id: str, question: str, answer: str, id: str | None) -> str:
@@ -23,23 +25,38 @@ def save_chat(user_id: str, question: str, answer: str, id: str | None) -> str:
     return session_id
 
 
-def get_chats_sessions(user_id: str) -> list[dict]:
+def get_chats_sessions(user_id: str) -> list[dict] | None:
     """Given a user_id -> return a list of all sessions.
     For each session include it's last update time, and summary.
     The list is ordered by created date (not last update)"""
 
     sessions = []
     db = firestore.Client()
-    collections = db.collection("chats").document(user_id).collections()
-    for collection in collections:
-        meta_data = collection.document("meta_data").data()
 
-        sessions.append(
-            {
-                "sessionId": collection.id,
-                "updated": meta_data["updated"],
-                "summary": meta_data["summary"],
-            }
-        )
+    doc_ref = db.collection("chats").document(user_id)
+
+    try:
+        collections = doc_ref.collections()
+    except exceptions.NotFound:
+        log_error("get_chats_sessions", f"document {user_id} not found")
+        return None
+
+    for collection in collections:
+        try:
+            meta_data = collection.document("meta_data").get()
+        except exceptions.NotFound:
+            log_error(
+                "get_chats_sessions",
+                f"session {collection.id} @ {user_id} does not have meta_data",
+            )
+            return None
+        else:
+            sessions.append(
+                {
+                    "sessionId": collection.id,
+                    "updated": meta_data["updated"],
+                    "summary": meta_data["summary"],
+                }
+            )
 
     return sessions

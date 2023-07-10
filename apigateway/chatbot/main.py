@@ -153,7 +153,11 @@ def handle_get(request):
 
     chats_list = get_chats_sessions(user_id=user_id)
 
-    return (chats_list, 200)
+    return (
+        (chats_list, 200)
+        if chats_list
+        else ("an error while getting chats data, check logs", 404)
+    )
 
 
 @functions_framework.http
