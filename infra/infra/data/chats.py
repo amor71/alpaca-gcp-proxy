@@ -21,3 +21,25 @@ def save_chat(user_id: str, question: str, answer: str, id: str | None) -> str:
     print("save_chat() : document update set=", status)
 
     return session_id
+
+
+def get_chats_sessions(user_id: str) -> list[dict]:
+    """Given a user_id -> return a list of all sessions.
+    For each session include it's last update time, and summary.
+    The list is ordered by created date (not last update)"""
+
+    sessions = []
+    db = firestore.Client()
+    collections = db.collection("chats").document(user_id).collections()
+    for collection in collections:
+        meta_data = collection.document("meta_data").data()
+
+        sessions.append(
+            {
+                "sessionId": collection.id,
+                "updated": meta_data["updated"],
+                "summary": meta_data["summary"],
+            }
+        )
+
+    return sessions

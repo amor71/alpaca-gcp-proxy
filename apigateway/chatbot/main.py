@@ -6,7 +6,7 @@ from google.cloud import secretmanager  # type:ignore
 
 from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
-from infra.data.chats import save_chat  # type:ignore
+from infra.data.chats import get_chats_sessions, save_chat  # type:ignore
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
 api_key = "openai_api_key"
@@ -151,7 +151,9 @@ def handle_get(request):
     user_id = authenticated_user_id.get()  # type: ignore
     print(f"GET request for user_id={user_id}")
 
-    return ("", 200)
+    chats_list = get_chats_sessions(user_id=user_id)
+
+    return (chats_list, 200)
 
 
 @functions_framework.http
