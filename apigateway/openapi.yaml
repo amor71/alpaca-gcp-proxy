@@ -77,11 +77,16 @@ paths:
             $ref: "#/definitions/ChatOut"
 
     get:
-      description: "Get list of past chats"
+      description: "Get past chat sessions"
       operationId: "chatbot-get"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/chatbot
-
+      parameters:
+        - in: path
+          name: sessionId
+          required: false
+          type: string
+          description: Return details for a specific Chat Session
       responses:
         "200":
           description: OK
@@ -183,7 +188,7 @@ definitions:
 
   ChatIn:
     type: object
-    required:  # List the required properties here
+    required: # List the required properties here
       - question
     properties:
       sessionId:
