@@ -82,9 +82,8 @@ paths:
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/chatbot
       parameters:
-        - in: path
-          name: sessionId
-          required: false
+        - name: sessionId
+          in: query
           type: string
           description: Return details for a specific Chat Session
       responses:
