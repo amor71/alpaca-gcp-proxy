@@ -9,7 +9,7 @@ from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
 from infra.data.chats import get_chat_session_details  # type:ignore
 from infra.data.chats import get_chats_sessions, save_chat
-from infra.infra.logger import log_error
+from infra.logger import log_error
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
 api_key = "openai_api_key"
