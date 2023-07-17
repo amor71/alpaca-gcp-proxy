@@ -3,11 +3,13 @@ import json
 import functions_framework
 import openai
 from google.cloud import secretmanager  # type:ignore
+from openai.error import ServiceUnavailableError
 
 from infra import auth, authenticated_user_id  # type:ignore
 from infra.config import project_id  # type:ignore
-from infra.data.chats import (get_chat_session_details,  # type:ignore
-                              get_chats_sessions, save_chat)
+from infra.data.chats import get_chat_session_details  # type:ignore
+from infra.data.chats import get_chats_sessions, save_chat
+from infra.infra.logger import log_error
 from infra.proxies.proxy_base import check_crc  # type:ignore
 
 api_key = "openai_api_key"
@@ -86,13 +88,20 @@ def handle_post(request):
         }
     ]
 
-    chat_completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-0613",
-        messages=messages,
-        functions=functions,
-        function_call="auto",
-        user=user_id,
-    )
+    try:
+        chat_completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0613",
+            messages=messages,
+            functions=functions,
+            function_call="auto",
+            user=user_id,
+        )
+    except ServiceUnavailableError as e:
+        log_error("chatbot - handle_post", str(e))
+        return (
+            "This is embarrassing, but I need to take a short bio-break, do you mind trying again in five?",
+            200,
+        )
 
     print(chat_completion)
 

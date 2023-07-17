@@ -38,3 +38,7 @@ variable "token_bypass" {
 }
 
 
+resource "google_project_service" "enable_cloud_tasks_api" {
+  service            = "tasks.googleapis.com"
+  disable_on_destroy = true
+}
