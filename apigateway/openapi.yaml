@@ -57,6 +57,24 @@ paths:
         "200":
           description: OK
 
+  /v1/missions:
+    post:
+      description: "Create a new investment Mission"
+      operationId: "new-mission"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/mission
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewMission"
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/MissionStatus"
+            
   /v1/chatbot:
     post:
       description: "Interface with Chatbot"
@@ -220,3 +238,18 @@ definitions:
         enum:
           - weekly
           - monthly
+          
+  NewMission:
+    type: object
+    properties:
+      name:
+        description: "User select mission name"
+        type: string
+        required: true
+      strategy:
+        description: "Mission strategy"
+        type: string
+        required: true
+
+    
+
