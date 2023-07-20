@@ -270,11 +270,9 @@ definitions:
       name:
         description: "User selected mission name"
         type: string
-        required: true
       strategy:
         description: "Mission strategy"
         type: string
-        required: true
 
   MissionStatus:
     type: object
