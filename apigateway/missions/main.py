@@ -55,9 +55,12 @@ def load_account_id(user_id: str) -> str | None:
     return alpaca_account_id
 
 
-def save_new_mission(user_id: str, mission_name: str, strategy: str) -> str:
+def save_new_mission(
+    user_id: str, mission_name: str, strategy: str
+) -> tuple[str, int]:
     db = firestore.Client()
 
+    created = time.time_ns()
     doc_ref = (
         db.collection("missions")
         .document(user_id)
@@ -67,14 +70,14 @@ def save_new_mission(user_id: str, mission_name: str, strategy: str) -> str:
     data = {
         "name": mission_name,
         "strategy": strategy,
-        "created": time.time_ns(),
+        "created": created,
     }
 
     status = doc_ref.set(data)
 
     print("document update status=", status)
 
-    return status
+    return doc_ref.id(), created
 
 
 def create_run(user_id: str, model_portfolio: dict) -> str | None:
@@ -131,9 +134,11 @@ def handle_post(request):
     print(
         f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
     )
-    run_id = create_run(user_id, model_portfolio)
 
-    print(f"create run with id {run_id}")
+    if not (run_id := create_run(user_id, model_portfolio)):
+        return None
+    print(f"created run with id {run_id}")
+
     mission_id, created = save_new_mission(user_id, name, strategy)
 
     # track_run(run_id)
