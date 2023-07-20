@@ -27,8 +27,8 @@ def get_model_portfolio_by_name(name: str) -> dict | None:
         (
             portfolio
             for portfolio in portfolios
-            if portfolio.name.lower() == name.lower()
-            and portfolio.status == "active"
+            if portfolio["name"].lower() == name.lower()
+            and portfolio["status"] == "active"
         ),
         None,
     )
