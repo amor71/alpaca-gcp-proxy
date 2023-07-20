@@ -11,7 +11,11 @@ from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 def get_model_portfolio_by_name(name: str) -> dict | None:
     """Look-up a portfolio by portfolio name"""
 
-    r = alpaca_proxy(method="GET", url="/v1/beta/rebalancing/portfolios")
+    r = alpaca_proxy(
+        method="GET",
+        url="/v1/beta/rebalancing/portfolios",
+        args=None,
+    )
 
     if r.status_code != 200:
         return None
