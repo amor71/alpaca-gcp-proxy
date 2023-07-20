@@ -282,21 +282,18 @@ definitions:
       id:
         description: "Mission identification"
         type: string
-        required: true
       status:
         description: "Mission creation status"
         type: string
         enum:
           - created
           - rebalanced
-        required: true
       created:
         description: "Mission created timestamp"
         type: string
       last_rebalanced:
         description: "Last rebalanced timestamp"
         type: string
-        required: false
       rebalanced_trigger:
         description: "Last rebalanced trigger"
         type: string
@@ -305,4 +302,3 @@ definitions:
           - calendar
           - redeem
           - topup
-        required: false
