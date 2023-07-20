@@ -97,6 +97,8 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
         method="POST",
         url="/v1/beta/rebalancing/runs",
         payload=rebalance_payload,
+        args=None,
+        headers=None,
     )
 
     if r.status_code != 200:
