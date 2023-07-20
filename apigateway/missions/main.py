@@ -136,7 +136,7 @@ def handle_post(request):
     )
 
     if not (run_id := create_run(user_id, model_portfolio)):
-        return None
+        return ("could not create rebalance run", 400)
     print(f"created run with id {run_id}")
 
     mission_id, created = save_new_mission(user_id, name, strategy)
