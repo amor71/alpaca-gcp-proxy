@@ -44,6 +44,7 @@ def load_account_id(user_id: str) -> str | None:
         log_error("load_account_id", f"could not load {user_id} document")
         return None
 
+    print(f"loaded document:{doc}")
     if not (alpaca_account_id := doc.get("alpaca_account_id")):
         log_error(
             "load_account_id",
@@ -125,10 +126,10 @@ def handle_post(request):
         return None
 
     if not (model_portfolio := get_model_portfolio_by_name(strategy)):
-        return (f"model portfolio {strategy} not found", 400)
+        return (f"model portfolio '{strategy}' not found", 400)
 
     print(
-        f"Located portfolio id {model_portfolio.id} for strategy name {strategy}"
+        f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
     )
 
     create_run(model_portfolio)
