@@ -110,7 +110,7 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
 
     run_payload = r.json()
 
-    return run_payload.id
+    return run_payload["id"]
 
 
 def handle_post(request):
