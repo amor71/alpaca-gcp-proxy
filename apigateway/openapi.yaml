@@ -73,7 +73,6 @@ paths:
         - Missions
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/missions
-        allowCors: True
       parameters:
         - name: body
           in: body
