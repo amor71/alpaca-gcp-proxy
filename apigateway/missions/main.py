@@ -15,6 +15,8 @@ def get_model_portfolio_by_name(name: str) -> dict | None:
         method="GET",
         url="/v1/beta/rebalancing/portfolios",
         args=None,
+        payload=None,
+        headers=None,
     )
 
     if r.status_code != 200:
