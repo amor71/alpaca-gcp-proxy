@@ -1,15 +1,18 @@
 swagger: "2.0"
 info:
-  title: Create a new user
-  description: "Notify NINE30 of a newly registered user"
+  title: NINE30 APIs
+  description: "NINE30 APIs"
   version: "1.0.0"
 host: api.nine30.com
 schemes:
   - "https"
+
 paths:
   /v1/users:
     post:
       description: "Notify creation of a new user"
+      tags:
+        - Users
       operationId: "accounts"
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/new_user
@@ -30,6 +33,8 @@ paths:
     options:
       description: "CORS support"
       operationId: "accounts-cors"
+      tags:
+        - Users
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/new_user
       responses:
@@ -40,6 +45,8 @@ paths:
     post:
       description: "Slackbot"
       operationId: "slack-post"
+      tags:
+        - Chat
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/slackbot
 
@@ -50,17 +57,41 @@ paths:
     get:
       description: "Slackbot"
       operationId: "slack-get"
+      tags:
+        - Chat
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/slackbot
-
       responses:
         "200":
           description: OK
+
+  /v1/missions:
+    post:
+      description: "Create a new investment Mission for the authenticated user"
+      operationId: "new-mission"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/missions
+        allowCors: True
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewMission"
+      responses:
+        "201":
+          description: OK
+          schema:
+            $ref: "#/definitions/MissionStatus"
 
   /v1/chatbot:
     post:
       description: "Interface with Chatbot"
       operationId: "chatbot-post"
+      tags:
+        - Chat
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/chatbot
       parameters:
@@ -79,6 +110,8 @@ paths:
     get:
       description: "Get past chat sessions"
       operationId: "chatbot-get"
+      tags:
+        - Chat
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/chatbot
       parameters:
@@ -93,6 +126,8 @@ paths:
     options:
       description: "CORS support"
       operationId: "chatbot-cors"
+      tags:
+        - Chat
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/chatbot
       responses:
@@ -103,6 +138,8 @@ paths:
     get:
       description: "Get user state and details"
       operationId: "getUserDetails"
+      tags:
+        - Users
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
       parameters:
@@ -122,6 +159,8 @@ paths:
     options:
       description: "CORS support"
       operationId: "getUserDetails-cors"
+      tags:
+        - Users
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
       parameters:
@@ -138,6 +177,8 @@ paths:
     put:
       description: "Update User top-up schedule and amount"
       operationId: "updateTopup"
+      tags:
+        - Funding
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       consumes:
@@ -162,6 +203,8 @@ paths:
     options:
       description: "CORS support"
       operationId: "update-topup-cors"
+      tags:
+        - Funding
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       parameters:
@@ -220,3 +263,46 @@ definitions:
         enum:
           - weekly
           - monthly
+
+  NewMission:
+    type: object
+    properties:
+      name:
+        description: "User selected mission name"
+        type: string
+        required: true
+      strategy:
+        description: "Mission strategy"
+        type: string
+        required: true
+
+  MissionStatus:
+    type: object
+    properties:
+      id:
+        description: "Mission identification"
+        type: string
+        required: true
+      status:
+        description: "Mission creation status"
+        type: string
+        enum:
+          - created
+          - rebalanced
+        required: true
+      created:
+        description: "Mission created timestamp"
+        type: string
+      last_rebalanced:
+        description: "Last rebalanced timestamp"
+        type: string
+        required: false
+      rebalanced_trigger:
+        description: "Last rebalanced trigger"
+        type: string
+        enum:
+          - manual
+          - calendar
+          - redeem
+          - topup
+        required: false

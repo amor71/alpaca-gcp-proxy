@@ -266,6 +266,41 @@ resource "google_cloudfunctions_function" "chatbot" {
   }
 }
 
+# --------------
+# -- missions --
+# --------------
+data "archive_file" "missions" {
+  type        = "zip"
+  output_path = "/tmp/missions.zip"
+  source_dir  = "apigateway/missions"
+}
+resource "google_storage_bucket_object" "missions" {
+  name         = format("missions-%s.zip", data.archive_file.missions.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.missions.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "missions" {
+  name                  = "missions"
+  description           = "Missions control"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.missions.name
+
+  trigger_http = true
+
+  entry_point         = "missions"
+  available_memory_mb = 256
+
+  environment_variables = {
+    PROJECT_ID   = var.project_id
+    TOKEN_BYPASS = var.token_bypass
+  }
+}
+
 # -----------
 # -- proxy --
 # -----------
