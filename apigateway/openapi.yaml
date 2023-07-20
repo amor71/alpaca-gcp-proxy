@@ -287,7 +287,6 @@ definitions:
         description: "Mission creation status"
         type: string
         enum:
-          - pending
           - created
           - rebalanced
         required: true

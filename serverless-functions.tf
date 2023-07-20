@@ -266,10 +266,9 @@ resource "google_cloudfunctions_function" "chatbot" {
   }
 }
 
-# -------------
+# --------------
 # -- missions --
-# -------------
-
+# --------------
 data "archive_file" "missions" {
   type        = "zip"
   output_path = "/tmp/missions.zip"
@@ -284,7 +283,6 @@ resource "google_storage_bucket_object" "missions" {
     google_storage_bucket.serverless_function_bucket
   ]
 }
-
 resource "google_cloudfunctions_function" "missions" {
   name                  = "missions"
   description           = "Missions control"
