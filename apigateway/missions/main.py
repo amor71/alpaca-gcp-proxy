@@ -106,9 +106,11 @@ def handle_post(request):
 
     if (
         not payload
-        or not (name := payload.get(""))
+        or not (name := payload.get("name"))
         or not (strategy := payload.get("strategy"))
     ):
+        if payload:
+            log_error("handle_post", f"payload={payload}")
         return ("Missing or invalid payload", 400)
 
     user_id = authenticated_user_id.get()  # type: ignore
