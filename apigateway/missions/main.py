@@ -131,9 +131,9 @@ def handle_post(request):
     print(
         f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
     )
+    run_id = create_run(user_id, model_portfolio)
 
-    create_run(model_portfolio)
-
+    print(f"create run with id {run_id}")
     mission_id, created = save_new_mission(user_id, name, strategy)
 
     # track_run(run_id)
