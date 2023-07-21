@@ -116,6 +116,8 @@ resource "google_cloudfunctions_function" "new_user" {
 
   environment_variables = {
     PROJECT_ID   = var.project_id
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
     TOKEN_BYPASS = var.token_bypass
   }
 }
@@ -153,6 +155,8 @@ resource "google_cloudfunctions_function" "topup" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 
@@ -189,6 +193,8 @@ resource "google_cloudfunctions_function" "get_user_details" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 
@@ -226,6 +232,8 @@ resource "google_cloudfunctions_function" "slackbot" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 
@@ -263,6 +271,8 @@ resource "google_cloudfunctions_function" "chatbot" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 
@@ -298,6 +308,8 @@ resource "google_cloudfunctions_function" "missions" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 
@@ -336,6 +348,8 @@ resource "google_cloudfunctions_function" "proxy" {
   environment_variables = {
     PROJECT_ID   = var.project_id
     TOKEN_BYPASS = var.token_bypass
+    LOCATION = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
   }
 }
 

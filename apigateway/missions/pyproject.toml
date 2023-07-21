@@ -61,7 +61,7 @@ dependencies = [
     "pbr==5.11.1",
     "pluggy==1.0.0",
     "proto-plus==1.22.2",
-    "protobuf==4.23.2",
+    "protobuf>=4.23.4",
     "pyasn1==0.5.0",
     "pyasn1-modules==0.3.0",
     "pycparser==2.21",
@@ -89,3 +89,7 @@ requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
+[tool.pdm.dev-dependencies]
+dev = [
+    "types-protobuf>=4.23.0.1",
+]

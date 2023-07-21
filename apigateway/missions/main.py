@@ -1,9 +1,15 @@
+import datetime
+import json
 import time
+import uuid
 
 import functions_framework
 from google.cloud import firestore  # type: ignore
+from google.cloud import tasks_v2
+from google.protobuf import duration_pb2, timestamp_pb2
 
 from infra import auth, authenticated_user_id  # type: ignore
+from infra.config import location, project_id, rebalance_queue
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
@@ -111,11 +117,66 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
             "create_run",
             f"run failed status code {r.status_code} and {r.text}",
         )
-        return None
+
+        return "reschedule" if r.status_code == 422 else None
 
     run_payload = r.json()
-
     return run_payload["id"]
+
+
+def is_market_open() -> bool:
+    return True
+
+
+def calculate_seconds_from_now() -> int:
+    if is_market_open():
+        return 60 * 5
+
+    return 100 * 5
+
+
+def reschedule_run(request):
+    # Create a client.
+    client = tasks_v2.CloudTasksClient()
+
+    task_id = str(uuid.uuid4())
+    # Construct the task.
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.POST,
+            url=request.url,
+            headers={"Content-type": "application/json"},
+            body=json.dumps(request.json).encode(),
+        ),
+        name=(
+            client.task_path(project_id, location, rebalance_queue, task_id)
+            if task_id is not None
+            else None
+        ),
+    )
+    second_from_now = calculate_seconds_from_now()
+
+    # Convert "seconds from now" to an absolute Protobuf Timestamp
+    timestamp = timestamp_pb2.Timestamp()
+    timestamp.FromDatetime(
+        datetime.datetime.now(datetime.timezone.utc)
+        + datetime.timedelta(seconds=second_from_now)
+    )
+    task.schedule_time = timestamp
+
+    # Use the client to send a CreateTaskRequest.
+    task = client.create_task(
+        tasks_v2.CreateTaskRequest(
+            # The queue to add the task to
+            parent=client.queue_path(project_id, location, rebalance_queue),
+            # The task itself
+            task=task,
+        )
+    )
+
+    print(f"created task = {task}")
+
+    return ("scheduled", 201)
 
 
 def handle_post(request):
@@ -144,6 +205,10 @@ def handle_post(request):
 
     if not (run_id := create_run(user_id, model_portfolio)):
         return ("could not create rebalance run", 400)
+
+    if run_id == "reschedule":
+        return reschedule_run(request)
+
     print(f"created run with id {run_id}")
 
     mission_id, created = save_new_mission(user_id, name, strategy, run_id)

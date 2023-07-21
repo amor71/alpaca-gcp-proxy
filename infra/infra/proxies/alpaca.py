@@ -62,7 +62,7 @@ def trigger_step_function(user_id: str, url: str, response: dict):
 def alpaca_proxy(
     method: str,
     url: str,
-    args: list,
+    args: list | None,
     payload: dict | None,
     headers: dict | None,
 ) -> Response:
