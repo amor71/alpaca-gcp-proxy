@@ -29,6 +29,10 @@ variable "region" {
   default = "us-east4"
 }
 
+variable "rebalance_queue" {
+  default = "rebalance"
+}
+
 locals {
   resource_prefix = var.env == "prod" ? "" : "${var.env}-"
 }
