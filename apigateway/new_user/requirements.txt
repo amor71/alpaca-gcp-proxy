@@ -198,12 +198,12 @@ google-cloud-firestore==2.11.1 \
 google-cloud-monitoring==2.14.2 \
     --hash=sha256:43cca0adb1ff387ebe099414f9af957532c23723cb377c23cd9f88fd84e1bc3f \
     --hash=sha256:e6fda130979e2e8d759ab70d6427b5948481948c96f5fd4a42370ba96a11959b
-google-cloud-pubsub==2.17.0 \
-    --hash=sha256:8288d0323800f26b331b154fd1fb31ce92fe9a26f3f8483737209c7bfe50ade9 \
-    --hash=sha256:85db40ce1c03ad604fe2f299906f49f2bf36abbe2320863a3e19bdc746a904f7
-google-cloud-secret-manager==2.16.1 \
-    --hash=sha256:149d11ce9be7ea81d4ac3544d3fcd4c716a9edb2cb775d9c075231570b079fbb \
-    --hash=sha256:dad28c24921fb62961aafe808be0e7935a99096f03ac29eeeefa04b85534c1f3
+google-cloud-pubsub==2.18.0 \
+    --hash=sha256:7a70df4111d9cb694a25cecdd2328827159c5213ae1e6304cb3abb38f379dd29 \
+    --hash=sha256:c2aeec5cc80d55c94689cd72db74273cf5a5fba5f00771a623271086dfde161c
+google-cloud-secret-manager==2.16.2 \
+    --hash=sha256:596521091c39b94a260d814776421c8a009f6463b392880041efa80283b5fd29 \
+    --hash=sha256:9814c1bf75d44e4d03d5b79a1ccb2b121b27348de8d09ba2deedb7ca5c6d76de
 google-crc32c==1.5.0 \
     --hash=sha256:024894d9d3cfbc5943f8f230e23950cd4906b2fe004c72e29b209420a1e6b05a \
     --hash=sha256:02c65b9817512edc6a4ae7c7e987fea799d2e0ee40c53ec573a692bee24de876 \
@@ -406,18 +406,21 @@ MarkupSafe==2.1.2 \
 more-itertools==9.1.0 \
     --hash=sha256:cabaa341ad0389ea83c17a94566a53ae4c9d07349861ecb14dc6d0345cf9ac5d \
     --hash=sha256:d2bc7f02446e86a68911e58ded76d6561eea00cddfb2a91e7019bbb586c799f3
-opentelemetry-api==1.17.0 \
-    --hash=sha256:3480fcf6b783be5d440a226a51db979ccd7c49a2e98d1c747c991031348dcf04 \
-    --hash=sha256:b41d9b2a979607b75d2683b9bbf97062a683d190bc696969fb2122fa60aeaabc
-opentelemetry-exporter-gcp-monitoring==1.4.0a0 \
-    --hash=sha256:26d604a5038b54a1730fdaa2d47a2e92f5709a933e5011488240b38f8cea799b \
-    --hash=sha256:65281caefed099f3d59cc04cab66cc4a5f38921b6441ae79c8916283c37ece5a
-opentelemetry-sdk==1.17.0 \
-    --hash=sha256:07424cbcc8c012bc120ed573d5443e7322f3fb393512e72866c30111070a8c37 \
-    --hash=sha256:99bb9a787006774f865a4b24f8179900347d03a214c362a6cb70191f77dd6132
-opentelemetry-semantic-conventions==0.38b0 \
-    --hash=sha256:37f09e47dd5fc316658bf9ee9f37f9389b21e708faffa4a65d6a3de484d22309 \
-    --hash=sha256:b0ba36e8b70bfaab16ee5a553d809309cc11ff58aec3d2550d451e79d45243a7
+opentelemetry-api==1.19.0 \
+    --hash=sha256:db374fb5bea00f3c7aa290f5d94cea50b659e6ea9343384c5f6c2bb5d5e8db65 \
+    --hash=sha256:dcd2a0ad34b691964947e1d50f9e8c415c32827a1d87f0459a72deb9afdf5597
+opentelemetry-exporter-gcp-monitoring==1.5.0a0 \
+    --hash=sha256:33fa3563a05ae2f5b7e5bf05e68333d4442ead290eb29f5f50213b6d91cd3da6 \
+    --hash=sha256:f7c0730f5ffef5c041e4b177f68cc421e5c774c7b5658aea9c9fa93397d06a25
+opentelemetry-resourcedetector-gcp==1.5.0a0 \
+    --hash=sha256:319537563c457bf3c7302509c471eb45be28774ba04a1ecf6d56986ccae27e62 \
+    --hash=sha256:a6a12e0419d31edfd8b7cefe480330c758e574c64156e3d719097f2624817e54
+opentelemetry-sdk==1.19.0 \
+    --hash=sha256:765928956262c7a7766eaba27127b543fb40ef710499cad075f261f52163a87f \
+    --hash=sha256:bb67ad676b1bc671766a40d7fc9d9563854c186fa11f0dc8fa2284e004bd4263
+opentelemetry-semantic-conventions==0.40b0 \
+    --hash=sha256:5a7a491873b15ab7c4907bbfd8737645cc87ca55a0a326c1755d1b928d8a0fae \
+    --hash=sha256:7ebbaf86755a0948902e68637e3ae516c50222c30455e55af154ad3ffe283839
 pluggy==1.0.0 \
     --hash=sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159 \
     --hash=sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3
@@ -456,15 +459,12 @@ rsa==4.9 \
 SecretStorage==3.3.3 \
     --hash=sha256:2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77 \
     --hash=sha256:f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99
-setuptools==67.7.2 \
-    --hash=sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b \
-    --hash=sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990
 six==1.16.0 \
     --hash=sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926 \
     --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
-types-requests==2.30.0.0 \
-    --hash=sha256:c6cf08e120ca9f0dc4fa4e32c3f953c3fba222bcc1db6b97695bce8da1ba9864 \
-    --hash=sha256:dec781054324a70ba64430ae9e62e7e9c8e4618c185a5cb3f87a6738251b5a31
+types-requests==2.31.0.2 \
+    --hash=sha256:56d181c85b5925cbc59f4489a57e72a8b2166f18273fd8ba7b6fe0c0b986f12a \
+    --hash=sha256:6aa3f7faf0ea52d728bb18c0a0d1522d9bfd8c72d26ff6f61bfc3d06a411cf40
 types-urllib3==1.26.25.13 \
     --hash=sha256:3300538c9dc11dad32eae4827ac313f5d986b8b21494801f1bf97a1ac6c03ae5 \
     --hash=sha256:5dbd1d2bef14efee43f5318b5d36d805a489f6600252bb53626d4bfafd95e27c
@@ -557,7 +557,6 @@ zipp==3.15.0 \
     --hash=sha256:112929ad649da941c23de50f356a2b5570c954b65150642bccdd66bf194d224b \
     --hash=sha256:48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556
 
-
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
-infra==0.1.28 \
-    --hash=sha256:8e6ade72f26e0e30f836f2309c9c63c07ee5b27db3ccb52cec1373bc64790adf
+infra==0.1.42 \
+    --hash=sha256:db749cc42a6002cee90e78906ed0071117a38bb644d1191b7f6c8d7ffdf7d99e
