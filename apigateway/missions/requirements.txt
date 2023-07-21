@@ -394,6 +394,9 @@ google-cloud-pubsub==2.17.1 \
 google-cloud-secret-manager==2.16.2 \
     --hash=sha256:596521091c39b94a260d814776421c8a009f6463b392880041efa80283b5fd29 \
     --hash=sha256:9814c1bf75d44e4d03d5b79a1ccb2b121b27348de8d09ba2deedb7ca5c6d76de
+google-cloud-tasks==2.13.2 \
+    --hash=sha256:557614b393d0f9b1fdeddfef380c5a8380809fc44e32f3d97b0174e5efe4ecf3 \
+    --hash=sha256:f10e001c2fc52dc37a921c7ea7dfad2c5e1131a744bc98bd0f9fefada2c1850c
 google-crc32c==1.5.0 \
     --hash=sha256:024894d9d3cfbc5943f8f230e23950cd4906b2fe004c72e29b209420a1e6b05a \
     --hash=sha256:02c65b9817512edc6a4ae7c7e987fea799d2e0ee40c53ec573a692bee24de876 \
@@ -946,7 +949,6 @@ yarl==1.9.2 \
 zipp==3.15.0 \
     --hash=sha256:112929ad649da941c23de50f356a2b5570c954b65150642bccdd66bf194d224b \
     --hash=sha256:48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556
-
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
 infra==0.1.41 \
