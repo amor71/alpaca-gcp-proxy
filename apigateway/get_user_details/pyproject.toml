@@ -13,6 +13,7 @@ dependencies = [
     "firestore>=0.0.8",
     "functions-framework>=3.4.0",
     "keyrings-google-artifactregistry-auth>=1.1.2",
+    "SecretStorage>=3.3.3",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
