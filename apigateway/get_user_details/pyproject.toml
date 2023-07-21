@@ -6,6 +6,8 @@ description = ""
 authors = [
     {name = "Amichay Oren", email = "amichay@nine30.com"},
 ]
-dependencies = []
+dependencies = [
+    "google-cloud-firestore>=2.11.1",
+]
 requires-python = ">=3.11"
 license = {text = "MIT"}
