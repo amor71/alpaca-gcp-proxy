@@ -9,7 +9,7 @@ from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
 
 from infra import auth, authenticated_user_id  # type: ignore
-from infra.config import location, project_id, rebalance_queue
+from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
@@ -140,6 +140,9 @@ def reschedule_run(request):
     client = tasks_v2.CloudTasksClient()
 
     task_id = str(uuid.uuid4())
+    print(
+        f"task-id={task_id}, location={location} rebalance_queue={rebalance_queue}"
+    )
     # Construct the task.
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
