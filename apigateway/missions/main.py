@@ -56,7 +56,7 @@ def load_account_id(user_id: str) -> str | None:
 
 
 def save_new_mission(
-    user_id: str, mission_name: str, strategy: str
+    user_id: str, mission_name: str, strategy: str, run_id: str
 ) -> tuple[str, int]:
     db = firestore.Client()
 
@@ -77,6 +77,11 @@ def save_new_mission(
 
     print("document update status=", status)
 
+    run_doc_def = doc_ref.collection("runs").document()
+    run_data = {"run_id": run_id, "created": created}
+    status = run_doc_def.set(run_data)
+
+    print("document update status=", status)
     return doc_ref.id, created
 
 
@@ -141,7 +146,7 @@ def handle_post(request):
         return ("could not create rebalance run", 400)
     print(f"created run with id {run_id}")
 
-    mission_id, created = save_new_mission(user_id, name, strategy)
+    mission_id, created = save_new_mission(user_id, name, strategy, run_id)
 
     # track_run(run_id)
 
