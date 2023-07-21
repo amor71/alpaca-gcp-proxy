@@ -147,8 +147,8 @@ def reschedule_run(request):
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.POST,
-            url=request.url,
-            headers={"Content-type": "application/json"},
+            url="https://api.nine30.com/v1/missions",
+            headers=request.headers,
             body=json.dumps(request.json).encode(),
         ),
         name=(
