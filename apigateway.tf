@@ -127,6 +127,6 @@ module "lb-http-api-gw" {
 # Tasks
 #---------------
 resource "google_cloud_tasks_queue" "rebalance_queue" {
-  name     = "rebalance_queue"
+  name     = "rebalance"
   location = var.region
 }
