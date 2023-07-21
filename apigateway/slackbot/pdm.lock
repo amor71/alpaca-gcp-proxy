@@ -261,20 +261,22 @@ summary = "A python wrapper of the C library 'Google CRC32C'"
 
 [[package]]
 name = "googleapis-common-protos"
-version = "1.59.0"
+version = "1.59.1"
 requires_python = ">=3.7"
 summary = "Common protobufs used in Google APIs"
 dependencies = [
-    "protobuf!=3.20.0,!=3.20.1,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0.dev0,>=3.19.5",
 ]
 
 [[package]]
 name = "googleapis-common-protos"
-version = "1.59.0"
+version = "1.59.1"
+extras = ["grpc"]
 requires_python = ">=3.7"
 summary = "Common protobufs used in Google APIs"
 dependencies = [
-    "protobuf!=3.20.0,!=3.20.1,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+    "googleapis-common-protos==1.59.1",
+    "grpcio<2.0.0.dev0,>=1.44.0",
 ]
 
 [[package]]
@@ -689,7 +691,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default"]
-content_hash = "sha256:45ddea1e4eec52313ae308fd3c8da08b25b9011d7d741409c1c6c5dbd2c0114c"
+content_hash = "sha256:4892fd2d7e813070dce815f61120a6ef617561b7a8449549842f56988780a0b6"
 
 [metadata.files]
 "aiohttp 3.8.4" = [
@@ -1175,9 +1177,9 @@ content_hash = "sha256:45ddea1e4eec52313ae308fd3c8da08b25b9011d7d741409c1c6c5dbd
     {url = "https://files.pythonhosted.org/packages/fc/7f/b8fc0644c6eea688532a58a0d872d28ea9ffc2fdf93956ce03aa07f19c6b/google_crc32c-1.5.0-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:1e986b206dae4476f41bcec1faa057851f3889503a70e1bdb2378d406223994a"},
     {url = "https://files.pythonhosted.org/packages/fd/71/299a368347aeab3c89896cdfb67703161becbf5afbc1748a1850094828dc/google_crc32c-1.5.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8485b340a6a9e76c62a7dce3c98e5f102c9219f4cfbf896a00cf48caf078d438"},
 ]
-"googleapis-common-protos 1.59.0" = [
-    {url = "https://files.pythonhosted.org/packages/9a/19/02a6256e00653b0fec9f356678df0ed996cb9d89aeb472c8c4df9490cac0/googleapis-common-protos-1.59.0.tar.gz", hash = "sha256:4168fcb568a826a52f23510412da405abd93f4d23ba544bb68d943b14ba3cb44"},
-    {url = "https://files.pythonhosted.org/packages/a7/8d/7ccf8f63ab0a768e13720262374c0d6a1489f7f23f1b89a16c92af452f09/googleapis_common_protos-1.59.0-py2.py3-none-any.whl", hash = "sha256:b287dc48449d1d41af0c69f4ea26242b5ae4c3d7249a38b0984c86a4caffff1f"},
+"googleapis-common-protos 1.59.1" = [
+    {url = "https://files.pythonhosted.org/packages/28/9b/ea531afe585da044686ab13351c99dfbb2ca02b96c396874946d52d0e127/googleapis-common-protos-1.59.1.tar.gz", hash = "sha256:b35d530fe825fb4227857bc47ad84c33c809ac96f312e13182bdeaa2abe1178a"},
+    {url = "https://files.pythonhosted.org/packages/b3/b7/bbaa556e9ff0580f408c64ccf4db0c1414eec79e7151d33a10bc209ffb6d/googleapis_common_protos-1.59.1-py2.py3-none-any.whl", hash = "sha256:0cbedb6fb68f1c07e18eb4c48256320777707e7d0c55063ae56c15db3224a61e"},
 ]
 "grpc-google-iam-v1 0.12.6" = [
     {url = "https://files.pythonhosted.org/packages/34/72/c84e54991d452942c5a85474693c8433169104a596e9dd23b05c5f091894/grpc_google_iam_v1-0.12.6-py2.py3-none-any.whl", hash = "sha256:5c10f3d8dc2d88678ab1a9b0cb5482735c5efee71e6c0cd59f872eef22913f5c"},
