@@ -160,7 +160,7 @@ dependencies = [
 
 [[package]]
 name = "google-cloud-pubsub"
-version = "2.17.0"
+version = "2.18.0"
 requires_python = ">=3.7"
 summary = "Google Cloud Pub/Sub API client library"
 dependencies = [
@@ -175,7 +175,7 @@ dependencies = [
 
 [[package]]
 name = "google-cloud-secret-manager"
-version = "2.16.1"
+version = "2.16.2"
 requires_python = ">=3.7"
 summary = "Google Cloud Secret Manager API client library"
 dependencies = [
@@ -324,41 +324,52 @@ summary = "More routines for operating on iterables, beyond itertools"
 
 [[package]]
 name = "opentelemetry-api"
-version = "1.17.0"
+version = "1.19.0"
 requires_python = ">=3.7"
 summary = "OpenTelemetry Python API"
 dependencies = [
     "deprecated>=1.2.6",
-    "importlib-metadata~=6.0.0",
-    "setuptools>=16.0",
+    "importlib-metadata~=6.0",
 ]
 
 [[package]]
 name = "opentelemetry-exporter-gcp-monitoring"
-version = "1.4.0a0"
+version = "1.5.0a0"
 requires_python = ">=3.7"
 summary = "Google Cloud Monitoring exporter for OpenTelemetry"
 dependencies = [
     "google-cloud-monitoring~=2.0",
     "opentelemetry-api~=1.0",
+    "opentelemetry-resourcedetector-gcp==1.*,>=1.5.0dev0",
     "opentelemetry-sdk~=1.0",
 ]
 
 [[package]]
+name = "opentelemetry-resourcedetector-gcp"
+version = "1.5.0a0"
+requires_python = ">=3.7"
+summary = "Google Cloud resource detector for OpenTelemetry"
+dependencies = [
+    "opentelemetry-api~=1.0",
+    "opentelemetry-sdk~=1.0",
+    "requests~=2.24",
+    "typing-extensions~=4.0",
+]
+
+[[package]]
 name = "opentelemetry-sdk"
-version = "1.17.0"
+version = "1.19.0"
 requires_python = ">=3.7"
 summary = "OpenTelemetry Python SDK"
 dependencies = [
-    "opentelemetry-api==1.17.0",
-    "opentelemetry-semantic-conventions==0.38b0",
-    "setuptools>=16.0",
+    "opentelemetry-api==1.19.0",
+    "opentelemetry-semantic-conventions==0.40b0",
     "typing-extensions>=3.7.4",
 ]
 
 [[package]]
 name = "opentelemetry-semantic-conventions"
-version = "0.38b0"
+version = "0.40b0"
 requires_python = ">=3.7"
 summary = "OpenTelemetry Semantic Conventions"
 
@@ -441,12 +452,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "67.7.2"
-requires_python = ">=3.7"
-summary = "Easily download, build, install, upgrade, and uninstall Python packages"
-
-[[package]]
 name = "six"
 version = "1.16.0"
 requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
@@ -454,7 +459,7 @@ summary = "Python 2 and 3 compatibility utilities"
 
 [[package]]
 name = "types-requests"
-version = "2.30.0.0"
+version = "2.31.0.2"
 summary = "Typing stubs for requests"
 dependencies = [
     "types-urllib3",
@@ -721,13 +726,13 @@ content_hash = "sha256:96f3cb3744bc851d06f113ae3dfad666b08fb00af767287605beb4260
     {url = "https://files.pythonhosted.org/packages/cb/03/2cf12a4a297a11f26c2765aa647c2731e37940091c9296c59f4db0415ab8/google-cloud-monitoring-2.14.2.tar.gz", hash = "sha256:e6fda130979e2e8d759ab70d6427b5948481948c96f5fd4a42370ba96a11959b"},
     {url = "https://files.pythonhosted.org/packages/e5/b8/a7f51d0d386683e87de146b6b636bc4685a8c927937971bf65cf9df331de/google_cloud_monitoring-2.14.2-py2.py3-none-any.whl", hash = "sha256:43cca0adb1ff387ebe099414f9af957532c23723cb377c23cd9f88fd84e1bc3f"},
 ]
-"google-cloud-pubsub 2.17.0" = [
-    {url = "https://files.pythonhosted.org/packages/c0/62/359bad2c10067a36027ac83dd7a1d7201df4f956591e7763df1358ef189a/google-cloud-pubsub-2.17.0.tar.gz", hash = "sha256:8288d0323800f26b331b154fd1fb31ce92fe9a26f3f8483737209c7bfe50ade9"},
-    {url = "https://files.pythonhosted.org/packages/c8/98/54e08d32d9990754f66a8625a3d4ba7a8152451c4dc682ca969ac49eaf0b/google_cloud_pubsub-2.17.0-py2.py3-none-any.whl", hash = "sha256:85db40ce1c03ad604fe2f299906f49f2bf36abbe2320863a3e19bdc746a904f7"},
+"google-cloud-pubsub 2.18.0" = [
+    {url = "https://files.pythonhosted.org/packages/51/8d/3784f023a00c0d0fa0860d131039df6ce58b3f10abbb84f91f7d4c0f13a3/google_cloud_pubsub-2.18.0-py2.py3-none-any.whl", hash = "sha256:c2aeec5cc80d55c94689cd72db74273cf5a5fba5f00771a623271086dfde161c"},
+    {url = "https://files.pythonhosted.org/packages/73/77/c6fa954f25bc5356601990ce3e820cfb5e960c8ddd18d67c9c4a3727cbb3/google-cloud-pubsub-2.18.0.tar.gz", hash = "sha256:7a70df4111d9cb694a25cecdd2328827159c5213ae1e6304cb3abb38f379dd29"},
 ]
-"google-cloud-secret-manager 2.16.1" = [
-    {url = "https://files.pythonhosted.org/packages/48/6b/92b705f408c1d928526b65d1259be4254ef1f45e620f01f8665156b4d781/google-cloud-secret-manager-2.16.1.tar.gz", hash = "sha256:149d11ce9be7ea81d4ac3544d3fcd4c716a9edb2cb775d9c075231570b079fbb"},
-    {url = "https://files.pythonhosted.org/packages/6c/e3/c3aade516eaf544bd7d86694178de9c2da8eff8fc40326d0265acc65991d/google_cloud_secret_manager-2.16.1-py2.py3-none-any.whl", hash = "sha256:dad28c24921fb62961aafe808be0e7935a99096f03ac29eeeefa04b85534c1f3"},
+"google-cloud-secret-manager 2.16.2" = [
+    {url = "https://files.pythonhosted.org/packages/25/13/7e481680b20cfc722da1c1d85a630cbb174642df2ec9be48cce336533e77/google-cloud-secret-manager-2.16.2.tar.gz", hash = "sha256:596521091c39b94a260d814776421c8a009f6463b392880041efa80283b5fd29"},
+    {url = "https://files.pythonhosted.org/packages/78/0f/cecdd6c4541caaa4ac99176c1dc248e85b48fa650e4be2fd073c3aac4ad2/google_cloud_secret_manager-2.16.2-py2.py3-none-any.whl", hash = "sha256:9814c1bf75d44e4d03d5b79a1ccb2b121b27348de8d09ba2deedb7ca5c6d76de"},
 ]
 "google-crc32c 1.5.0" = [
     {url = "https://files.pythonhosted.org/packages/02/94/d2ea867760d5a27b3e9eb40ff31faf7f03f949e51d4e3b3ae24f759b5963/google_crc32c-1.5.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:72218785ce41b9cfd2fc1d6a017dc1ff7acfc4c17d01053265c41a2c0cc39b8c"},
@@ -946,21 +951,25 @@ content_hash = "sha256:96f3cb3744bc851d06f113ae3dfad666b08fb00af767287605beb4260
     {url = "https://files.pythonhosted.org/packages/2e/d0/bea165535891bd1dcb5152263603e902c0ec1f4c9a2e152cc4adff6b3a38/more-itertools-9.1.0.tar.gz", hash = "sha256:cabaa341ad0389ea83c17a94566a53ae4c9d07349861ecb14dc6d0345cf9ac5d"},
     {url = "https://files.pythonhosted.org/packages/85/01/e2678ee4e0d7eed4fd6be9e5b043fff9d22d245d06c8c91def8ced664189/more_itertools-9.1.0-py3-none-any.whl", hash = "sha256:d2bc7f02446e86a68911e58ded76d6561eea00cddfb2a91e7019bbb586c799f3"},
 ]
-"opentelemetry-api 1.17.0" = [
-    {url = "https://files.pythonhosted.org/packages/07/80/0369a242858b5ca3c4bf9c4af964afed3d875804f6dba3e9dd2be5c5da82/opentelemetry_api-1.17.0-py3-none-any.whl", hash = "sha256:b41d9b2a979607b75d2683b9bbf97062a683d190bc696969fb2122fa60aeaabc"},
-    {url = "https://files.pythonhosted.org/packages/0e/e7/f2d1bcabd52558a849be42d312575cedb842715d1fe6ce7d53df396b9de5/opentelemetry_api-1.17.0.tar.gz", hash = "sha256:3480fcf6b783be5d440a226a51db979ccd7c49a2e98d1c747c991031348dcf04"},
+"opentelemetry-api 1.19.0" = [
+    {url = "https://files.pythonhosted.org/packages/11/2e/a6a5b453957cf72050ee7f510597fa9377d5b14577c89d9290aa103fc9db/opentelemetry_api-1.19.0-py3-none-any.whl", hash = "sha256:dcd2a0ad34b691964947e1d50f9e8c415c32827a1d87f0459a72deb9afdf5597"},
+    {url = "https://files.pythonhosted.org/packages/7e/35/d9fa13c9ac63ce67a5b5a84e754f32fe0ce3be48242cf5b76554cdcb7e90/opentelemetry_api-1.19.0.tar.gz", hash = "sha256:db374fb5bea00f3c7aa290f5d94cea50b659e6ea9343384c5f6c2bb5d5e8db65"},
 ]
-"opentelemetry-exporter-gcp-monitoring 1.4.0a0" = [
-    {url = "https://files.pythonhosted.org/packages/ab/b6/034c5911f23d24dbbef029a9d49a78b5527a3f1ae7f025d3333771833ba6/opentelemetry-exporter-gcp-monitoring-1.4.0a0.tar.gz", hash = "sha256:65281caefed099f3d59cc04cab66cc4a5f38921b6441ae79c8916283c37ece5a"},
-    {url = "https://files.pythonhosted.org/packages/dd/e3/29eb5316aa7b5d12da30229daf50b5c59caad4a4406c85fd4a851ae90c00/opentelemetry_exporter_gcp_monitoring-1.4.0a0-py3-none-any.whl", hash = "sha256:26d604a5038b54a1730fdaa2d47a2e92f5709a933e5011488240b38f8cea799b"},
+"opentelemetry-exporter-gcp-monitoring 1.5.0a0" = [
+    {url = "https://files.pythonhosted.org/packages/54/89/5e8e154e63e2d3b5b8b2bb948a16cee549fe4942ec8648c38e7a30d2857f/opentelemetry-exporter-gcp-monitoring-1.5.0a0.tar.gz", hash = "sha256:33fa3563a05ae2f5b7e5bf05e68333d4442ead290eb29f5f50213b6d91cd3da6"},
+    {url = "https://files.pythonhosted.org/packages/aa/66/dd32bf82116f4186c5d4da8e2ce4a619e6f8a58b8fab78fdb0b131e36c55/opentelemetry_exporter_gcp_monitoring-1.5.0a0-py3-none-any.whl", hash = "sha256:f7c0730f5ffef5c041e4b177f68cc421e5c774c7b5658aea9c9fa93397d06a25"},
 ]
-"opentelemetry-sdk 1.17.0" = [
-    {url = "https://files.pythonhosted.org/packages/12/f8/2578fcee8a5ef5808959d31bfaae934064516698d1b7cfe377ad6ea2b32f/opentelemetry_sdk-1.17.0.tar.gz", hash = "sha256:99bb9a787006774f865a4b24f8179900347d03a214c362a6cb70191f77dd6132"},
-    {url = "https://files.pythonhosted.org/packages/fb/25/aeb2e432b8df411fb09502f37941c0b1b27fb81f79285cac37d8cf4b50ea/opentelemetry_sdk-1.17.0-py3-none-any.whl", hash = "sha256:07424cbcc8c012bc120ed573d5443e7322f3fb393512e72866c30111070a8c37"},
+"opentelemetry-resourcedetector-gcp 1.5.0a0" = [
+    {url = "https://files.pythonhosted.org/packages/92/64/1739d632bc89df4979517e779b2d0c08116503ed80651ec09f4ed087d0e3/opentelemetry-resourcedetector-gcp-1.5.0a0.tar.gz", hash = "sha256:a6a12e0419d31edfd8b7cefe480330c758e574c64156e3d719097f2624817e54"},
+    {url = "https://files.pythonhosted.org/packages/b3/6f/4973b4429f515160a707c59a49f2b8e518367245209d306d1608f1144eac/opentelemetry_resourcedetector_gcp-1.5.0a0-py3-none-any.whl", hash = "sha256:319537563c457bf3c7302509c471eb45be28774ba04a1ecf6d56986ccae27e62"},
 ]
-"opentelemetry-semantic-conventions 0.38b0" = [
-    {url = "https://files.pythonhosted.org/packages/0b/b0/c8bdd02ce280f41e9d0568a37ead4c0153d5200f887a5f6858839daa5bb6/opentelemetry_semantic_conventions-0.38b0-py3-none-any.whl", hash = "sha256:b0ba36e8b70bfaab16ee5a553d809309cc11ff58aec3d2550d451e79d45243a7"},
-    {url = "https://files.pythonhosted.org/packages/cb/67/2e34aa3dde0558017ec071591d04aeb99f29dadad9f72ff59e490011ccb6/opentelemetry_semantic_conventions-0.38b0.tar.gz", hash = "sha256:37f09e47dd5fc316658bf9ee9f37f9389b21e708faffa4a65d6a3de484d22309"},
+"opentelemetry-sdk 1.19.0" = [
+    {url = "https://files.pythonhosted.org/packages/46/d3/bed29dc5b7027e4c8721fd276f30b41741903239b56405ed960f0ed45015/opentelemetry_sdk-1.19.0-py3-none-any.whl", hash = "sha256:bb67ad676b1bc671766a40d7fc9d9563854c186fa11f0dc8fa2284e004bd4263"},
+    {url = "https://files.pythonhosted.org/packages/8a/13/ada8736a13855f446c8989851dc6e9c9cf9e737f74e63d9e9748cb27cd0e/opentelemetry_sdk-1.19.0.tar.gz", hash = "sha256:765928956262c7a7766eaba27127b543fb40ef710499cad075f261f52163a87f"},
+]
+"opentelemetry-semantic-conventions 0.40b0" = [
+    {url = "https://files.pythonhosted.org/packages/6c/cb/9460610c42d6ed300b68f7a41927bf2338da56130205bd97705018cee8c5/opentelemetry_semantic_conventions-0.40b0.tar.gz", hash = "sha256:5a7a491873b15ab7c4907bbfd8737645cc87ca55a0a326c1755d1b928d8a0fae"},
+    {url = "https://files.pythonhosted.org/packages/e7/16/53cdd7e2b53b64437fc705c2daff524aea587efc1e8b25cd8fbfc78984bf/opentelemetry_semantic_conventions-0.40b0-py3-none-any.whl", hash = "sha256:7ebbaf86755a0948902e68637e3ae516c50222c30455e55af154ad3ffe283839"},
 ]
 "pluggy 1.0.0" = [
     {url = "https://files.pythonhosted.org/packages/9e/01/f38e2ff29715251cf25532b9082a1589ab7e4f571ced434f98d0139336dc/pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
@@ -1013,17 +1022,13 @@ content_hash = "sha256:96f3cb3744bc851d06f113ae3dfad666b08fb00af767287605beb4260
     {url = "https://files.pythonhosted.org/packages/53/a4/f48c9d79cb507ed1373477dbceaba7401fd8a23af63b837fa61f1dcd3691/SecretStorage-3.3.3.tar.gz", hash = "sha256:2403533ef369eca6d2ba81718576c5e0f564d5cca1b58f73a8b23e7d4eeebd77"},
     {url = "https://files.pythonhosted.org/packages/54/24/b4293291fa1dd830f353d2cb163295742fa87f179fcc8a20a306a81978b7/SecretStorage-3.3.3-py3-none-any.whl", hash = "sha256:f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99"},
 ]
-"setuptools 67.7.2" = [
-    {url = "https://files.pythonhosted.org/packages/2f/8c/f336a966d4097c7cef6fc699b2ecb83b5fb63fd698198c1b5c7905a74f0f/setuptools-67.7.2-py3-none-any.whl", hash = "sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b"},
-    {url = "https://files.pythonhosted.org/packages/fd/53/e5d7ae40d03e4ed20b7cba317cf9c0c97097c8debb39f9d72d182a6578a2/setuptools-67.7.2.tar.gz", hash = "sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990"},
-]
 "six 1.16.0" = [
     {url = "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
     {url = "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
 ]
-"types-requests 2.30.0.0" = [
-    {url = "https://files.pythonhosted.org/packages/3b/a7/7d6dab83a48eff91ff75e21b2aaefd7419a29d5b1b1b8025d4a78ade0017/types-requests-2.30.0.0.tar.gz", hash = "sha256:dec781054324a70ba64430ae9e62e7e9c8e4618c185a5cb3f87a6738251b5a31"},
-    {url = "https://files.pythonhosted.org/packages/fa/c7/024171d587afe75934a6f779922d24fcc6dd468e947c74598eb17840e229/types_requests-2.30.0.0-py3-none-any.whl", hash = "sha256:c6cf08e120ca9f0dc4fa4e32c3f953c3fba222bcc1db6b97695bce8da1ba9864"},
+"types-requests 2.31.0.2" = [
+    {url = "https://files.pythonhosted.org/packages/06/9b/04bb62f11a6824df5d4568439cf0715118c265d0ffbebeb7cf4b8c9caa15/types_requests-2.31.0.2-py3-none-any.whl", hash = "sha256:56d181c85b5925cbc59f4489a57e72a8b2166f18273fd8ba7b6fe0c0b986f12a"},
+    {url = "https://files.pythonhosted.org/packages/44/70/60c1e24806a2cd1b64867a15a1100e5ad6423c8ce250ebc04dd519162487/types-requests-2.31.0.2.tar.gz", hash = "sha256:6aa3f7faf0ea52d728bb18c0a0d1522d9bfd8c72d26ff6f61bfc3d06a411cf40"},
 ]
 "types-urllib3 1.26.25.13" = [
     {url = "https://files.pythonhosted.org/packages/08/6d/98b51f9776747e1e270919aa02298ce6a7d2d4d78a3349b47666deb61c4c/types_urllib3-1.26.25.13-py3-none-any.whl", hash = "sha256:5dbd1d2bef14efee43f5318b5d36d805a489f6600252bb53626d4bfafd95e27c"},

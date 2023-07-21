@@ -250,7 +250,7 @@ dependencies = [
 
 [[package]]
 name = "google-cloud-pubsub"
-version = "2.17.1"
+version = "2.18.0"
 requires_python = ">=3.7"
 summary = "Google Cloud Pub/Sub API client library"
 dependencies = [
@@ -1101,9 +1101,9 @@ content_hash = "sha256:9ee070d4b5c9a7aac72059795b00919c49899805107b6ff6303df4080
     {url = "https://files.pythonhosted.org/packages/77/2d/4777a0541730fd76846ff4e53c4baddac28901aadcb3e97735546ef62ca5/google-cloud-firestore-2.11.1.tar.gz", hash = "sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d"},
     {url = "https://files.pythonhosted.org/packages/c8/64/3fd8a948fe42936a81a23a93a08c63d96625373ab55c3a20041dcb082325/google_cloud_firestore-2.11.1-py2.py3-none-any.whl", hash = "sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e"},
 ]
-"google-cloud-pubsub 2.17.1" = [
-    {url = "https://files.pythonhosted.org/packages/30/8c/8102d1a98d3d03487d063e424f6f4ad164a5a5e1d21ebd1a3229dd29cbae/google-cloud-pubsub-2.17.1.tar.gz", hash = "sha256:0593428ecbb0249cb5e741b403e95c3d421b4697c83eb7ed4c1684dff176c753"},
-    {url = "https://files.pythonhosted.org/packages/f5/21/1a70e8d2959d578e8365241af7a6cf463d6f0ee56ae7f7d4ba4a4914a4fe/google_cloud_pubsub-2.17.1-py2.py3-none-any.whl", hash = "sha256:bc07475496735378736b50cddd87be94bb7e44d60d76a5c6ab19bc306a0340e5"},
+"google-cloud-pubsub 2.18.0" = [
+    {url = "https://files.pythonhosted.org/packages/51/8d/3784f023a00c0d0fa0860d131039df6ce58b3f10abbb84f91f7d4c0f13a3/google_cloud_pubsub-2.18.0-py2.py3-none-any.whl", hash = "sha256:c2aeec5cc80d55c94689cd72db74273cf5a5fba5f00771a623271086dfde161c"},
+    {url = "https://files.pythonhosted.org/packages/73/77/c6fa954f25bc5356601990ce3e820cfb5e960c8ddd18d67c9c4a3727cbb3/google-cloud-pubsub-2.18.0.tar.gz", hash = "sha256:7a70df4111d9cb694a25cecdd2328827159c5213ae1e6304cb3abb38f379dd29"},
 ]
 "google-cloud-secret-manager 2.16.2" = [
     {url = "https://files.pythonhosted.org/packages/25/13/7e481680b20cfc722da1c1d85a630cbb174642df2ec9be48cce336533e77/google-cloud-secret-manager-2.16.2.tar.gz", hash = "sha256:596521091c39b94a260d814776421c8a009f6463b392880041efa80283b5fd29"},

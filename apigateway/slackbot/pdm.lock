@@ -196,15 +196,13 @@ dependencies = [
 [[package]]
 name = "google-api-core"
 version = "2.11.0"
-extras = ["grpc"]
 requires_python = ">=3.7"
 summary = "Google API client core library"
 dependencies = [
-    "google-api-core==2.11.0",
-    "grpcio-status<2.0dev,>=1.33.2",
-    "grpcio-status<2.0dev,>=1.49.1; python_version >= \"3.11\"",
-    "grpcio<2.0dev,>=1.33.2",
-    "grpcio<2.0dev,>=1.49.1; python_version >= \"3.11\"",
+    "google-auth<3.0dev,>=2.14.1",
+    "googleapis-common-protos<2.0dev,>=1.56.2",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+    "requests<3.0.0dev,>=2.18.0",
 ]
 
 [[package]]
@@ -271,12 +269,10 @@ dependencies = [
 [[package]]
 name = "googleapis-common-protos"
 version = "1.59.0"
-extras = ["grpc"]
 requires_python = ">=3.7"
 summary = "Common protobufs used in Google APIs"
 dependencies = [
-    "googleapis-common-protos==1.59.0",
-    "grpcio<2.0.0dev,>=1.44.0",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
 ]
 
 [[package]]

@@ -373,6 +373,9 @@ GitPython==3.1.31 \
 google-api-core==2.11.0 \
     --hash=sha256:4b9bb5d5a380a0befa0573b302651b8a9a89262c1730e37bf423cec511804c22 \
     --hash=sha256:ce222e27b0de0d7bc63eb043b956996d6dccab14cc3b690aaea91c9cc99dc16e
+google-api-core==2.11.0 \
+    --hash=sha256:4b9bb5d5a380a0befa0573b302651b8a9a89262c1730e37bf423cec511804c22 \
+    --hash=sha256:ce222e27b0de0d7bc63eb043b956996d6dccab14cc3b690aaea91c9cc99dc16e
 google-auth==2.19.0 \
     --hash=sha256:be617bfaf77774008e9d177573f782e109188c8a64ae6e744285df5cea3e7df6 \
     --hash=sha256:f39d528077ac540793dd3c22a8706178f157642a67d874db25c640b7fead277e
@@ -454,6 +457,9 @@ google-crc32c==1.5.0 \
     --hash=sha256:f583edb943cf2e09c60441b910d6a20b4d9d626c75a36c8fcac01a6c96c01183 \
     --hash=sha256:fd8536e902db7e365f49e7d9029283403974ccf29b13fc7028b97e2295b33556 \
     --hash=sha256:fe70e325aa68fa4b5edf7d1a4b6f691eb04bbccac0ace68e34820d283b5f80d4
+googleapis-common-protos==1.59.0 \
+    --hash=sha256:4168fcb568a826a52f23510412da405abd93f4d23ba544bb68d943b14ba3cb44 \
+    --hash=sha256:b287dc48449d1d41af0c69f4ea26242b5ae4c3d7249a38b0984c86a4caffff1f
 googleapis-common-protos==1.59.0 \
     --hash=sha256:4168fcb568a826a52f23510412da405abd93f4d23ba544bb68d943b14ba3cb44 \
     --hash=sha256:b287dc48449d1d41af0c69f4ea26242b5ae4c3d7249a38b0984c86a4caffff1f
@@ -947,5 +953,5 @@ zipp==3.15.0 \
     --hash=sha256:48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
-infra==0.1.28 \
-    --hash=sha256:8e6ade72f26e0e30f836f2309c9c63c07ee5b27db3ccb52cec1373bc64790adf
+infra==0.1.42 \
+    --hash=sha256:db749cc42a6002cee90e78906ed0071117a38bb644d1191b7f6c8d7ffdf7d99e
