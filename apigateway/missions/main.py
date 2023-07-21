@@ -77,7 +77,7 @@ def save_new_mission(
 
     print("document update status=", status)
 
-    return doc_ref.id(), created
+    return doc_ref.id, created
 
 
 def create_run(user_id: str, model_portfolio: dict) -> str | None:
