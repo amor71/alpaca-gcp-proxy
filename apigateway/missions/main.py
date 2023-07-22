@@ -125,7 +125,7 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
     return run_payload["id"]
 
 
-def market_open() -> bool:
+def calculate_seconds_from_now() -> int | None:
     now_in_nyc = datetime.datetime.now(pytz.timezone("America/New_York"))
     today_in_nyc = now_in_nyc.date()
 
@@ -141,16 +141,54 @@ def market_open() -> bool:
         headers=None,
     )
 
-    print(r.status_code, r.text)
+    if r.status_code != 200:
+        return None
 
-    return True
+    calendars = r.json()
+    first_trading_calendar = calendars[0]
 
+    # Is today a trading day?
+    if first_trading_calendar["date"] == str(today_in_nyc):
+        market_open = datetime.datetime.combine(
+            first_trading_calendar["date"],
+            datetime.datetime.strptime(
+                first_trading_calendar["open"], "%H:%M"
+            ).time(),
+            pytz.timezone("America/New_York"),
+        )
+        market_close = datetime.datetime.combine(
+            first_trading_calendar["date"],
+            datetime.datetime.strptime(
+                first_trading_calendar["open"], "%H:%M"
+            ).time(),
+            pytz.timezone("America/New_York"),
+        )
 
-def calculate_seconds_from_now() -> int:
-    if market_open():
-        return 60 * 5
+        if now_in_nyc < market_open:
+            return int((market_open - now_in_nyc).total_seconds())
+        elif now_in_nyc < market_close:
+            return 60 * 5
 
-    return 100 * 5
+        next_trading_day = calendars[1]
+        next_market_open = datetime.datetime.combine(
+            next_trading_day["date"],
+            datetime.datetime.strptime(
+                next_trading_day["open"], "%H:%M"
+            ).time(),
+            pytz.timezone("America/New_York"),
+        )
+
+        return int((next_market_open - now_in_nyc).total_seconds())
+
+    next_market_open = datetime.datetime.combine(
+        first_trading_calendar["date"],
+        datetime.datetime.strptime(
+            first_trading_calendar["open"], "%H:%M"
+        ).time(),
+        pytz.timezone("America/New_York"),
+    )
+
+    return int((next_market_open - now_in_nyc).total_seconds())
 
 
 def reschedule_run(request):
