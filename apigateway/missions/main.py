@@ -196,6 +196,9 @@ def calculate_seconds_from_now() -> int | None:
         pytz.timezone("America/New_York"),
     )
 
+    print(
+        f"next market open time: {next_market_open}, now in ny: {now_in_nyc}"
+    )
     return int((next_market_open - now_in_nyc).total_seconds())
 
 
