@@ -2,9 +2,9 @@ import datetime
 import json
 import time
 import uuid
+from zoneinfo import ZoneInfo
 
 import functions_framework
-import pytz
 from google.cloud import firestore  # type: ignore
 from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
@@ -126,7 +126,8 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
 
 
 def calculate_seconds_from_now() -> int | None:
-    now_in_nyc = datetime.datetime.now(pytz.timezone("America/New_York"))
+    EDT = ZoneInfo("US/Eastern")
+    now_in_nyc = datetime.datetime.now(EDT)
     today_in_nyc = now_in_nyc.date()
 
     args = {
@@ -148,6 +149,7 @@ def calculate_seconds_from_now() -> int | None:
     first_trading_calendar = calendars[0]
 
     # Is today a trading day?
+
     if first_trading_calendar["date"] == str(today_in_nyc):
         market_open = datetime.datetime.combine(
             datetime.datetime.strptime(
@@ -156,7 +158,7 @@ def calculate_seconds_from_now() -> int | None:
             datetime.datetime.strptime(
                 first_trading_calendar["open"], "%H:%M"
             ).time(),
-            pytz.timezone("America/New_York"),
+            EDT,
         )
         market_close = datetime.datetime.combine(
             datetime.datetime.strptime(
@@ -165,7 +167,7 @@ def calculate_seconds_from_now() -> int | None:
             datetime.datetime.strptime(
                 first_trading_calendar["open"], "%H:%M"
             ).time(),
-            pytz.timezone("America/New_York"),
+            EDT,
         )
 
         if now_in_nyc < market_open:
@@ -181,7 +183,7 @@ def calculate_seconds_from_now() -> int | None:
             datetime.datetime.strptime(
                 next_trading_day["open"], "%H:%M"
             ).time(),
-            pytz.timezone("America/New_York"),
+            EDT,
         )
 
         return int((next_market_open - now_in_nyc).total_seconds())
@@ -193,7 +195,7 @@ def calculate_seconds_from_now() -> int | None:
         datetime.datetime.strptime(
             first_trading_calendar["open"], "%H:%M"
         ).time(),
-        pytz.timezone("America/New_York"),
+        EDT,
     )
 
     print(
