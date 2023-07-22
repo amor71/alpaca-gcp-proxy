@@ -51,7 +51,6 @@ def load_account_id(user_id: str) -> str | None:
         log_error("load_account_id", f"could not load {user_id} document")
         return None
 
-    print(f"loaded document:{doc}")
     if not (alpaca_account_id := doc.get("alpaca_account_id")):
         log_error(
             "load_account_id",
@@ -151,43 +150,9 @@ def calculate_seconds_from_now() -> int | None:
     # Is today a trading day?
 
     if first_trading_calendar["date"] == str(today_in_nyc):
-        market_open = datetime.datetime.combine(
-            datetime.datetime.strptime(
-                first_trading_calendar["date"], "'%Y-%m-%d'"
-            ).date(),
-            datetime.datetime.strptime(
-                first_trading_calendar["open"], "%H:%M"
-            ).time(),
-            EDT,
+        return _extracted_from_calculate_seconds_from_now_27(
+            first_trading_calendar, EDT, now_in_nyc, calendars
         )
-        market_close = datetime.datetime.combine(
-            datetime.datetime.strptime(
-                first_trading_calendar["date"], "%Y-%m-%d"
-            ).date(),
-            datetime.datetime.strptime(
-                first_trading_calendar["open"], "%H:%M"
-            ).time(),
-            EDT,
-        )
-
-        if now_in_nyc < market_open:
-            return int((market_open - now_in_nyc).total_seconds())
-        elif now_in_nyc < market_close:
-            return 60 * 5
-
-        next_trading_day = calendars[1]
-        next_market_open = datetime.datetime.combine(
-            datetime.datetime.strptime(
-                next_trading_day["date"], "%Y-%m-%d"
-            ).date(),
-            datetime.datetime.strptime(
-                next_trading_day["open"], "%H:%M"
-            ).time(),
-            EDT,
-        )
-
-        return int((next_market_open - now_in_nyc).total_seconds())
-
     next_market_open = datetime.datetime.combine(
         datetime.datetime.strptime(
             first_trading_calendar["date"], "%Y-%m-%d"
@@ -204,14 +169,52 @@ def calculate_seconds_from_now() -> int | None:
     return int((next_market_open - now_in_nyc).total_seconds())
 
 
+# TODO Rename this here and in `calculate_seconds_from_now`
+def _extracted_from_calculate_seconds_from_now_27(
+    first_trading_calendar, EDT, now_in_nyc, calendars
+):
+    market_open = datetime.datetime.combine(
+        datetime.datetime.strptime(
+            first_trading_calendar["date"], "'%Y-%m-%d'"
+        ).date(),
+        datetime.datetime.strptime(
+            first_trading_calendar["open"], "%H:%M"
+        ).time(),
+        EDT,
+    )
+    market_close = datetime.datetime.combine(
+        datetime.datetime.strptime(
+            first_trading_calendar["date"], "%Y-%m-%d"
+        ).date(),
+        datetime.datetime.strptime(
+            first_trading_calendar["open"], "%H:%M"
+        ).time(),
+        EDT,
+    )
+
+    if now_in_nyc < market_open:
+        return int((market_open - now_in_nyc).total_seconds())
+    elif now_in_nyc < market_close:
+        return 60 * 5
+
+    next_trading_day = calendars[1]
+    next_market_open = datetime.datetime.combine(
+        datetime.datetime.strptime(
+            next_trading_day["date"], "%Y-%m-%d"
+        ).date(),
+        datetime.datetime.strptime(next_trading_day["open"], "%H:%M").time(),
+        EDT,
+    )
+
+    return int((next_market_open - now_in_nyc).total_seconds())
+
+
 def reschedule_run(request):
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
     task_id = str(uuid.uuid4())
-    print(
-        f"task-id={task_id}, location={location} rebalance_queue={rebalance_queue}"
-    )
+
     # Construct the task.
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
@@ -245,8 +248,6 @@ def reschedule_run(request):
             task=task,
         )
     )
-
-    print(f"created task = {task}")
 
     return ("scheduled", 201)
 
