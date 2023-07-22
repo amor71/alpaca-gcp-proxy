@@ -4,6 +4,7 @@ import time
 import uuid
 
 import functions_framework
+import pytz
 from google.cloud import firestore  # type: ignore
 from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
@@ -124,12 +125,25 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
     return run_payload["id"]
 
 
-def is_market_open() -> bool:
+def market_open() -> bool:
+    now_in_nyc = datetime.datetime.now(pytz.timezone("America/New_York"))
+    today_in_nyc = now_in_nyc.date()
+
+    r = alpaca_proxy(
+        method="GET",
+        url="/v1/calendar",
+        args=[f"start={today_in_nyc}", f"end={today_in_nyc}"],
+        payload=None,
+        headers=None,
+    )
+
+    print(r.status_code, r.text)
+
     return True
 
 
 def calculate_seconds_from_now() -> int:
-    if is_market_open():
+    if market_open():
         return 60 * 5
 
     return 100 * 5
