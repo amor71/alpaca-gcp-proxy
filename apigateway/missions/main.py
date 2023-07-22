@@ -150,14 +150,18 @@ def calculate_seconds_from_now() -> int | None:
     # Is today a trading day?
     if first_trading_calendar["date"] == str(today_in_nyc):
         market_open = datetime.datetime.combine(
-            first_trading_calendar["date"],
+            datetime.datetime.strptime(
+                first_trading_calendar["date"], "'%Y-%m-%d'"
+            ).date(),
             datetime.datetime.strptime(
                 first_trading_calendar["open"], "%H:%M"
             ).time(),
             pytz.timezone("America/New_York"),
         )
         market_close = datetime.datetime.combine(
-            first_trading_calendar["date"],
+            datetime.datetime.strptime(
+                first_trading_calendar["date"], "'%Y-%m-%d'"
+            ).date(),
             datetime.datetime.strptime(
                 first_trading_calendar["open"], "%H:%M"
             ).time(),
@@ -171,7 +175,9 @@ def calculate_seconds_from_now() -> int | None:
 
         next_trading_day = calendars[1]
         next_market_open = datetime.datetime.combine(
-            next_trading_day["date"],
+            datetime.datetime.strptime(
+                next_trading_day["date"], "'%Y-%m-%d'"
+            ).date(),
             datetime.datetime.strptime(
                 next_trading_day["open"], "%H:%M"
             ).time(),
