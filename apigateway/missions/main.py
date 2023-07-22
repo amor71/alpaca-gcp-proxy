@@ -129,7 +129,10 @@ def market_open() -> bool:
     now_in_nyc = datetime.datetime.now(pytz.timezone("America/New_York"))
     today_in_nyc = now_in_nyc.date()
 
-    args = {"start": today_in_nyc, "end": today_in_nyc}
+    args = {
+        "start": today_in_nyc,
+        "end": today_in_nyc + datetime.timedelta(days=7),
+    }
     r = alpaca_proxy(
         method="GET",
         url="/v1/calendar",
