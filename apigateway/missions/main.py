@@ -160,7 +160,7 @@ def calculate_seconds_from_now() -> int | None:
         )
         market_close = datetime.datetime.combine(
             datetime.datetime.strptime(
-                first_trading_calendar["date"], "'%Y-%m-%d'"
+                first_trading_calendar["date"], "%Y-%m-%d"
             ).date(),
             datetime.datetime.strptime(
                 first_trading_calendar["open"], "%H:%M"
@@ -176,7 +176,7 @@ def calculate_seconds_from_now() -> int | None:
         next_trading_day = calendars[1]
         next_market_open = datetime.datetime.combine(
             datetime.datetime.strptime(
-                next_trading_day["date"], "'%Y-%m-%d'"
+                next_trading_day["date"], "%Y-%m-%d"
             ).date(),
             datetime.datetime.strptime(
                 next_trading_day["open"], "%H:%M"
@@ -188,7 +188,7 @@ def calculate_seconds_from_now() -> int | None:
 
     next_market_open = datetime.datetime.combine(
         datetime.datetime.strptime(
-            first_trading_calendar["date"], "'%Y-%m-%d'"
+            first_trading_calendar["date"], "%Y-%m-%d"
         ).date(),
         datetime.datetime.strptime(
             first_trading_calendar["open"], "%H:%M"
