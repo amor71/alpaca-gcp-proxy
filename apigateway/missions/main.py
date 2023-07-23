@@ -258,7 +258,7 @@ def reschedule_run(request):
     return set_task(client, task)
 
 
-def handle_post(request):
+def handle_post(request: Request):
     payload = request.get_json() if request.is_json else None
 
     if (
@@ -294,7 +294,7 @@ def handle_post(request):
         user_id, name, strategy, run_id
     )
 
-    # track_run(run_id)
+    _ = reschedule_verify(request=request, run_id=run_id)
 
     return ({"id": mission_id, "status": "created", "created": created}, 200)
 
