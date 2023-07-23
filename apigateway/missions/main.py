@@ -297,6 +297,17 @@ def handle_get(request):
     if not run_id:
         return ("missing run-id", 400)
 
+    r = alpaca_proxy(
+        method="GET",
+        url=f"/v1/rebalancing/runs/{run_id}",
+        args=None,
+        payload=None,
+        headers=None,
+    )
+
+    if r.status_code != 200:
+        log_error("handle_get()", f"failed to load run {run_id}: {r.text}")
+
     print(f"validating run {run_id}")
 
     return ("OK", 200)
