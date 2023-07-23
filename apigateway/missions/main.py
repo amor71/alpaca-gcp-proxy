@@ -291,12 +291,25 @@ def handle_post(request):
     return ({"id": mission_id, "status": "created", "created": created}, 200)
 
 
+def handle_get(request):
+    run_id = request.args.get("runId")
+
+    if not run_id:
+        return ("missing run-id", 400)
+
+    print(f"validating run {run_id}")
+
+    return ("OK", 200)
+
+
 @functions_framework.http
 @auth
 def missions(request):
-    """Implement /v1/missions"""
+    """Implement POST /v1/missions and GET /v1/runs/{run-id}"""
 
     if request.method == "POST":
         return handle_post(request)
+    if request.method == "GET":
+        return handle_get(request)
 
     return (f"{request.method} not yet implemented", 405)
