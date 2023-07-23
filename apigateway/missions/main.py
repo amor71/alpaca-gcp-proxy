@@ -5,6 +5,7 @@ import uuid
 from zoneinfo import ZoneInfo
 
 import functions_framework
+from flask import Request
 from google.cloud import firestore  # type: ignore
 from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
@@ -61,7 +62,7 @@ def load_account_id(user_id: str) -> str | None:
     return alpaca_account_id
 
 
-def save_new_mission(
+def save_new_mission_and_run(
     user_id: str, mission_name: str, strategy: str, run_id: str
 ) -> tuple[str, int]:
     db = firestore.Client()
@@ -80,14 +81,12 @@ def save_new_mission(
     }
 
     status = doc_ref.set(data)
-
     print("document update status=", status)
 
-    run_doc_def = doc_ref.collection("runs").document()
-    run_data = {"run_id": run_id, "created": created}
-    status = run_doc_def.set(run_data)
-
+    run_doc_def = db.collection("runs").document(run_id)
+    status = run_doc_def.set(data)
     print("document update status=", status)
+
     return doc_ref.id, created
 
 
@@ -209,6 +208,33 @@ def _extracted_from_calculate_seconds_from_now_27(
     return int((next_market_open - now_in_nyc).total_seconds())
 
 
+def set_task(
+    client: tasks_v2.CloudTasksClient, task: tasks_v2.Task
+) -> tuple[str, int]:
+    if not (second_from_now := calculate_seconds_from_now()):
+        return ("failed to calculate 'set_task' schedule", 400)
+
+    # Convert "seconds from now" to an absolute Protobuf Timestamp
+    second_from_now = int(second_from_now)  # type : ignore
+    timestamp = timestamp_pb2.Timestamp()
+    timestamp.FromDatetime(
+        datetime.datetime.now(datetime.timezone.utc)
+        + datetime.timedelta(seconds=second_from_now)
+    )
+    task.schedule_time = timestamp
+
+    # Use the client to send a CreateTaskRequest.
+    _ = client.create_task(
+        tasks_v2.CreateTaskRequest(
+            # The queue to add the task to
+            parent=client.queue_path(project_id, location, rebalance_queue),  # type: ignore
+            # The task itself
+            task=task,
+        )
+    )
+    return ("scheduled", 201)
+
+
 def reschedule_run(request):
     # Create a client.
     client = tasks_v2.CloudTasksClient()
@@ -229,27 +255,7 @@ def reschedule_run(request):
             else None
         ),
     )
-    second_from_now = calculate_seconds_from_now()
-
-    # Convert "seconds from now" to an absolute Protobuf Timestamp
-    timestamp = timestamp_pb2.Timestamp()
-    timestamp.FromDatetime(
-        datetime.datetime.now(datetime.timezone.utc)
-        + datetime.timedelta(seconds=second_from_now)
-    )
-    task.schedule_time = timestamp
-
-    # Use the client to send a CreateTaskRequest.
-    task = client.create_task(
-        tasks_v2.CreateTaskRequest(
-            # The queue to add the task to
-            parent=client.queue_path(project_id, location, rebalance_queue),
-            # The task itself
-            task=task,
-        )
-    )
-
-    return ("scheduled", 201)
+    return set_task(client, task)
 
 
 def handle_post(request):
@@ -284,14 +290,85 @@ def handle_post(request):
 
     print(f"created run with id {run_id}")
 
-    mission_id, created = save_new_mission(user_id, name, strategy, run_id)
+    mission_id, created = save_new_mission_and_run(
+        user_id, name, strategy, run_id
+    )
 
     # track_run(run_id)
 
     return ({"id": mission_id, "status": "created", "created": created}, 200)
 
 
-def handle_get(request):
+def reschedule_verify(
+    request: Request,
+    run_id: str,
+) -> tuple[str, int]:
+    # Create a client.
+    client = tasks_v2.CloudTasksClient()
+
+    task_id = str(uuid.uuid4())
+
+    # Construct the task.
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.POST,
+            url=f"https://api.nine30.com/v1/runs/{run_id}",
+            headers=request.headers,
+            body=json.dumps(request.json).encode(),
+        ),
+        name=(
+            client.task_path(project_id, location, rebalance_queue, task_id)  # type: ignore
+            if task_id is not None
+            else None
+        ),
+    )
+    return set_task(client, task)
+
+
+def reschedule_run_by_run_id(request: Request, run_id: str) -> tuple[str, int]:
+    if not project_id or not location or not rebalance_queue:
+        log_error(
+            "reschedule_run_by_run_id", "could not load environment variables"
+        )
+        return ("missing environment variable(s)", 400)
+
+    # load run details
+    db = firestore.Client()
+    doc = db.collection("runs").document(run_id).get()
+
+    if doc.exists:
+        data = doc.to_dict()
+    else:
+        log_error("reschedule_run_by_run_id", "could not load run {run_id}")
+        return ("failed to load previous run details", 400)
+
+    # Create a client.
+    client = tasks_v2.CloudTasksClient()
+    task_id = str(uuid.uuid4())
+
+    # Construct the task.
+    payload = {
+        "name": data["name"],
+        "strategy": data["strategy"],
+    }
+
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.POST,
+            url="https://api.nine30.com/v1/missions",
+            headers=request.headers,
+            body=json.dumps(payload).encode(),
+        ),
+        name=(
+            client.task_path(project_id, location, rebalance_queue, task_id)
+            if task_id is not None
+            else None
+        ),
+    )
+    return set_task(client, task)
+
+
+def handle_get(request: Request) -> tuple[str, int]:
     run_id = request.args.get("runId")
 
     if not run_id:
@@ -307,10 +384,19 @@ def handle_get(request):
 
     if r.status_code != 200:
         log_error("handle_get()", f"failed to load run {run_id}: {r.text}")
+        return (f"run id {run_id} not found", 400)
 
     print(f"validating run {run_id}")
 
-    return ("OK", 200)
+    payload = r.json()
+    status = payload["status"]
+
+    if status == "COMPLETED_SUCCESS":
+        return ("OK", 200)
+    elif status in {"COMPLETED_ADJUSTED", "IN_PROGRESS", "QUEUED"}:
+        return reschedule_verify(request, run_id)
+
+    return reschedule_run_by_run_id(request, run_id)
 
 
 @functions_framework.http
