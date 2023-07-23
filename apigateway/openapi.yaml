@@ -85,6 +85,28 @@ paths:
           schema:
             $ref: "#/definitions/MissionStatus"
 
+  /v1/runs/{runId}:
+    patch:
+      description: "Validate scheduled run, if completed check execution status if not all passed re-balance again."
+      operationId: "validate-mission"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/missions
+      parameters:
+        - in: path
+          name: runId
+          required: true
+          type: string
+          description: Missions rebalance run-id
+      responses:
+        "200":
+          description: Rebalance completed ok
+        "201":
+          description: New rebalance had to be created
+        "202":
+          description: Run not completed yet, another run validation task scheduled
+
   /v1/chatbot:
     post:
       description: "Interface with Chatbot"
