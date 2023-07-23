@@ -320,7 +320,7 @@ def missions(request):
 
     if request.method == "POST":
         return handle_post(request)
-    if request.method == "GET":
+    if request.method == "PATCH":
         return handle_get(request)
 
     return (f"{request.method} not yet implemented", 405)
