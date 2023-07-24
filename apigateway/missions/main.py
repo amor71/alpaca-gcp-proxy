@@ -194,6 +194,9 @@ def _extracted_from_calculate_seconds_from_now_27(
         EDT,
     )
 
+    print(
+        f"market_open={market_open}, market_close={market_close}, now_in_nyc={now_in_nyc}"
+    )
     if now_in_nyc < market_open:
         return int((market_open - now_in_nyc).total_seconds())
     elif now_in_nyc < market_close:
