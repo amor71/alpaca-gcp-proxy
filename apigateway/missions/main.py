@@ -174,7 +174,7 @@ def _extracted_from_calculate_seconds_from_now_27(
 ):
     market_open = datetime.datetime.combine(
         datetime.datetime.strptime(
-            first_trading_calendar["date"], "'%Y-%m-%d'"
+            first_trading_calendar["date"], "%Y-%m-%d"
         ).date(),
         datetime.datetime.strptime(
             first_trading_calendar["open"], "%H:%M"

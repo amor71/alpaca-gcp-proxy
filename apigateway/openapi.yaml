@@ -103,9 +103,11 @@ paths:
         "200":
           description: Rebalance completed ok
         "201":
-          description: New rebalance had to be created
+          description: New rebalance task had to be scheduled
         "202":
           description: Run not completed yet, another run validation task scheduled
+        "400":
+          description: Something went wrong, follow-up tasks not scheduled
 
   /v1/chatbot:
     post:
