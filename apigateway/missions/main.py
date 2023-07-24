@@ -317,7 +317,7 @@ def reschedule_verify(
     # Construct the task.
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
-            http_method=tasks_v2.HttpMethod.POST,
+            http_method=tasks_v2.HttpMethod.PATCH,
             url=f"https://api.nine30.com/v1/runs/{run_id}",
             headers=request.headers,
             body=json.dumps(request.json).encode(),
