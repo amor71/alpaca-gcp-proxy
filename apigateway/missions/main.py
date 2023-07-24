@@ -392,10 +392,10 @@ def handle_get(request: Request) -> tuple[str, int]:
         log_error("handle_get()", f"failed to load run {run_id}: {r.text}")
         return (f"run id {run_id} not found", 400)
 
-    print(f"validating run {run_id}")
-
     payload = r.json()
     status = payload["status"]
+
+    print(f"validating run {run_id} with status={status}")
 
     if status == "COMPLETED_SUCCESS":
         return ("OK", 200)
