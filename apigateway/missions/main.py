@@ -189,7 +189,7 @@ def _extracted_from_calculate_seconds_from_now_27(
             first_trading_calendar["date"], "%Y-%m-%d"
         ).date(),
         datetime.datetime.strptime(
-            first_trading_calendar["open"], "%H:%M"
+            first_trading_calendar["close"], "%H:%M"
         ).time(),
         EDT,
     )
