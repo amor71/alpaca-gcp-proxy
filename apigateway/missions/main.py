@@ -145,10 +145,13 @@ def calculate_seconds_from_now() -> int | None:
 
     calendars = r.json()
     first_trading_calendar = calendars[0]
-
+    print(
+        f"first_trading_calendar={first_trading_calendar} today_in_nyc={today_in_nyc}"
+    )
     # Is today a trading day?
 
     if first_trading_calendar["date"] == str(today_in_nyc):
+        print("its today!")
         return _extracted_from_calculate_seconds_from_now_27(
             first_trading_calendar, EDT, now_in_nyc, calendars
         )
