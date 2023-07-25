@@ -409,9 +409,9 @@ def handle_validate(request: Request) -> tuple[str, int]:
     # increment_counter(status)
     print(f"validating run {run_id} with status={status}")
 
-    if status == "COMPLETED_SUCCESS":
-        return ("OK", 200)
-    elif status in {"COMPLETED_ADJUSTED", "IN_PROGRESS", "QUEUED"}:
+    if status in {"COMPLETED_SUCCESS", "COMPLETED_ADJUSTED"}:
+        return (f"{status}", 200)
+    elif status in {"IN_PROGRESS", "QUEUED"}:
         return reschedule_verify(request, run_id)
 
     return reschedule_run_by_run_id(request, run_id)
