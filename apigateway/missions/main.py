@@ -15,6 +15,8 @@ from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
+from .alpaca import get_available_cash
+
 
 def get_model_portfolio_by_name(name: str) -> dict | None:
     """Look-up a portfolio by portfolio name"""
@@ -95,6 +97,15 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
 
     if not (user_account_id := load_account_id(user_id)):
         return None
+
+    cash = get_available_cash(user_account_id)
+    if not cash or cash < 1.0:
+        log_error(
+            "create_run", "account can't be used for trading at the moment."
+        )
+        return None
+
+    print(f"cash={cash}")
 
     # TODO: Do we need anything except weights?
     rebalance_payload: dict = {
