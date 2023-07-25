@@ -10,7 +10,8 @@ metrics.set_meter_provider(
     MeterProvider(
         metric_readers=[
             PeriodicExportingMetricReader(
-                CloudMonitoringMetricsExporter(), export_interval_millis=5000
+                CloudMonitoringMetricsExporter(add_unique_identifier=True),
+                export_interval_millis=5000,
             )
         ],
         resource=Resource.create(

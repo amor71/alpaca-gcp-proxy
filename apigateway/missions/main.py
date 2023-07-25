@@ -406,7 +406,7 @@ def handle_validate(request: Request) -> tuple[str, int]:
 
     payload = r.json()
     status = payload["status"]
-    # increment_counter(status)
+    increment_counter(status)
     print(f"validating run {run_id} with status={status}")
 
     if status in {"COMPLETED_SUCCESS", "COMPLETED_ADJUSTED"}:
