@@ -16,6 +16,7 @@ from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
 from .alpaca import get_available_cash
+from .telemetrics import increment_counter
 
 
 def get_model_portfolio_by_name(name: str) -> dict | None:
@@ -385,7 +386,7 @@ def reschedule_run_by_run_id(request: Request, run_id: str) -> tuple[str, int]:
     return set_task(client, task)
 
 
-def handle_get(request: Request) -> tuple[str, int]:
+def handle_validate(request: Request) -> tuple[str, int]:
     run_id = request.args.get("runId")
 
     if not run_id:
@@ -405,7 +406,7 @@ def handle_get(request: Request) -> tuple[str, int]:
 
     payload = r.json()
     status = payload["status"]
-
+    increment_counter(status)
     print(f"validating run {run_id} with status={status}")
 
     if status == "COMPLETED_SUCCESS":
@@ -424,6 +425,6 @@ def missions(request):
     if request.method == "POST":
         return handle_post(request)
     if request.method == "PATCH":
-        return handle_get(request)
+        return handle_validate(request)
 
     return (f"{request.method} not yet implemented", 405)
