@@ -391,6 +391,9 @@ google-cloud-core==2.3.3 \
 google-cloud-firestore==2.11.1 \
     --hash=sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d \
     --hash=sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e
+google-cloud-monitoring==2.15.1 \
+    --hash=sha256:086a845a34a6e105ab8a3a4809392ea6367a65b28b7561c26101534a8705ed37 \
+    --hash=sha256:4394e5e031f30d622a24739678ec48a45400ead94af9a6032cbff7f66194dc12
 google-cloud-pubsub==2.17.1 \
     --hash=sha256:0593428ecbb0249cb5e741b403e95c3d421b4697c83eb7ed4c1684dff176c753 \
     --hash=sha256:bc07475496735378736b50cddd87be94bb7e44d60d76a5c6ab19bc306a0340e5
@@ -709,6 +712,9 @@ openapi==1.1.0 \
 opentelemetry-api==1.19.0 \
     --hash=sha256:db374fb5bea00f3c7aa290f5d94cea50b659e6ea9343384c5f6c2bb5d5e8db65 \
     --hash=sha256:dcd2a0ad34b691964947e1d50f9e8c415c32827a1d87f0459a72deb9afdf5597
+opentelemetry-exporter-gcp-monitoring==1.5.0a0 \
+    --hash=sha256:33fa3563a05ae2f5b7e5bf05e68333d4442ead290eb29f5f50213b6d91cd3da6 \
+    --hash=sha256:f7c0730f5ffef5c041e4b177f68cc421e5c774c7b5658aea9c9fa93397d06a25
 opentelemetry-exporter-gcp-trace==1.5.0 \
     --hash=sha256:7ab070fac6331551dee80cd5e89c1a098096a8c7e19f78bee8f3b6b90e96d470 \
     --hash=sha256:bb34b568379dd8333279fdc8aff9b3e79c9cd5a039a7ebe712e81b6fa02350f0
@@ -1055,6 +1061,7 @@ yarl==1.9.2 \
 zipp==3.15.0 \
     --hash=sha256:112929ad649da941c23de50f356a2b5570c954b65150642bccdd66bf194d224b \
     --hash=sha256:48904fc76a60e542af151aded95726c1a5c34ed43ab4134b597665c86d7ad556
+
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
 infra==0.1.43 \
