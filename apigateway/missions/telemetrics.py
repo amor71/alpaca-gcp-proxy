@@ -34,7 +34,7 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
             counter = meter.create_counter(
                 name=counter_name,
                 description="Mission counter",
-                unit="count",
+                # unit="count",
             )
 
             counters[counter_name] = counter
@@ -46,7 +46,7 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
 
 
 def run_status(status: str) -> None:
-    increment_counter(f"run.{status}")
+    increment_counter(f"run.{status}", 1)
 
 
 def mission_amount(amount: float) -> None:
