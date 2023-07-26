@@ -34,7 +34,7 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
             counter = meter.create_counter(
                 name=counter_name,
                 description="Mission counter",
-                unit="1",
+                unit="count",
             )
 
             counters[counter_name] = counter
