@@ -13,7 +13,7 @@ metrics.set_meter_provider(
         metric_readers=[
             PeriodicExportingMetricReader(
                 CloudMonitoringMetricsExporter(add_unique_identifier=True),
-                export_interval_millis=500,
+                export_interval_millis=5000,
             )
         ],
         resource=Resource.create(
@@ -32,9 +32,7 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
     try:
         if not (counter := counters.get(counter_name)):
             print(f"create new counter {counter_name}")
-            counter = meter.create_counter(
-                name=counter_name,
-            )
+            counter = meter.create_counter(name=counter_name, unit="1")
 
             counters[counter_name] = counter
         else:

@@ -83,12 +83,9 @@ def save_new_mission_and_run(
         "created": created,
     }
 
-    status = doc_ref.set(data)
-    print("document update status=", status)
-
+    _ = doc_ref.set(data)
     run_doc_def = db.collection("runs").document(run_id)
-    status = run_doc_def.set(data)
-    print("document update status=", status)
+    _ = run_doc_def.set(data)
 
     return doc_ref.id, created
 
@@ -105,8 +102,6 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
             "create_run", "account can't be used for trading at the moment."
         )
         return None
-
-    print(f"cash={cash}")
 
     # TODO: Do we need anything except weights?
     rebalance_payload: dict = {
@@ -160,13 +155,9 @@ def calculate_seconds_from_now() -> int | None:
 
     calendars = r.json()
     first_trading_calendar = calendars[0]
-    print(
-        f"first_trading_calendar={first_trading_calendar} today_in_nyc={today_in_nyc}"
-    )
-    # Is today a trading day?
 
+    # Is today a trading day?
     if first_trading_calendar["date"] == str(today_in_nyc):
-        print("its today!")
         return _extracted_from_calculate_seconds_from_now_27(
             first_trading_calendar, EDT, now_in_nyc, calendars
         )
@@ -180,9 +171,6 @@ def calculate_seconds_from_now() -> int | None:
         EDT,
     )
 
-    print(
-        f"next market open time: {next_market_open}, now in ny: {now_in_nyc}"
-    )
     return int((next_market_open - now_in_nyc).total_seconds())
 
 
@@ -207,10 +195,6 @@ def _extracted_from_calculate_seconds_from_now_27(
             first_trading_calendar["close"], "%H:%M"
         ).time(),
         EDT,
-    )
-
-    print(
-        f"market_open={market_open}, market_close={market_close}, now_in_nyc={now_in_nyc}"
     )
     if now_in_nyc < market_open:
         return int((market_open - now_in_nyc).total_seconds())
