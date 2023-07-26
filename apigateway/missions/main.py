@@ -132,6 +132,8 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
         return "reschedule" if r.status_code == 422 else None
 
     run_payload = r.json()
+    increment_counter(run_payload["status"])
+
     return run_payload["id"]
 
 
@@ -276,7 +278,7 @@ def reschedule_run(request):
     return set_task(client, task)
 
 
-def handle_post(request: Request):
+def handle_create_mission(request: Request):
     payload = request.get_json() if request.is_json else None
 
     if (
@@ -423,7 +425,7 @@ def missions(request):
     """Implement POST /v1/missions and GET /v1/runs/{run-id}"""
 
     if request.method == "POST":
-        return handle_post(request)
+        return handle_create_mission(request)
     if request.method == "PATCH":
         return handle_validate(request)
 

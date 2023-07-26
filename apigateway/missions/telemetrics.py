@@ -29,7 +29,7 @@ meter = metrics.get_meter(__name__)
 def increment_counter(status: str) -> None:
     if not (counter := counters.get(status)):
         counter = meter.create_counter(
-            name=status,
+            name=f"run.{status}",
             description=f"number of runs with status {status}",
             unit="1",
         )
