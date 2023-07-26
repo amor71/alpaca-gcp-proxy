@@ -5,6 +5,8 @@ from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from opentelemetry.sdk.resources import Resource
 
+from infra.logger import log_error
+
 counters: dict = {}
 metrics.set_meter_provider(
     MeterProvider(
@@ -27,17 +29,20 @@ meter = metrics.get_meter(__name__)
 
 
 def increment_counter(counter_name: str, amount: int = 1) -> None:
-    if not (counter := counters.get(counter_name)):
-        counter = meter.create_counter(
-            name=counter_name,
-            description="Mission counter",
-            unit="1",
-        )
+    try:
+        if not (counter := counters.get(counter_name)):
+            counter = meter.create_counter(
+                name=counter_name,
+                description="Mission counter",
+                unit="1",
+            )
 
-        counters[counter_name] = counter
+            counters[counter_name] = counter
 
-    staging_labels = {"environment": "development"}
-    counter.add(amount, staging_labels)
+        staging_labels = {"environment": "development"}
+        counter.add(amount, staging_labels)
+    except Exception as e:
+        log_error("increment_counter", f"EXCEPTION:{e}")
 
 
 def run_status(status: str) -> None:
