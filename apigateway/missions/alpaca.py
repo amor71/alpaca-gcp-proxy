@@ -26,4 +26,5 @@ def get_available_cash(account_id: str) -> float | None:
         log_error("get_available_cash()", f"{account_id} blocked")
         return None
 
+    print(f"account_id: {account_id}, details:{payload}")
     return float(payload["cash"])
