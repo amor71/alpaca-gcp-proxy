@@ -12,7 +12,7 @@ metrics.set_meter_provider(
     MeterProvider(
         metric_readers=[
             PeriodicExportingMetricReader(
-                CloudMonitoringMetricsExporter(add_unique_identifier=True),
+                CloudMonitoringMetricsExporter(),
                 export_interval_millis=5000,
             )
         ],
@@ -33,20 +33,19 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
         if not (counter := counters.get(counter_name)):
             counter = meter.create_counter(
                 name=counter_name,
-                description="Mission counter",
-                # unit="count",
             )
 
             counters[counter_name] = counter
 
         staging_labels = {"environment": "development"}
+        print(f"adding {amount} to {counter_name}")
         counter.add(amount, staging_labels)
     except Exception as e:
         log_error("increment_counter", f"EXCEPTION:{e}")
 
 
 def run_status(status: str) -> None:
-    increment_counter(f"run.{status}", 1)
+    increment_counter(f"mission.run.{status}", 1)
 
 
 def mission_amount(amount: float) -> None:
