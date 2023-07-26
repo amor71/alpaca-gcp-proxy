@@ -41,7 +41,7 @@ def increment_counter(counter_name: str, amount: int = 1) -> None:
         print(f"adding {amount} to {counter_name}")
         counter.add(amount, staging_labels)
     except Exception as e:
-        log_error("increment_counter", f"EXCEPTION:{e}")
+        log_error("increment_counter", f"EXCEPTION:{str(e)}")
 
 
 def run_status(status: str) -> None:
