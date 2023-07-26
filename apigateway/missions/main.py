@@ -5,6 +5,7 @@ import uuid
 from zoneinfo import ZoneInfo
 
 import functions_framework
+import telemetrics
 from flask import Request
 from google.cloud import firestore  # type: ignore
 from google.cloud import tasks_v2
@@ -16,7 +17,6 @@ from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
 from .alpaca import get_available_cash
-from .telemetrics import increment_counter
 
 
 def get_model_portfolio_by_name(name: str) -> dict | None:
@@ -132,7 +132,8 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
         return "reschedule" if r.status_code == 422 else None
 
     run_payload = r.json()
-    increment_counter(run_payload["status"])
+    telemetrics.run_status(run_payload["status"])
+    telemetrics.mission_amount(int(cash))
 
     return run_payload["id"]
 
@@ -408,7 +409,7 @@ def handle_validate(request: Request) -> tuple[str, int]:
 
     payload = r.json()
     status = payload["status"]
-    increment_counter(status)
+    telemetrics.run_status(status)
     print(f"validating run {run_id} with status={status}")
 
     if status in {"COMPLETED_SUCCESS", "COMPLETED_ADJUSTED"}:

@@ -26,15 +26,23 @@ metrics.set_meter_provider(
 meter = metrics.get_meter(__name__)
 
 
-def increment_counter(status: str) -> None:
-    if not (counter := counters.get(status)):
+def increment_counter(counter_name: str, amount: int = 1) -> None:
+    if not (counter := counters.get(counter_name)):
         counter = meter.create_counter(
-            name=f"run.{status}",
-            description=f"number of runs with status {status}",
+            name=counter_name,
+            description="Mission counter",
             unit="1",
         )
 
-        counters[status] = counter
+        counters[counter_name] = counter
 
     staging_labels = {"environment": "development"}
-    counter.add(1, staging_labels)
+    counter.add(amount, staging_labels)
+
+
+def run_status(status: str) -> None:
+    increment_counter(f"run.{status}")
+
+
+def mission_amount(amount: float) -> None:
+    increment_counter("mission.size", int(amount))
