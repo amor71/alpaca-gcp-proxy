@@ -1,6 +1,6 @@
 import os
 
-from flask import Request
+from flask import Request, abort
 
 from .logger import log_error
 from .proxies.stytch import stytch_proxy
@@ -23,7 +23,7 @@ def get_bearer_token(request: Request) -> str | None:
 
 
 def authenticate_token(token: str, headers: dict) -> str | None:
-    """Authenticate session token w/ Stytch, return True is valid, otherwise False"""
+    """Authenticate session token w/ Stytch, return user_id is valid, otherwise raise 403"""
 
     payload = {"session_token": token}
 
@@ -38,8 +38,7 @@ def authenticate_token(token: str, headers: dict) -> str | None:
         headers=headers,
     )
 
-    return (
-        r.json().get("session").get("user_id")
-        if r.status_code == 200
-        else None
-    )
+    if r.status_code == 200:
+        return r.json().get("session").get("user_id")
+
+    abort(403)

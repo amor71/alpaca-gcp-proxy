@@ -18,18 +18,27 @@ paths:
         address: https://us-east4-development-380917.cloudfunctions.net/new_user
       consumes:
         - application/json
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: "new user payload"
-          schema:
-            $ref: "#/definitions/User"
       responses:
         "200":
           description: OK
         "400":
-          description: Payload missing or incorrect
+          description: User already exist
+
+    get:
+      description: "Get state and details of the authenticated suer"
+      operationId: "getUserDetails"
+      tags:
+        - Users
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: user does not exist
+        "405":
+          description: invalid route parameters
+
     options:
       description: "CORS support"
       operationId: "accounts-cors"
@@ -157,48 +166,9 @@ paths:
         "204":
           description: OK
 
-  /v1/users/{emailId}:
-    get:
-      description: "Get user state and details"
-      operationId: "getUserDetails"
-      tags:
-        - Users
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
-      parameters:
-        - in: path
-          name: emailId
-          required: true
-          type: string
-          description: Id of user to update
-      responses:
-        "200":
-          description: OK
-        "404":
-          description: user does not exist
-        "405":
-          description: invalid route parameters
-
-    options:
-      description: "CORS support"
-      operationId: "getUserDetails-cors"
-      tags:
-        - Users
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/get_user_details
-      parameters:
-        - in: path
-          name: emailId
-          required: true
-          type: string
-          description: Id of user to update
-      responses:
-        "204":
-          description: OK
-
-  /v1/users/{emailId}/topup:
+  /v1/users/topup:
     put:
-      description: "Update User top-up schedule and amount"
+      description: "Update  top-up schedule and amount for the authenticated user"
       operationId: "updateTopup"
       tags:
         - Funding
@@ -207,11 +177,6 @@ paths:
       consumes:
         - application/json
       parameters:
-        - in: path
-          name: emailId
-          required: true
-          type: string
-          description: Id of user to update
         - in: body
           name: topupPayload
           required: true
@@ -223,32 +188,13 @@ paths:
           description: OK
         "400":
           description: Payload missing or incorrect
-    options:
-      description: "CORS support"
-      operationId: "update-topup-cors"
-      tags:
-        - Funding
-      x-google-backend:
-        address: https://us-east4-development-380917.cloudfunctions.net/topup
-      parameters:
-        - in: path
-          name: emailId
-          required: true
-          type: string
-          description: Id of user to update
-      responses:
-        "204":
-          description: OK
-
+    
 definitions:
   User:
     type: object
     properties:
-      user_id:
-        description: New Stytch user_id
-        type: string
-      email_id:
-        description: reference to the user's email address stored in Stytch
+      userId:
+        description: reference to the user-id stored in Stytch
         type: string
 
   ChatIn:

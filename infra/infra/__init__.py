@@ -67,24 +67,11 @@ def auth(func):
         if not (token := get_bearer_token(request)):
             return ("invalid token passed", 403)
 
-        email_id = request.args.get("emailId")
-
         headers: dict = clean_headers(dict(request.headers))
         authenticated_user = authenticate_token(token, headers)
-
         authenticated_user_id.set(authenticated_user)
-        print(f"set authenticated_user_id {authenticated_user_id}")
 
-        print(f"authenticated_user={authenticated_user} email_id={email_id}")
-        if not authenticated_user or (
-            email_id
-            and authenticated_user
-            not in [
-                email_id,
-                "bypass",
-            ]
-        ):
-            return ("invalid token passed", 403)
+        print(f"auth(): authenticated_user={authenticated_user}")
 
         response: tuple = func(request)
         return _handle_cors_headers(response)
