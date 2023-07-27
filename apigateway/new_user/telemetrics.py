@@ -14,7 +14,7 @@ metrics.set_meter_provider(
             PeriodicExportingMetricReader(
                 CloudMonitoringMetricsExporter(
                     add_unique_identifier=True,
-                    prefix="hush",
+                    # prefix="hush",
                 ),
                 export_interval_millis=5000,
             )
