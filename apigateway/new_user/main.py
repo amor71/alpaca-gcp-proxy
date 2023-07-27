@@ -1,7 +1,7 @@
 import functions_framework
 from new_user import new_user_handler
 
-from infra import auth  # type: ignore
+from infra import auth, authenticated_user_id  # type: ignore
 from infra.logger import log_error
 
 

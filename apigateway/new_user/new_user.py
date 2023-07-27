@@ -13,6 +13,4 @@ def new_user_handler(user_id: str):
             "created": time.time_ns(),
         }
     )
-
     telemetrics.increment_new_user()
-    print("document write status=", status)
