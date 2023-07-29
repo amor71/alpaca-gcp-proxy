@@ -76,7 +76,7 @@ paths:
 
   /v1/missions:
     post:
-      description: "Create a new investment Mission for the authenticated user"
+      description: "Rebalance an investment Mission for the authenticated user"
       operationId: "new-mission"
       tags:
         - Missions
@@ -87,7 +87,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: "#/definitions/NewMission"
+            $ref: "#/definitions/MissionDetails"
       responses:
         "201":
           description: OK
@@ -168,7 +168,7 @@ paths:
 
   /v1/users/topup:
     put:
-      description: "Update  top-up schedule and amount for the authenticated user"
+      description: "Update top-up schedule and amount for the authenticated user"
       operationId: "updateTopup"
       tags:
         - Funding
@@ -182,13 +182,35 @@ paths:
           required: true
           description: "update topup payload"
           schema:
-            $ref: "#/definitions/UpdateUserTopup"
+            type: array
+            items:
+              $ref: "#/definitions/TopupRequest"
       responses:
         "200":
           description: OK
         "400":
           description: Payload missing or incorrect
-    
+
+  /v1/transfers/{transferId}:
+    get:
+      description: "Validate transfer"
+      operationId: "validateTransfer"
+      tags:
+        - Funding
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/topup
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: transferId
+          required: true
+          type: string
+          description: Transfer id
+      responses:
+        "200":
+          description: OK
+
 definitions:
   User:
     type: object
@@ -219,7 +241,7 @@ definitions:
         description: Chatbot Answer
         type: string
 
-  UpdateUserTopup:
+  TopupRequest:
     type: object
     properties:
       amount:
@@ -230,10 +252,11 @@ definitions:
         description: How often to top-up the account
         type: string
         enum:
+          - immediate
           - weekly
           - monthly
 
-  NewMission:
+  MissionDetails:
     type: object
     properties:
       name:

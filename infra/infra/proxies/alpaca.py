@@ -62,7 +62,7 @@ def trigger_step_function(user_id: str, url: str, response: dict):
 def alpaca_proxy(
     method: str,
     url: str,
-    args: list | None,
+    args: list | dict | None,
     payload: dict | None,
     headers: dict | None,
 ) -> Response:
@@ -94,6 +94,6 @@ def alpaca_proxy(
         if user_id:
             trigger_step_function(user_id, url, r.json())
     except LookupError:
-        log_error("alpaca_proxy", "failed to lookup 'email_id' in Context")
+        log_error("alpaca_proxy", "failed to lookup 'user_id' in Context")
 
     return r

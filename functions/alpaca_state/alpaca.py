@@ -1,12 +1,6 @@
 import time
 
 from google.cloud import firestore  # type: ignore
-from opentelemetry import metrics
-from opentelemetry.exporter.cloud_monitoring import \
-    CloudMonitoringMetricsExporter
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-from opentelemetry.sdk.resources import Resource
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
@@ -31,6 +25,6 @@ def alpaca_state_handler(user_id: str, payload: dict):
         update_data["alpaca_account_type"] = account_type
     if account_id := payload.get("account_id"):
         update_data["linked_bank_account_id"] = account_id
+    if relationship_id := payload.get("relationship_id"):
+        update_data["transfer_relationship_id"] = relationship_id
     status = doc_ref.update(update_data)
-
-    print("document update status=", status)

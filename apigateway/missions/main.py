@@ -7,96 +7,35 @@ from zoneinfo import ZoneInfo
 import functions_framework
 import telemetrics
 from flask import Request
-from google.cloud import firestore  # type: ignore
 from google.cloud import tasks_v2
-from google.protobuf import duration_pb2, timestamp_pb2
+from google.protobuf import timestamp_pb2
 
 from infra import auth, authenticated_user_id  # type: ignore
+from infra.alpaca_action import get_available_cash, get_model_portfolio_by_name
 from infra.config import location, project_id, rebalance_queue  # type: ignore
+from infra.data.missions import Missions, Runs
+from infra.data.users import User
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
-
-from .alpaca import get_available_cash
-
-
-def get_model_portfolio_by_name(name: str) -> dict | None:
-    """Look-up a portfolio by portfolio name"""
-
-    r = alpaca_proxy(
-        method="GET",
-        url="/v1/beta/rebalancing/portfolios",
-        args=None,
-        payload=None,
-        headers=None,
-    )
-
-    if r.status_code != 200:
-        return None
-
-    portfolios = r.json()
-    return next(
-        (
-            portfolio
-            for portfolio in portfolios
-            if portfolio["name"].lower() == name.lower()
-            and portfolio["status"] == "active"
-        ),
-        None,
-    )
-
-
-def load_account_id(user_id: str) -> str | None:
-    """Load account-id from Firestore, based on the user-id"""
-
-    db = firestore.Client()
-    doc_ref = db.collection("users").document(user_id)
-
-    if not (doc := doc_ref.get()):
-        log_error("load_account_id", f"could not load {user_id} document")
-        return None
-
-    if not (alpaca_account_id := doc.get("alpaca_account_id")):
-        log_error(
-            "load_account_id",
-            f"{user_id} does not have 'alpaca_account_id' property",
-        )
-        return None
-
-    return alpaca_account_id
 
 
 def save_new_mission_and_run(
     user_id: str, mission_name: str, strategy: str, run_id: str
-) -> tuple[str, int]:
-    db = firestore.Client()
+) -> str:
+    new_id = Missions.add(user_id, mission_name, strategy)
+    Runs.add(run_id, user_id, mission_name, strategy)
 
-    created = time.time_ns()
-    doc_ref = (
-        db.collection("missions")
-        .document(user_id)
-        .collection("user_missions")
-        .document()
-    )
-    data = {
-        "name": mission_name,
-        "strategy": strategy,
-        "created": created,
-    }
-
-    _ = doc_ref.set(data)
-    run_doc_def = db.collection("runs").document(run_id)
-    _ = run_doc_def.set(data)
-
-    return doc_ref.id, created
+    return new_id
 
 
 def create_run(user_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
-    if not (user_account_id := load_account_id(user_id)):
+    user = User(user_id=user_id)
+    if not user.exists or not user.alpaca_account_id:
         return None
 
-    cash = get_available_cash(user_account_id)
+    cash = get_available_cash(user.alpaca_account_id)
     if not cash or cash < 1.0:
         log_error(
             "create_run", "account can't be used for trading at the moment."
@@ -105,7 +44,7 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
 
     # TODO: Do we need anything except weights?
     rebalance_payload: dict = {
-        "account_id": user_account_id,
+        "account_id": user.alpaca_account_id,
         "type": "full_rebalance",
         "weights": model_portfolio["weights"],
     }
@@ -263,7 +202,7 @@ def reschedule_run(request):
     return set_task(client, task)
 
 
-def handle_create_mission(request: Request):
+def handle_create_rebalance(request: Request):
     payload = request.get_json() if request.is_json else None
 
     if (
@@ -295,13 +234,14 @@ def handle_create_mission(request: Request):
 
     print(f"created run with id {run_id}")
 
-    mission_id, created = save_new_mission_and_run(
-        user_id, name, strategy, run_id
-    )
+    mission_id = save_new_mission_and_run(user_id, name, strategy, run_id)
 
     _ = reschedule_verify(request=request, run_id=run_id)
 
-    return ({"id": mission_id, "status": "created", "created": created}, 200)
+    return (
+        {"id": mission_id, "status": "created", "created": time.time_ns()},
+        200,
+    )
 
 
 def reschedule_verify(
@@ -338,13 +278,7 @@ def reschedule_run_by_run_id(request: Request, run_id: str) -> tuple[str, int]:
         return ("missing environment variable(s)", 400)
 
     # load run details
-    db = firestore.Client()
-    doc = db.collection("runs").document(run_id).get()
-
-    if doc.exists:
-        data = doc.to_dict()
-    else:
-        log_error("reschedule_run_by_run_id", "could not load run {run_id}")
+    if not (run := Runs.load(run_id)):
         return ("failed to load previous run details", 400)
 
     # Create a client.
@@ -353,8 +287,8 @@ def reschedule_run_by_run_id(request: Request, run_id: str) -> tuple[str, int]:
 
     # Construct the task.
     payload = {
-        "name": data["name"],
-        "strategy": data["strategy"],
+        "name": run.name,
+        "strategy": run.strategy,
     }
 
     task = tasks_v2.Task(
@@ -410,7 +344,7 @@ def missions(request):
     """Implement POST /v1/missions and GET /v1/runs/{run-id}"""
 
     if request.method == "POST":
-        return handle_create_mission(request)
+        return handle_create_rebalance(request)
     if request.method == "PATCH":
         return handle_validate(request)
 
