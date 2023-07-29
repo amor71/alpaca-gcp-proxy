@@ -87,7 +87,7 @@ class Runs:
         return run_doc_def.id
 
     @classmethod
-    def load(cls, run_id: str) -> "Runs" | None:
+    def load(cls, run_id: str):
         db = firestore.Client()
         doc = db.collection("runs").document(run_id).get()
 
