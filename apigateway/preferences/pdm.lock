@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:e1c7986ccfd655fbcec0d8c75eebd761b81d181faf18829dd2e6b9a25223c208"
+content_hash = "sha256:2fb00060431ee62540c33cdf38f77957e1ad5d46c2cac29d82362e9ff3502b01"
 
 [[package]]
 name = "autoflake"
@@ -1006,6 +1006,27 @@ dependencies = [
 files = [
     {file = "therapist-2.2.0-py3-none-any.whl", hash = "sha256:79fea4093e663f0df6332c473c405f63f8bf550deffcf8dad670555b8549114e"},
     {file = "therapist-2.2.0.tar.gz", hash = "sha256:bcc9999eb1ff1b9b4a3e4e0b14a3ef171bb97fbf2910e145fb4cdc14a634a96b"},
+]
+
+[[package]]
+name = "types-requests"
+version = "2.31.0.2"
+summary = "Typing stubs for requests"
+dependencies = [
+    "types-urllib3",
+]
+files = [
+    {file = "types-requests-2.31.0.2.tar.gz", hash = "sha256:6aa3f7faf0ea52d728bb18c0a0d1522d9bfd8c72d26ff6f61bfc3d06a411cf40"},
+    {file = "types_requests-2.31.0.2-py3-none-any.whl", hash = "sha256:56d181c85b5925cbc59f4489a57e72a8b2166f18273fd8ba7b6fe0c0b986f12a"},
+]
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.14"
+summary = "Typing stubs for urllib3"
+files = [
+    {file = "types-urllib3-1.26.25.14.tar.gz", hash = "sha256:229b7f577c951b8c1b92c1bc2b2fdb0b49847bd2af6d1cc2a2e3dd340f3bda8f"},
+    {file = "types_urllib3-1.26.25.14-py3-none-any.whl", hash = "sha256:9683bbb7fb72e32bfe9d2be6e04875fbe1b3eeec3cbb4ea231435aa7fd6b4f0e"},
 ]
 
 [[package]]
