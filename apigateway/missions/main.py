@@ -32,13 +32,19 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
     user = User(user_id=user_id)
-    if not user.exists or not user.alpaca_account_id:
+    if not user.exists:
+        log_error("create_run()", f"can't load user {user_id}")
+        return None
+    if not user.alpaca_account_id:
+        log_error(
+            "create_run()", "user does not have alpaca_account_id property"
+        )
         return None
 
     cash = get_available_cash(user.alpaca_account_id)
     if not cash or cash < 1.0:
         log_error(
-            "create_run", "account can't be used for trading at the moment."
+            "create_run()", "account can't be used for trading at the moment."
         )
         return None
 
