@@ -34,9 +34,7 @@ class User:
 
         doc = doc_ref.get()
         if not doc.exists:
-            log_error(
-                "load_account_id", f"could not load {self.user_id} document"
-            )
+            log_error("USer", f"could not load {self.user_id} document")
             return None
 
         return doc.to_dict()

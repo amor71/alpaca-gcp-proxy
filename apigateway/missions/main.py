@@ -37,14 +37,20 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
         return None
     if not user.alpaca_account_id:
         log_error(
-            "create_run()", "user does not have alpaca_account_id property"
+            "create_run()",
+            f"user {user_id} does not have alpaca_account_id property",
         )
         return None
 
     cash = get_available_cash(user.alpaca_account_id)
-    if not cash or cash < 1.0:
+    if not cash:
         log_error(
-            "create_run()", "account can't be used for trading at the moment."
+            "create_run()", "account can't be used for trading at the moment"
+        )
+        return None
+    elif cash < 1.0:
+        log_error(
+            "create_run()", f"account balance {cash} too low for trading"
         )
         return None
 

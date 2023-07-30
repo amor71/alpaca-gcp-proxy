@@ -31,15 +31,11 @@ meter = metrics.get_meter(__name__)
 def increment_counter(counter_name: str, amount: int = 1) -> None:
     try:
         if not (counter := counters.get(counter_name)):
-            print(f"create new counter {counter_name}")
             counter = meter.create_counter(name=counter_name, unit="1")
 
             counters[counter_name] = counter
-        else:
-            print("reuse counter")
 
         staging_labels = {"environment": "development"}
-        print(f"adding {amount} to {counter_name}")
         counter.add(amount, staging_labels)
     except Exception as e:
         log_error("increment_counter", f"EXCEPTION:{str(e)}")
