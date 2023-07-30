@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:5b93bab845d5eda88df4bbf1488a935102bc23db4225591b603dcc1a08abf543"
+content_hash = "sha256:e1c7986ccfd655fbcec0d8c75eebd761b81d181faf18829dd2e6b9a25223c208"
 
 [[package]]
 name = "autoflake"
