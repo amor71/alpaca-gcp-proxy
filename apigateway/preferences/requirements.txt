@@ -306,5 +306,5 @@ zipp==3.16.2 \
 
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
-infra==0.1.49 \
+infra==0.1.50 \
     --hash=sha256:6566c2ba9fc4a76303ab9c86ee4994ad70de6533bf82ab709bf845653261fc36
