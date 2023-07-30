@@ -50,6 +50,28 @@ paths:
         "204":
           description: OK
 
+  /v1/users/preferences:
+    patch:
+      description: "Update User Preferences"
+      tags:
+        - Users
+      operationId: "preferences"
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/preferences
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Preferences"
+      responses:
+        "200":
+          description: Updated
+        "400":
+          description: Invalid request
+
   /v1/slackbot:
     post:
       description: "Slackbot"
@@ -220,6 +242,16 @@ definitions:
       userId:
         description: reference to the user-id stored in Stytch
         type: string
+
+  Preferences:
+    type: object
+    properties:
+      riskLevel:
+        type: string
+        enum:
+          - low
+          - medium
+          - high
 
   ChatIn:
     type: object

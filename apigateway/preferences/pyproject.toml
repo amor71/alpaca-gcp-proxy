@@ -1,0 +1,14 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Amichay Oren", email = "amichay@nine30.com"},
+]
+dependencies = [
+    "functions-framework>=3.4.0",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+

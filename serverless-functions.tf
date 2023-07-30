@@ -115,10 +115,10 @@ resource "google_cloudfunctions_function" "new_user" {
   available_memory_mb = 256
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
-    TOKEN_BYPASS = var.token_bypass
+    TOKEN_BYPASS    = var.token_bypass
   }
 }
 
@@ -153,9 +153,9 @@ resource "google_cloudfunctions_function" "topup" {
   available_memory_mb = 128
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
@@ -191,9 +191,9 @@ resource "google_cloudfunctions_function" "get_user_details" {
   available_memory_mb = 128
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
@@ -230,9 +230,9 @@ resource "google_cloudfunctions_function" "slackbot" {
   available_memory_mb = 256
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
@@ -269,9 +269,9 @@ resource "google_cloudfunctions_function" "chatbot" {
   available_memory_mb = 256
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
@@ -306,9 +306,47 @@ resource "google_cloudfunctions_function" "missions" {
   available_memory_mb = 256
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
+# -----------------
+# -- preferences --
+# -----------------
+
+data "archive_file" "preferences" {
+  type        = "zip"
+  output_path = "/tmp/preferences.zip"
+  source_dir  = "apigateway/preferences"
+}
+resource "google_storage_bucket_object" "preferences" {
+  name         = format("preferences-%s.zip", data.archive_file.preferences.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.preferences.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "preferences" {
+  name                  = "preferences"
+  description           = "User Preferences"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.preferences.name
+
+  trigger_http = true
+
+  entry_point         = "preferences"
+  available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
@@ -346,9 +384,9 @@ resource "google_cloudfunctions_function" "proxy" {
   #ingress_settings = "ALLOW_INTERNAL_ONLY"
 
   environment_variables = {
-    PROJECT_ID   = var.project_id
-    TOKEN_BYPASS = var.token_bypass
-    LOCATION = var.region
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
