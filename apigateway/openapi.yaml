@@ -177,7 +177,7 @@ paths:
       consumes:
         - application/json
       parameters:
-        - name: payload
+        - name: body
           in: body
           required: true
           description: "update topup payload"
