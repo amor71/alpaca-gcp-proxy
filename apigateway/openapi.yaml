@@ -96,6 +96,26 @@ paths:
         "200":
           description: OK
 
+  /v1/missions/plaid/{publicToken}:
+    post:
+      description: "Establish link to Plaid"
+      operationId: "plaidLink"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/plaid
+      parameters:
+        - in: path
+          name: publicToken
+          required: true
+          type: string
+          description: Plaid publicToken
+      responses:
+        "200":
+          description: Link established
+        "400":
+          description: Something went wrong, follow-up tasks not scheduled
+
   /v1/missions:
     post:
       description: "Rebalance an investment Mission for the authenticated user"

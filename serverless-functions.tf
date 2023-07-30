@@ -352,6 +352,43 @@ resource "google_cloudfunctions_function" "preferences" {
 }
 
 # -----------
+# -- plaid --
+# -----------
+data "archive_file" "plaid" {
+  type        = "zip"
+  output_path = "/tmp/plaid.zip"
+  source_dir  = "apigateway/plaid"
+}
+resource "google_storage_bucket_object" "plaid" {
+  name         = format("plaid-%s.zip", data.archive_file.plaid.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.plaid.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "plaid" {
+  name                  = "plaid"
+  description           = "Plaid connectivity"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.plaid.name
+
+  trigger_http = true
+
+  entry_point         = "plaid"
+  available_memory_mb = 256
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
+# -----------
 # -- proxy --
 # -----------
 data "archive_file" "proxy" {
