@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:0f25c63ea453501a9773a560f329b3d7a285f49642db0e351c99e38c2a2b400f"
+content_hash = "sha256:f5897b1f3e973f4534aa798507c21c7657c301ba979074d506e0a86bdace9504"
 
 [[package]]
 name = "black"
@@ -326,6 +326,25 @@ dependencies = [
 files = [
     {file = "google-cloud-monitoring-2.15.1.tar.gz", hash = "sha256:086a845a34a6e105ab8a3a4809392ea6367a65b28b7561c26101534a8705ed37"},
     {file = "google_cloud_monitoring-2.15.1-py2.py3-none-any.whl", hash = "sha256:4394e5e031f30d622a24739678ec48a45400ead94af9a6032cbff7f66194dc12"},
+]
+
+[[package]]
+name = "google-cloud-pubsub"
+version = "2.18.1"
+requires_python = ">=3.7"
+summary = "Google Cloud Pub/Sub API client library"
+dependencies = [
+    "google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.0",
+    "grpc-google-iam-v1<1.0.0dev,>=0.12.4",
+    "grpcio-status>=1.33.2",
+    "grpcio<2.0dev,>=1.51.3",
+    "proto-plus<2.0.0dev,>=1.22.0",
+    "proto-plus<2.0.0dev,>=1.22.2; python_version >= \"3.11\"",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+]
+files = [
+    {file = "google-cloud-pubsub-2.18.1.tar.gz", hash = "sha256:4a2bf3c04f8278504f934b2bdbafe927fa650d7c5397c7633a0b30e10a5127f3"},
+    {file = "google_cloud_pubsub-2.18.1-py2.py3-none-any.whl", hash = "sha256:00691ca49bed09946f92f6001f9f7456f561b32a205e4f82dd8aa74dc3e97d9e"},
 ]
 
 [[package]]
