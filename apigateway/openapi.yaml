@@ -182,9 +182,10 @@ paths:
           required: true
           description: "update topup payload"
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/TopupRequest"
+            $ref: "#/definitions/TopupRequest"
+      #            type: array
+      #            items:
+      #              $ref: "#/definitions/TopupRequest"
 
       responses:
         "200":
