@@ -7,7 +7,7 @@ class Preferences:
     @classmethod
     def add(cls, user_id: str, data: dict) -> None:
         db = firestore.Client()
-        doc = db.collection("preferences").document(user_id)
+        doc = db.collection("preferences").document(user_id).get()
 
         if doc.exists:
             doc.update(data)
