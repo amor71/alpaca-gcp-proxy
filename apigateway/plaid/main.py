@@ -36,7 +36,7 @@ def plaid_link(request):
         log_error("plaid_link()", "failed to get access_token")
 
     stytch_payload = {"trusted_metadata": {"access_token": access_token}}
-    r = plaid_proxy(
+    r = stytch_proxy(
         method="PUT",
         url=f"/v1/users/{user_id}",
         payload=stytch_payload,
