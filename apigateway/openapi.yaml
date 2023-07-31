@@ -136,6 +136,20 @@ paths:
           schema:
             $ref: "#/definitions/MissionStatus"
 
+  /v1/missions/suggestion:
+    get:
+      description: "Get a suggested mission details, based on user knowledge"
+      operationId: "suggestedMission"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/missions
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/MissionSuggestions"
+
   /v1/runs/{runId}:
     patch:
       description: "Validate scheduled run, if completed check execution status if not all passed re-balance again."
@@ -346,3 +360,30 @@ definitions:
           - calendar
           - redeem
           - topup
+
+  MissionSuggestions:
+    type: object
+    properties:
+      name:
+        description: "Mission strategy name"
+        type: string
+      initialAmount:
+        description: "initial suggested investment amount"
+        type: integer
+        format: int32
+      topupAmount:
+        description: "initial suggested topup amount"
+        type: integer
+        format: int32
+      topupFrequency:
+        description: "initial suggested topup frequency"
+        type: string
+        enum:
+          - weekly
+          - monthly
+      forecast:
+        description: "forward looking forecast"
+        type: array
+        items:
+          type: integer
+
