@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:ee4b6a481a4738daee10553e94e0b314960b715a5ab8c6236572a393ab0c955b"
+content_hash = "sha256:9e265b8d49bd366382f5d7a3f87648df3688ea20f6cb7030b43e22ff2ad984dd"
 
 [[package]]
 name = "aiohttp"
@@ -3137,6 +3137,15 @@ summary = "Traitlets Python configuration system"
 files = [
     {file = "traitlets-5.9.0-py3-none-any.whl", hash = "sha256:9e6ec080259b9a5940c797d58b613b5e31441c2257b87c2e795c5228ae80d2d8"},
     {file = "traitlets-5.9.0.tar.gz", hash = "sha256:f6cde21a9c68cf756af02035f72d5a723bf607e862e7be33ece505abf4a3bad9"},
+]
+
+[[package]]
+name = "types-protobuf"
+version = "4.23.0.2"
+summary = "Typing stubs for protobuf"
+files = [
+    {file = "types-protobuf-4.23.0.2.tar.gz", hash = "sha256:1066b069d4f0e09bdebb64ca4f35cc6b8accf52f808368046ccec96744af0375"},
+    {file = "types_protobuf-4.23.0.2-py3-none-any.whl", hash = "sha256:ee1a1ac8c099870075ef4457c01f3d56e189d8af1c13c3aa9f8dc207ca35337c"},
 ]
 
 [[package]]

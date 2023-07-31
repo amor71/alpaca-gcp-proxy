@@ -353,8 +353,11 @@ def handle_validate(request: Request) -> tuple[str, int]:
 @functions_framework.http
 @auth
 def missions(request):
-    """Implement POST /v1/missions and GET /v1/runs/{run-id}"""
+    """Implement /v1/missions end points"""
 
+    if request.method == "GET":
+        print(request.base_url, request.host_url)
+        return ("OK", 200)
     if request.method == "POST":
         return handle_create_rebalance(request)
     if request.method == "PATCH":
