@@ -144,6 +144,17 @@ paths:
         - Missions
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/missions
+      parameters:
+        - name: initialAmount
+          in: query
+          required: false
+          type: string
+          description: Optional initial investment amount
+        - name: weeklyTopup
+          in: query
+          required: false
+          type: string
+          description: Optional weekly topup
       responses:
         "200":
           description: OK
@@ -386,4 +397,3 @@ definitions:
         type: array
         items:
           type: integer
-

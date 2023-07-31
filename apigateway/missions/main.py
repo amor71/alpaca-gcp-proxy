@@ -352,8 +352,8 @@ def handle_validate(request: Request) -> tuple[str, int]:
 
 
 def handle_mission_suggestion(request):
-    initial_investment = 100
-    weekly_topup = 50
+    initial_investment = int(request.args.get("initialAmount") or 100)
+    weekly_topup = int(request.args.get("weeklyTopup") or 50)
     annual_interest = 0.1
     weekly_interest = annual_interest / 52
     num_weeks = 52 * 30
@@ -394,7 +394,6 @@ def missions(request):
 
     if request.method == "GET":
         return handle_mission_suggestion(request)
-
     if request.method == "POST":
         return handle_create_rebalance(request)
     if request.method == "PATCH":
