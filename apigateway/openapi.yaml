@@ -364,7 +364,7 @@ definitions:
   MissionSuggestions:
     type: object
     properties:
-      name:
+      strategy:
         description: "Mission strategy name"
         type: string
       initialAmount:
