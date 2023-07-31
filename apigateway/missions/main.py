@@ -356,7 +356,7 @@ def missions(request):
     """Implement /v1/missions end points"""
 
     if request.method == "GET":
-        print(request.url, request.host_url)
+        print(request.endpoint, request.host_url)
         return ("OK", 200)
     if request.method == "POST":
         return handle_create_rebalance(request)
