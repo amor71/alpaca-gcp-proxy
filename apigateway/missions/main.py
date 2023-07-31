@@ -350,14 +350,18 @@ def handle_validate(request: Request) -> tuple[str, int]:
     return reschedule_run_by_run_id(request, run_id)
 
 
+def handle_mission_suggestion(request):
+    return ({""}, 200)
+
+
 @functions_framework.http
 @auth
 def missions(request):
     """Implement /v1/missions end points"""
 
     if request.method == "GET":
-        print(request.path, request.host_url)
-        return ("OK", 200)
+        return handle_mission_suggestion(request)
+
     if request.method == "POST":
         return handle_create_rebalance(request)
     if request.method == "PATCH":
