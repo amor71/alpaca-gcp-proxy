@@ -71,6 +71,16 @@ paths:
           description: Updated
         "400":
           description: Invalid request
+    options:
+      description: "CORS support"
+      operationId: "preferences-cors"
+      tags:
+        - Users
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/preferences
+      responses:
+        "204":
+          description: OK
 
   /v1/slackbot:
     post:
