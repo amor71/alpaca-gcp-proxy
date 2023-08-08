@@ -171,6 +171,17 @@ paths:
           schema:
             $ref: "#/definitions/MissionSuggestions"
 
+    options:
+      description: "CORS support"
+      operationId: "mission-suggestion-cors"
+      tags:
+        - Users
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/missions
+      responses:
+        "204":
+          description: OK
+
   /v1/runs/{runId}:
     patch:
       description: "Validate scheduled run, if completed check execution status if not all passed re-balance again."
