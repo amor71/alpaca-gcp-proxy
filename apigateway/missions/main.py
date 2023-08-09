@@ -354,9 +354,12 @@ def handle_validate(request: Request) -> tuple[str, int]:
 def handle_mission_suggestion(request):
     initial_investment = int(request.args.get("initialAmount") or 100)
     weekly_topup = int(request.args.get("weeklyTopup") or 50)
+    bins = int(request.args.get("weeklyTopup") or 30)
+
+    num_years_to_calc = 30
     annual_interest = 0.1
     weekly_interest = annual_interest / 52
-    num_weeks = 52 * 30
+    num_weeks = 52 * num_years_to_calc
 
     deposit = [weekly_topup] * num_weeks
     deposit[0] += initial_investment
@@ -366,7 +369,7 @@ def handle_mission_suggestion(request):
     df["total"] = (
         df["deposit"] * df["rate"].shift().add(1).cumprod().fillna(1)
     ).cumsum()
-    df["year"] = df.index // 52
+    df["year"] = df.index // (52 * num_years_to_calc / bins)
 
     new_df = pd.DataFrame(
         {
