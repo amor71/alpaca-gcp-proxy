@@ -354,7 +354,7 @@ def handle_validate(request: Request) -> tuple[str, int]:
 def handle_mission_suggestion(request):
     initial_investment = int(request.args.get("initialAmount") or 100)
     weekly_topup = int(request.args.get("weeklyTopup") or 50)
-    bins = int(request.args.get("weeklyTopup") or 30)
+    bins = int(request.args.get("bins") or 30)
 
     num_years_to_calc = 30
     annual_interest = 0.1
