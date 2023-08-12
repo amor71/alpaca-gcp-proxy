@@ -376,7 +376,7 @@ def handle_mission_suggestion(request):
             "deposit": df.groupby("year").sum()["deposit"].cumsum(),
             "amount": df.groupby("year").last()["total"],
         }
-    )
+    ).round(1)
 
     return (
         {
