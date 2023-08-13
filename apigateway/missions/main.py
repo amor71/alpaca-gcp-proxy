@@ -40,9 +40,11 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
     user = User(user_id=user_id)
+
     if not user.exists:
         log_error("create_run()", f"can't load user {user_id}")
         return None
+
     if not user.alpaca_account_id:
         log_error(
             "create_run()",
