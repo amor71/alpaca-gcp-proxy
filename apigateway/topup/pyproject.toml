@@ -8,6 +8,7 @@ authors = [
 ]
 dependencies = [
     "googleapis-common-protos>=1.60.0",
+    "requests>=2.31.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
