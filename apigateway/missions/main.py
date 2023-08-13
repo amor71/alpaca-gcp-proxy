@@ -48,15 +48,10 @@ def save_pending_new_mission(
     )
 
 
-def create_run(user_id: str, model_portfolio: dict) -> str | None:
+def create_run(
+    user_id: str, alpaca_account_id: str, model_portfolio: dict
+) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
-
-    if not (alpaca_account_id := get_alpaca_account_id(user_id)):
-        log_error(
-            "create_run()",
-            f"user {user_id} does not have alpaca_account_id property",
-        )
-        return None
 
     cash = get_available_cash(alpaca_account_id)
     if not cash:
@@ -246,7 +241,16 @@ def handle_create_rebalance(request: Request):
     weekly_topup = payload.get("weeklyTopup")
 
     user_id = authenticated_user_id.get()  # type: ignore
-    if not user_id:
+
+    if not (model_portfolio := get_model_portfolio_by_name(strategy)):
+        return (f"model portfolio '{strategy}' not found", 400)
+
+    print(
+        f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
+    )
+
+    if not (alpaca_account_id := get_alpaca_account_id(user_id)):
+        print(f"user_id {user_id} does not have alpaca_account_id (yet)")
         mission_id = save_pending_new_mission(
             user_id=user_id,
             mission_name=name,
@@ -256,14 +260,7 @@ def handle_create_rebalance(request: Request):
         )
         return ({"mission_id": mission_id}, 202)
 
-    if not (model_portfolio := get_model_portfolio_by_name(strategy)):
-        return (f"model portfolio '{strategy}' not found", 400)
-
-    print(
-        f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
-    )
-
-    if not (run_id := create_run(user_id, model_portfolio)):
+    if not (run_id := create_run(user_id, alpaca_account_id, model_portfolio)):
         return ("could not create rebalance run", 400)
 
     if run_id == "reschedule":
