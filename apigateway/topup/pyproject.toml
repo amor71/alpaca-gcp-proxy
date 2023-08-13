@@ -10,6 +10,7 @@ dependencies = [
     "googleapis-common-protos>=1.60.0",
     "requests>=2.31.0",
     "flask>=2.3.2",
+    "google-cloud>=0.34.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
