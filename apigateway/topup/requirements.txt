@@ -46,4 +46,4 @@ urllib3==2.0.4 \
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
 infra==0.1.55 \
-    --hash=sha256:deaa7e4b666d261893a5d099bb1057da3b23e86a2529d2cf78ebeae01358aa78
+    --hash=sha256:b97c46e03721d2565c70e3e7f436714c0610ff4843746656b78dfee423346f84
