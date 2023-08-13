@@ -15,6 +15,11 @@ dependencies = [
     "keyrings-google-artifactregistry-auth>=1.1.2",
     "SecretStorage>=3.3.3",
     "google-cloud-tasks>=2.14.1",
+    "google-cloud-pubsub>=2.18.2",
+    "google-cloud-secret-manager>=2.16.3",
+    "google-cloud-monitoring>=2.15.1",
+    "google-cloud-firestore>=2.11.1",
+    "google-cloud-core>=2.3.3",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}

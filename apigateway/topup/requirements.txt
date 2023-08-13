@@ -99,6 +99,21 @@ google-auth==2.22.0 \
 google-cloud==0.34.0 \
     --hash=sha256:01430187cf56df10a9ba775dd547393185d4b40741db0ea5889301f8e7a9d5d3 \
     --hash=sha256:fb1ab7b0548fe44b3d538041f0a374505b7f990d448a935ea36649c5ccab5acf
+google-cloud-core==2.3.3 \
+    --hash=sha256:37b80273c8d7eee1ae816b3a20ae43585ea50506cb0e60f3cf5be5f87f1373cb \
+    --hash=sha256:fbd11cad3e98a7e5b0343dc07cb1039a5ffd7a5bb96e1f1e27cee4bda4a90863
+google-cloud-firestore==2.11.1 \
+    --hash=sha256:7f7dfa86567c8d66c66c8dba8bc5ef85677c8532b4206055a339413f8071525d \
+    --hash=sha256:833019175b6c82727da71e2db2fdea9bf203d0b8239c696492f7e2b24566bb3e
+google-cloud-monitoring==2.15.1 \
+    --hash=sha256:086a845a34a6e105ab8a3a4809392ea6367a65b28b7561c26101534a8705ed37 \
+    --hash=sha256:4394e5e031f30d622a24739678ec48a45400ead94af9a6032cbff7f66194dc12
+google-cloud-pubsub==2.18.2 \
+    --hash=sha256:5b9d14249a29c0e5bc6b98c8d7c166644cc1ada830c40f009f2bcb5882f5b105 \
+    --hash=sha256:62976041c320cb051af86d41ec027308044a554402fb0871eba462b331d275cf
+google-cloud-secret-manager==2.16.3 \
+    --hash=sha256:266ab8da831b3532ca197b5a30dcde0f0504761390bb26c3397403d6ff0b8e3f \
+    --hash=sha256:6cab5cbf1927a34c586e4af90437eea3d44ff4b41b9a82ec86fcff09a5ac26ea
 google-cloud-tasks==2.14.1 \
     --hash=sha256:b44ff8721f9a36f118892c5d45745393fba0ce0ef27fab3853e07cb5fba91a92 \
     --hash=sha256:ca1a83df7391a78592dcca751583b22c9074d0a72dc8debdb4a4687ff9958a29
