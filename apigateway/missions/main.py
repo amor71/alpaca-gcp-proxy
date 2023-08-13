@@ -15,9 +15,9 @@ from infra import auth, authenticated_user_id  # type: ignore
 from infra.alpaca_action import get_available_cash, get_model_portfolio_by_name
 from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.missions import Missions, Runs
-from infra.data.users import User
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
+from infra.stytch_actions import get_alpaca_account_id
 
 
 def save_new_mission_and_run(
@@ -39,20 +39,14 @@ def save_new_mission_and_run(
 def create_run(user_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
-    user = User(user_id=user_id)
-
-    if not user.exists:
-        log_error("create_run()", f"can't load user {user_id}")
-        return None
-
-    if not user.alpaca_account_id:
+    if not (alpaca_account_id := get_alpaca_account_id(user_id)):
         log_error(
             "create_run()",
             f"user {user_id} does not have alpaca_account_id property",
         )
         return None
 
-    cash = get_available_cash(user.alpaca_account_id)
+    cash = get_available_cash(alpaca_account_id)
     if not cash:
         log_error(
             "create_run()", "account can't be used for trading at the moment"
@@ -66,7 +60,7 @@ def create_run(user_id: str, model_portfolio: dict) -> str | None:
 
     # TODO: Do we need anything except weights?
     rebalance_payload: dict = {
-        "account_id": user.alpaca_account_id,
+        "account_id": alpaca_account_id,
         "type": "full_rebalance",
         "weights": model_portfolio["weights"],
     }

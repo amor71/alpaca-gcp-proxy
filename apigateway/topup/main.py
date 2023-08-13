@@ -14,8 +14,8 @@ from infra.alpaca_action import (get_transfers, transfer_amount,
 from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.missions import Missions
 from infra.data.transfers import Transfer
-from infra.data.users import User
 from infra.logger import log_error
+from infra.stytch_actions import get_alpaca_account_id, get_from_user_vault
 
 
 class Frequency(Enum):
@@ -223,15 +223,14 @@ def transfer_validator(request):
         log_error("handle_post", "could not load authenticated user_id")
         abort(403)
 
-    user = User(user_id)
-    if not user.alpaca_account_id:
+    if not (alpaca_account_id := get_alpaca_account_id(user_id=user_id)):
         log_error(
             "transfer_validator()",
             f"{user_id} does not have alpaca_account_id in database",
         )
         abort(400)
 
-    transfers = get_transfers(user.alpaca_account_id)
+    transfers = get_transfers(alpaca_account_id)
 
     for transfer in transfers:
         if transfer["id"] == transfer_id:
@@ -262,13 +261,13 @@ def handle_users_topup(request):
         )
         return ("Something went wrong", 403)
 
-    user = User(user_id)
-
-    if not user.exists():
-        return ("could not load user details", 400)
-    if not (alpaca_account_id := user.alpaca_account_id()):
+    if not (alpaca_account_id := get_alpaca_account_id(user_id=user_id)):
         return ("brokerage account not provisioned yet", 400)
-    if not (relationship_id := user.transfer_relationship_id()):
+    if not (
+        relationship_id := get_from_user_vault(
+            user_id=user_id, key="relationship_id"
+        )
+    ):
         return ("brokerage account not linked to bank account yet", 400)
 
     # validate API

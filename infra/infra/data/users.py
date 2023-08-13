@@ -15,12 +15,6 @@ class User:
         return self.data != None
 
     @property
-    def alpaca_account_id(self) -> str | None:
-        """Return the Alpaca account id, if exists in data. Otherwise None"""
-
-        return self.data.get("alpaca_account_id") if self.data else None
-
-    @property
     def transfer_relationship_id(self) -> str | None:
         """Return the Alpaca id to be used in transfer requests, if exists. Otherwise None"""
 

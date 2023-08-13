@@ -2,8 +2,7 @@ import time
 
 from google.cloud import firestore  # type: ignore
 
-from infra.logger import log_error
-from infra.proxies.stytch import stytch_proxy
+from infra.stytch_actions import update_user_vault
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
@@ -13,23 +12,14 @@ def alpaca_state_handler(user_id: str, payload: dict):
 
     doc_ref = db.collection("users").document(user_id)
 
-    r = stytch_proxy(
-        method="PUT",
-        url=f"/v1/users/{user_id}",
-        args=None,
-        payload={"trusted_metadata": {"alpaca_account_id": payload.get("id")}},
-        headers=None,
-    )
-
-    if r.status_code != 200:
-        log_error(
-            "alpaca_state_handler()",
-            f"Updating Stytch failed {r.status_code}:{r.text}",
-        )
-
     update_data = {
         "alpaca_updated": time.time_ns(),
     }
+
+    if alpaca_account_id := payload.get("id"):
+        update_user_vault(user_id, "alpaca_account_id", alpaca_account_id)
+    if relationship_id := payload.get("relationship_id"):
+        update_user_vault(user_id, "relationship_id", relationship_id)
 
     if status := payload.get("status"):
         update_data["alpaca_status"] = status
@@ -41,6 +31,5 @@ def alpaca_state_handler(user_id: str, payload: dict):
         update_data["alpaca_account_type"] = account_type
     if account_id := payload.get("account_id"):
         update_data["linked_bank_account_id"] = account_id
-    if relationship_id := payload.get("relationship_id"):
-        update_data["transfer_relationship_id"] = relationship_id
+
     status = doc_ref.update(update_data)
