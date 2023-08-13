@@ -37,12 +37,24 @@ class Missions:
         return [doc_ref.to_dict() for doc_ref in docs]
 
     @classmethod
-    def add(cls, user_id: str, mission_name: str, strategy: str) -> str:
+    def add(
+        cls,
+        user_id: str,
+        mission_name: str,
+        strategy: str,
+        initial_amount: str | None,
+        weekly_topup: str | None,
+    ) -> str:
         data = {
             "name": mission_name,
             "strategy": strategy,
             "created": time.time_ns(),
         }
+
+        if initial_amount:
+            data["initial_amount"] = initial_amount
+        if weekly_topup:
+            data["weekly_topup"] = weekly_topup
 
         db = firestore.Client()
         doc_ref = (

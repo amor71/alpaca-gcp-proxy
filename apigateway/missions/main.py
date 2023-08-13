@@ -21,9 +21,16 @@ from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
 
 def save_new_mission_and_run(
-    user_id: str, mission_name: str, strategy: str, run_id: str
+    user_id: str,
+    mission_name: str,
+    strategy: str,
+    run_id: str,
+    initial_amount: str | None,
+    weekly_topup: str | None,
 ) -> str:
-    new_id = Missions.add(user_id, mission_name, strategy)
+    new_id = Missions.add(
+        user_id, mission_name, strategy, initial_amount, weekly_topup
+    )
     Runs.add(run_id, user_id, mission_name, strategy)
 
     return new_id
@@ -227,6 +234,9 @@ def handle_create_rebalance(request: Request):
             log_error("handle_post", f"payload={payload}")
         return ("Missing or invalid payload", 400)
 
+    initial_amount = payload.get("initialAmount")
+    weekly_topup = payload.get("weeklyTopup")
+
     user_id = authenticated_user_id.get()  # type: ignore
     if not user_id:
         log_error("handle_post", "could not load authenticated user_id")
@@ -247,7 +257,14 @@ def handle_create_rebalance(request: Request):
 
     print(f"created run with id {run_id}")
 
-    mission_id = save_new_mission_and_run(user_id, name, strategy, run_id)
+    mission_id = save_new_mission_and_run(
+        user_id=user_id,
+        mission_name=name,
+        strategy=strategy,
+        run_id=run_id,
+        initial_amount=initial_amount,
+        weekly_topup=weekly_topup,
+    )
 
     _ = reschedule_verify(request=request, run_id=run_id)
 
