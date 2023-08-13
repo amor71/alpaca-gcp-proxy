@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:e764e867edfe888701e7b502a82c6776fd200cdeb4efcfac224190ba9bbf3a98"
+content_hash = "sha256:327f33b6d2442ba6ecb1d4211597394c4cc3943d4e573e056d24c26edd372194"
 
 [[package]]
 name = "bandit"
