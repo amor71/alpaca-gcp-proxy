@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:5cb80d7d6c43bbd0417327cd6e6f7865dbceb770b447b267a03df16fdfc7d0cd"
+content_hash = "sha256:613ee49e6bc008b949848b6fa11f9e3e0d9e23f624c524d3981909e47d7cadb4"
 
 [[package]]
 name = "aiohttp"
@@ -861,6 +861,35 @@ files = [
     {file = "multidict-6.0.4-cp311-cp311-win32.whl", hash = "sha256:3601a3cece3819534b11d4efc1eb76047488fddd0c85a3948099d5da4d504636"},
     {file = "multidict-6.0.4-cp311-cp311-win_amd64.whl", hash = "sha256:81a4f0b34bd92df3da93315c6a59034df95866014ac08535fc819f043bfd51f0"},
     {file = "multidict-6.0.4.tar.gz", hash = "sha256:3666906492efb76453c0e7b97f2cf459b0682e7402c0489a95484965dbc1da49"},
+]
+
+[[package]]
+name = "mypy"
+version = "1.5.0"
+requires_python = ">=3.8"
+summary = "Optional static typing for Python"
+dependencies = [
+    "mypy-extensions>=1.0.0",
+    "typing-extensions>=4.1.0",
+]
+files = [
+    {file = "mypy-1.5.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:c36011320e452eb30bec38b9fd3ba20569dc9545d7d4540d967f3ea1fab9c374"},
+    {file = "mypy-1.5.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:f3940cf5845b2512b3ab95463198b0cdf87975dfd17fdcc6ce9709a9abe09e69"},
+    {file = "mypy-1.5.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9166186c498170e1ff478a7f540846b2169243feb95bc228d39a67a1a450cdc6"},
+    {file = "mypy-1.5.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:725b57a19b7408ef66a0fd9db59b5d3e528922250fb56e50bded27fea9ff28f0"},
+    {file = "mypy-1.5.0-cp311-cp311-win_amd64.whl", hash = "sha256:eec5c927aa4b3e8b4781840f1550079969926d0a22ce38075f6cfcf4b13e3eb4"},
+    {file = "mypy-1.5.0-py3-none-any.whl", hash = "sha256:69b32d0dedd211b80f1b7435644e1ef83033a2af2ac65adcdc87c38db68a86be"},
+    {file = "mypy-1.5.0.tar.gz", hash = "sha256:f3460f34b3839b9bc84ee3ed65076eb827cd99ed13ed08d723f9083cada4a212"},
+]
+
+[[package]]
+name = "mypy-extensions"
+version = "1.0.0"
+requires_python = ">=3.5"
+summary = "Type system extensions for programs checked with the mypy type checker."
+files = [
+    {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
+    {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
 ]
 
 [[package]]

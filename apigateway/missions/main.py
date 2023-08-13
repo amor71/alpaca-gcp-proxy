@@ -36,6 +36,18 @@ def save_new_mission_and_run(
     return new_id
 
 
+def save_pending_new_mission(
+    user_id: str,
+    mission_name: str,
+    strategy: str,
+    initial_amount: str | None,
+    weekly_topup: str | None,
+) -> str:
+    return Missions.add(
+        user_id, mission_name, strategy, initial_amount, weekly_topup
+    )
+
+
 def create_run(user_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
@@ -235,8 +247,14 @@ def handle_create_rebalance(request: Request):
 
     user_id = authenticated_user_id.get()  # type: ignore
     if not user_id:
-        log_error("handle_post", "could not load authenticated user_id")
-        return None
+        mission_id = save_pending_new_mission(
+            user_id=user_id,
+            mission_name=name,
+            strategy=strategy,
+            initial_amount=initial_amount,
+            weekly_topup=weekly_topup,
+        )
+        return ({"mission_id": mission_id}, 202)
 
     if not (model_portfolio := get_model_portfolio_by_name(strategy)):
         return (f"model portfolio '{strategy}' not found", 400)
