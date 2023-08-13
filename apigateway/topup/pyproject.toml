@@ -14,3 +14,12 @@ dependencies = [
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "mypy>=1.5.0",
+    "therapist>=2.2.0",
+    "isort>=5.12.0",
+    "black>=23.7.0",
+    "bandit>=1.7.5",
+]
