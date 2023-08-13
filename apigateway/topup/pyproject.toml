@@ -14,6 +14,7 @@ dependencies = [
     "google-crc32c>=1.5.0",
     "keyrings-google-artifactregistry-auth>=1.1.2",
     "SecretStorage>=3.3.3",
+    "google-cloud-tasks>=2.14.1",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}
