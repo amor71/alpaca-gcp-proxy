@@ -126,6 +126,17 @@ paths:
         "400":
           description: Something went wrong, follow-up tasks not scheduled
 
+    options:
+      description: "CORS support"
+      operationId: "plaidLink-cors"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/plaid
+      responses:
+        "204":
+          description: OK
+
   /v1/missions:
     post:
       description: "Rebalance an investment Mission for the authenticated user"
