@@ -145,6 +145,17 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/MissionStatus"
+            
+    options:
+      description: "CORS support"
+      operationId: "missions-cors"
+      tags:
+        - Missions
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/missions
+      responses:
+        "204":
+          description: OK
 
   /v1/missions/suggestion:
     get:
@@ -365,6 +376,16 @@ definitions:
       strategy:
         description: "Mission strategy"
         type: string
+      initialAmount:
+        description: "initial  investment amount"
+        required: false
+        type: integer
+        format: int32
+      weeklyTopup:
+        description: "weekly recurring investment"
+        required: false
+        type: integer
+        format: int32
 
   MissionStatus:
     type: object
