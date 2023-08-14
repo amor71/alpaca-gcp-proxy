@@ -21,7 +21,7 @@ def plaid_link(request):
         method="POST",
         url="/item/public_token/exchange",
         payload={"public_token": public_token},
-        headers=request.headers,
+        headers={"Content-Type": "application/json"},
         args=None,
     )
     if r.status_code != 200:
