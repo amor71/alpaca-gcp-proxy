@@ -3,7 +3,7 @@ from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.logger import log_error
-from infra.proxies.plaid import plaid_proxy
+from infra.plaid_actions import get_access_token
 from infra.stytch_actions import update_user_vault
 
 
@@ -14,26 +14,15 @@ def plaid_link(request):
 
     user_id = authenticated_user_id.get()  # type: ignore
     if not user_id:
-        log_error("handle_post", "could not load authenticated user_id")
+        log_error("plaid_link()", "could not load authenticated user_id")
         abort(400)
 
-    r = plaid_proxy(
-        method="POST",
-        url="/item/public_token/exchange",
-        payload={"public_token": public_token},
-        headers={"Content-Type": "application/json"},
-        args=None,
-    )
-    if r.status_code != 200:
-        log_error(
-            "plaid_link()",
-            f"failed call to Plaid with {r.status_code}:{r.text}",
+    if not (
+        plaid_access_token := get_access_token(
+            user_id=user_id, public_token=public_token
         )
+    ):
         abort(400)
-
-    plaid_payload = r.json()
-    if not (plaid_access_token := plaid_payload.get("access_token")):
-        log_error("plaid_link()", "failed to get access_token")
 
     if update_user_vault(
         user_id=user_id, key="plaid_access_token", value=plaid_access_token
