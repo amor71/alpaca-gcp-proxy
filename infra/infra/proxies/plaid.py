@@ -14,7 +14,7 @@ from ..proxies.proxy_base import check_crc, construct_url
 plaid_base_url = os.getenv("PLAID_BASE_URL", "https://sandbox.plaid.com")
 
 plaid_client_id = "plaid_client_id"
-plaid_secret = "plaid_secret"
+plaid_secret_name = "plaid_secret"  # nosec
 
 project_id = os.getenv("PROJECT_ID", None)
 
@@ -30,7 +30,7 @@ def _get_plaid_authentication() -> Dict:
     )
     api_secret_response = client.access_secret_version(
         request={
-            "name": f"projects/{project_id}/secrets/{plaid_secret}/versions/latest"
+            "name": f"projects/{project_id}/secrets/{plaid_secret_name}/versions/latest"
         }
     )
 
@@ -77,12 +77,13 @@ def plaid_proxy(
         headers=headers,
     )
 
-    try:
-        user_id = authenticated_user_id.get()  # type: ignore
-        print(f"looked up user_id {user_id}")
-        if user_id:
-            trigger_step_function(user_id, url, r.json())
-    except LookupError:
-        log_error("plaid_proxy", "failed to lookup 'email_id' in Context")
+    if r.status_code in {200, 201, 202}:
+        try:
+            user_id = authenticated_user_id.get()  # type: ignore
+            print(f"looked up user_id {user_id}")
+            if user_id:
+                trigger_step_function(user_id, url, r.json())
+        except LookupError:
+            log_error("plaid_proxy", "failed to lookup 'email_id' in Context")
 
     return r
