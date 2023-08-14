@@ -168,10 +168,12 @@ paths:
       parameters:
         - name: initialAmount
           in: query
+          required: false
           type: string
           description: Optional initial investment amount
         - name: weeklyTopup
           in: query
+          required: false
           type: string
           description: Optional weekly topup
       responses:
@@ -376,12 +378,10 @@ definitions:
         type: string
       initialAmount:
         description: "initial  investment amount"
-        required: false
         type: integer
         format: int32
       weeklyTopup:
         description: "weekly recurring investment"
-        required: false
         type: integer
         format: int32
 
