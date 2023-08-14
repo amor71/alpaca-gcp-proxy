@@ -19,7 +19,7 @@ def plaid_link(request):
 
     r = plaid_proxy(
         method="POST",
-        url="item/public_token/exchange",
+        url="/item/public_token/exchange",
         payload={"public_token": public_token},
         headers=request.headers,
         args=None,
