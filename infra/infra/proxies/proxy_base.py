@@ -2,6 +2,9 @@ import google_crc32c
 
 
 def construct_url(base_url: str, url: str) -> str:
+    if url[0] == "/":
+        url = url[1:]
+
     return (
         f"{base_url}/{url}"
         if base_url[-1] != "/"
