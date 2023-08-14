@@ -133,6 +133,12 @@ paths:
         - Missions
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/plaid
+      parameters:
+        - in: path
+          name: publicToken
+          required: true
+          type: string
+          description: Plaid publicToken
       responses:
         "204":
           description: OK
