@@ -127,8 +127,8 @@ paths:
           description: Something went wrong, follow-up tasks not scheduled
 
     options:
-      description: "CORS support"
-      operationId: "plaidLink-cors"
+      description: "CORS support got plaid"
+      operationId: "plaid-cors"
       tags:
         - Missions
       x-google-backend:
