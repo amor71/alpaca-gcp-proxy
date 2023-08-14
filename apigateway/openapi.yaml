@@ -145,7 +145,7 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/MissionStatus"
-            
+
     options:
       description: "CORS support"
       operationId: "missions-cors"
@@ -168,12 +168,10 @@ paths:
       parameters:
         - name: initialAmount
           in: query
-          required: false
           type: string
           description: Optional initial investment amount
         - name: weeklyTopup
           in: query
-          required: false
           type: string
           description: Optional weekly topup
       responses:
