@@ -14,7 +14,7 @@ def update_user_vault(user_id: str, key: str, value: str) -> bool:
 
     if r.status_code != 200:
         log_error(
-            "alpaca_state_handler()",
+            "update_user_vault()",
             f"Updating Stytch failed {r.status_code}:{r.text}",
         )
         return False

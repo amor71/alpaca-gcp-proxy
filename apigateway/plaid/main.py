@@ -4,7 +4,7 @@ from flask import abort
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.logger import log_error
 from infra.proxies.plaid import plaid_proxy
-from infra.proxies.stytch import stytch_proxy
+from infra.stytch_actions import update_user_vault
 
 
 def plaid_link(request):
@@ -32,26 +32,15 @@ def plaid_link(request):
         abort(400)
 
     plaid_payload = r.json()
-    if not (access_token := plaid_payload.get("access_token")):
+    if not (plaid_access_token := plaid_payload.get("access_token")):
         log_error("plaid_link()", "failed to get access_token")
 
-    stytch_payload = {"trusted_metadata": {"access_token": access_token}}
-    r = stytch_proxy(
-        method="PUT",
-        url=f"/v1/users/{user_id}",
-        payload=stytch_payload,
-        headers=request.headers,
-        args=None,
-    )
+    if update_user_vault(
+        user_id=user_id, key="plaid_access_token", value=plaid_access_token
+    ):
+        return ("OK", 200)
 
-    if r.status_code != 200:
-        log_error(
-            "plaid_link()",
-            f"failed call to Stytch with {r.status_code}:{r.text}",
-        )
-        abort(400)
-
-    return ("OK", 200)
+    abort(400)
 
 
 @functions_framework.http
