@@ -70,20 +70,9 @@ def plaid_proxy(
     if payload:
         payload.update(auth)
 
-    r = request(
+    return request(
         method=method,
         url=request_url,
         json=payload,
         headers=headers,
     )
-
-    if r.status_code in {200, 201, 202}:
-        try:
-            user_id = authenticated_user_id.get()  # type: ignore
-            print(f"looked up user_id {user_id}")
-            if user_id:
-                trigger_step_function(user_id, url, r.json())
-        except LookupError:
-            log_error("plaid_proxy", "failed to lookup 'email_id' in Context")
-
-    return r
