@@ -70,7 +70,7 @@ def plaid_proxy(
     if payload:
         payload.update(auth)
 
-    print(f"plaid_proxy to {request_url}")
+    print(f"plaid_proxy {method} {request_url} with {payload}")
     return request(
         method=method,
         url=request_url,
