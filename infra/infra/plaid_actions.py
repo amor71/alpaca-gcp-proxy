@@ -1,4 +1,4 @@
-from infra.data.past_transactions import get_cursor
+from infra.data.past_transactions import get_cursor, save_past_transactions
 from infra.logger import log_error
 from infra.proxies.plaid import plaid_proxy
 
@@ -29,27 +29,42 @@ def get_access_token(public_token: str) -> str | None:
     return plaid_access_token
 
 
-def get_recent_transactions(
-    user_id: str, plaid_access_token: str
-) -> dict | None:
-    r = plaid_proxy(
-        method="POST",
-        url="/transactions/sync",
-        payload={
-            "access_token": plaid_access_token,
-            "cursor": get_cursor(user_id),
-            "count": 500,
-            "options": {"include_personal_finance_category": True},
-        },
-        headers={"Content-Type": "application/json"},
-        args=None,
-    )
-
-    if r.status_code != 200:
-        log_error(
-            "get_recent_transactions()",
-            "failed to called Plaid with {r.status_code}:{r.text}",
+def load_recent_transactions(user_id: str, plaid_access_token: str) -> bool:
+    cursor = get_cursor(user_id)
+    has_more: bool = True
+    while has_more:
+        r = plaid_proxy(
+            method="POST",
+            url="/transactions/sync",
+            payload={
+                "access_token": plaid_access_token,
+                "cursor": cursor,
+                "count": 500,
+                "options": {"include_personal_finance_category": True},
+            },
+            headers={"Content-Type": "application/json"},
+            args=None,
         )
-        return None
 
-    return r.json()
+        if r.status_code != 200:
+            log_error(
+                "get_recent_transactions()",
+                "failed to called Plaid with {r.status_code}:{r.text}",
+            )
+            return False
+
+        payload = r.json()
+
+        cursor = payload["next_cursor"]
+        has_more = payload["has_more"]
+
+        if (
+            len(payload["added"])
+            or len(payload["modified"])
+            or len(payload["removed"])
+        ):
+            save_past_transactions(
+                user_id=user_id, cursor=cursor, data=payload  # type: ignore
+            )
+
+    return True
