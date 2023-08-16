@@ -16,6 +16,6 @@ def plaid_callback(request):
 
     payload = request.get_json() if request.is_json else None
 
-    print(f"payload = {payload}")
+    print(f"payload = {payload} from {request.remote_addr}")
 
     return ("OK", 200)
