@@ -282,6 +282,22 @@ paths:
         "204":
           description: OK
 
+  /v1/plaid/transactions:
+    get:
+      description: "load recent transactions via Plaid"
+      operationId: "loadRecentPlaidTransactions"
+      tags:
+        - FinancialProfile
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/plaid
+      consumes:
+        - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Error
+
   /v1/users/topup:
     put:
       description: "Update top-up schedule and amount for the authenticated user"
