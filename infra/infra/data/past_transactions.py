@@ -13,8 +13,18 @@ def save_past_transactions(user_id: str, cursor: str, data: dict) -> None:
     else:
         doc_ref.update(cursor_payload)
 
-    new_transactions = doc_ref.collection("transactions").document()
-    new_transactions.set(data)
+    transactions = doc_ref.collection("transactions")
+
+    for new_transaction in data["added"]:
+        transactions.document(new_transaction["transaction_id"]).set(
+            new_transaction
+        )
+    for modified_transaction in data["modified"]:
+        transactions.document(modified_transaction["transaction_id"]).update(
+            modified_transaction
+        )
+    for removed_transaction in data["removed"]:
+        transactions.document(removed_transaction["transaction_id"]).delete()
 
 
 def get_cursor(user_id: str) -> str | None:
