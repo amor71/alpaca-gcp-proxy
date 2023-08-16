@@ -10,7 +10,12 @@ from infra.stytch_actions import get_from_user_vault, update_user_vault
 
 @functions_framework.http
 def plaid_callback(request):
+    """Implementation POST"""
     if request.method != "POST":
         abort(405)
+
+    payload = request.get_json() if request.is_json else None
+
+    print(f"payload = {payload}")
 
     return ("OK", 200)
