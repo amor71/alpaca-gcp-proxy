@@ -350,6 +350,42 @@ resource "google_cloudfunctions_function" "preferences" {
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
+# --------------------
+# -- plaid_callback --
+# --------------------
+data "archive_file" "plaid_callback" {
+  type        = "zip"
+  output_path = "/tmp/plaid_callback.zip"
+  source_dir  = "apigateway/plaid_callback"
+}
+resource "google_storage_bucket_object" "plaid_callback" {
+  name         = format("plaid_callback-%s.zip", data.archive_file.plaid_callback.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.plaid_callback.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "plaid_callback" {
+  name                  = "plaid_callback"
+  description           = "Plaid Callback"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.plaid_callback.name
+
+  trigger_http = true
+
+  entry_point         = "plaid_callback"
+  available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
 
 # -----------
 # -- plaid --

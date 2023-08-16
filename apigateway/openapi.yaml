@@ -282,6 +282,22 @@ paths:
         "204":
           description: OK
 
+  /v1/plaid/callback:
+    post:
+      description: "Plaid callback endpoint"
+      operationId: "callbackPlaid"
+      tags:
+        - FinancialProfile
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/plaid_callback
+      consumes:
+        - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Error
+
   /v1/plaid/transactions:
     get:
       description: "load recent transactions via Plaid"
