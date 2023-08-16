@@ -14,7 +14,7 @@ def save_past_transactions(user_id: str, cursor: str, data: dict) -> None:
         doc_ref.update(cursor_payload)
 
     new_transactions = doc_ref.collection("transactions").document()
-    new_transactions(data)
+    new_transactions.set(data)
 
 
 def get_cursor(user_id: str) -> str | None:
