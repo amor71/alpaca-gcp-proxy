@@ -4,7 +4,8 @@ from flask import abort
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.data.plaid_item import PlaidItem
 from infra.logger import log_error
-from infra.plaid_actions import get_access_token, load_recent_transactions
+from infra.plaid_actions import (get_access_token, load_new_accounts,
+                                 load_recent_transactions)
 from infra.stytch_actions import get_from_user_vault, update_user_vault
 
 
@@ -30,6 +31,12 @@ def plaid_link(request):
         abort(400)
 
     PlaidItem.save(item_id=item_id, user_id=user_id)
+
+    # load transactions
+    load_recent_transactions(user_id, plaid_access_token)
+
+    # load accounts
+    load_new_accounts(user_id, plaid_access_token)
 
     return ("OK", 200)
 
