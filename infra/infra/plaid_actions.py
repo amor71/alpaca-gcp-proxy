@@ -1,4 +1,4 @@
-from infra.data.bank_accounts import Account
+from infra.data.bank_account import Account
 from infra.data.past_transactions import get_cursor, save_past_transactions
 from infra.logger import log_error
 from infra.proxies.plaid import plaid_proxy
