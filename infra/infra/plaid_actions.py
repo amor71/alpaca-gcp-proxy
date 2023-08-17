@@ -27,7 +27,7 @@ def get_access_token(public_token: str) -> tuple[str, str] | None:
         log_error("get_access_token()", "failed to get access_token")
         return None
 
-    if not (item_id := plaid_payload.get("access_token")):
+    if not (item_id := plaid_payload.get("item_id")):
         log_error("get_access_token()", "failed to get item_id")
         return None
     return plaid_access_token, item_id
