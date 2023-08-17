@@ -41,7 +41,7 @@ def load_accounts(request):
 
 @functions_framework.http
 @auth
-def plaid(request):
+def plaid_accounts(request):
     if request.method == "GET":
         return load_accounts(request)
 
