@@ -4,7 +4,7 @@ from infra.logger import log_error
 from infra.proxies.plaid import plaid_proxy
 
 
-def get_access_token(public_token: str) -> str | None:
+def get_access_token(public_token: str) -> tuple[str, str] | None:
     """convert public_key to a permanent access_token"""
 
     r = plaid_proxy(
@@ -27,7 +27,10 @@ def get_access_token(public_token: str) -> str | None:
         log_error("get_access_token()", "failed to get access_token")
         return None
 
-    return plaid_access_token
+    if not (item_id := plaid_payload.get("access_token")):
+        log_error("get_access_token()", "failed to get item_id")
+        return None
+    return plaid_access_token, item_id
 
 
 def load_recent_transactions(user_id: str, plaid_access_token: str) -> bool:

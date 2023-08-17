@@ -2,6 +2,7 @@ import functions_framework
 from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
+from infra.data.plaid_item import PlaidItem
 from infra.logger import log_error
 from infra.plaid_actions import get_access_token, load_recent_transactions
 from infra.stytch_actions import get_from_user_vault, update_user_vault
@@ -19,15 +20,18 @@ def plaid_link(request):
         log_error("plaid_link()", "could not load authenticated user_id")
         abort(400)
 
-    if not (plaid_access_token := get_access_token(public_token=public_token)):
+    plaid_access_token, item_id = get_access_token(public_token=public_token)
+    if not plaid_access_token:
         abort(400)
 
-    if update_user_vault(
+    if not update_user_vault(
         user_id=user_id, key="plaid_access_token", value=plaid_access_token
     ):
-        return ("OK", 200)
+        abort(400)
 
-    abort(400)
+    PlaidItem.save(item_id=item_id, user_id=user_id)
+
+    return ("OK", 200)
 
 
 def load_transactions(request):

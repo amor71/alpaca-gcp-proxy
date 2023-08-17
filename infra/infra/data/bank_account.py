@@ -1,6 +1,4 @@
-from google.cloud import exceptions, firestore  # type: ignore
-
-from ..logger import log_error
+from google.cloud import firestore  # type: ignore
 
 
 class Account:
@@ -10,7 +8,7 @@ class Account:
 
         update_data = {"last_update": firestore.SERVER_TIMESTAMP}
         db = firestore.Client()
-        doc_ref = db.collection("back_accounts").document(user_id)
+        doc_ref = db.collection("bank_accounts").document(user_id)
 
         doc = doc_ref.get()
         if not doc.exists:
