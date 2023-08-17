@@ -20,7 +20,7 @@ class Account:
         else:
             doc_ref.update(update_data)
 
-        accounts_collection = doc_ref.collections("list")
+        accounts_collection = doc_ref.collection("list")
         account = accounts_collection.document(account_details["account_id"])
         if not account.get().exists:
             account.set(account_details)
