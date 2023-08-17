@@ -314,6 +314,22 @@ paths:
         "400":
           description: Error
 
+  /v1/plaid/accounts:
+    get:
+      description: "load user accounts details via Plaid"
+      operationId: "loadPlaidAccounts"
+      tags:
+        - FinancialProfile
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/plaid_accounts
+      consumes:
+        - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Error
+          
   /v1/users/topup:
     put:
       description: "Update top-up schedule and amount for the authenticated user"

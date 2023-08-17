@@ -1,4 +1,4 @@
-from google.cloud import firestore
+from google.cloud import firestore  # type: ignore
 
 
 def save_past_transactions(user_id: str, cursor: str, data: dict) -> None:

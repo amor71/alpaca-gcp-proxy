@@ -1,3 +1,4 @@
+from infra.data.bank_accounts import Account
 from infra.data.past_transactions import get_cursor, save_past_transactions
 from infra.logger import log_error
 from infra.proxies.plaid import plaid_proxy
@@ -66,5 +67,31 @@ def load_recent_transactions(user_id: str, plaid_access_token: str) -> bool:
             save_past_transactions(
                 user_id=user_id, cursor=cursor, data=payload  # type: ignore
             )
+
+    return True
+
+
+def load_new_accounts(user_id: str, plaid_access_token: str) -> bool:
+    r = plaid_proxy(
+        method="POST",
+        url="/accounts/get",
+        payload={
+            "access_token": plaid_access_token,
+        },
+        headers={"Content-Type": "application/json"},
+        args=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "get_recent_transactions()",
+            "failed to called Plaid with {r.status_code}:{r.text}",
+        )
+        return False
+
+    payload = r.json()
+
+    for account in payload["accounts"]:
+        Account.save(user_id=user_id, account_details=account)
 
     return True

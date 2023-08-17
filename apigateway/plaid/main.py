@@ -2,7 +2,6 @@ import functions_framework
 from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
-from infra.data.past_transactions import save_past_transactions
 from infra.logger import log_error
 from infra.plaid_actions import get_access_token, load_recent_transactions
 from infra.stytch_actions import get_from_user_vault, update_user_vault
@@ -52,8 +51,6 @@ def load_transactions(request):
             "'plaid_access_token' can't be loaded from user's vault ",
         )
         abort(400)
-
-    has_more: bool = True
 
     if not load_recent_transactions(user_id, plaid_access_token):
         log_error(

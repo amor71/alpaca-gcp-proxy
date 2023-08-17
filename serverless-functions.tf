@@ -387,6 +387,43 @@ resource "google_cloudfunctions_function" "plaid_callback" {
   }
 }
 
+# --------------------
+# -- plaid_accounts --
+# --------------------
+data "archive_file" "plaid_accounts" {
+  type        = "zip"
+  output_path = "/tmp/plaid_accounts.zip"
+  source_dir  = "apigateway/plaid_accounts"
+}
+resource "google_storage_bucket_object" "plaid_accounts" {
+  name         = format("plaid_accounts-%s.zip", data.archive_file.plaid_accounts.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.plaid_accounts.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "plaid_accounts" {
+  name                  = "plaid_accounts"
+  description           = "Plaid Accounts"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.plaid_accounts.name
+
+  trigger_http = true
+
+  entry_point         = "plaid_accounts"
+  available_memory_mb = 128
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
 # -----------
 # -- plaid --
 # -----------

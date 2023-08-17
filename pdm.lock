@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:734de2a3cd7328004438275f52112f6fe8a63cde5491cf785e9a0000e8528775"
+content_hash = "sha256:5ff6394c7320bb29862de60cad13a771c0ccb37edb16fbf59ca018a2a0583ec6"
 
 [[package]]
 name = "aiohttp"
