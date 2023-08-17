@@ -414,7 +414,7 @@ resource "google_cloudfunctions_function" "plaid_accounts" {
   trigger_http = true
 
   entry_point         = "plaid_accounts"
-  available_memory_mb = 128
+  available_memory_mb = 256
 
   environment_variables = {
     PROJECT_ID      = var.project_id
