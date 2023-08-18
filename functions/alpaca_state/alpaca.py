@@ -1,4 +1,3 @@
-import json
 import time
 
 from google.cloud import firestore  # type: ignore
@@ -14,18 +13,13 @@ def events_listener():
         args=None,
         payload=None,
         headers={"accept": "text/event-stream"},
-        stream=True,
+        # stream=True,
     )
 
     print(f"status : {r.status_code}")
 
     if r.status_code == 200:
-        for line in r.iter_lines():
-            # filter out keep-alive new lines
-            if line:
-                print("line:", line)
-                decoded_line = line.decode("utf-8")
-                print(json.loads(decoded_line))
+        print(r.text)
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
