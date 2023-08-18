@@ -41,6 +41,12 @@ resource "google_cloudfunctions_function" "alpaca_events" {
     resource   = "projects/${var.project_id}/topics/alpaca_events"
   }
 
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
   entry_point         = "alpaca_state"
   available_memory_mb = 256
 }
@@ -80,6 +86,12 @@ resource "google_cloudfunctions_function" "plaid_state" {
     resource   = "projects/${var.project_id}/topics/plaid_events"
   }
 
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
   entry_point         = "plaid_state"
   available_memory_mb = 256
 }
