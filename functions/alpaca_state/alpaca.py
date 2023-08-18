@@ -22,7 +22,10 @@ def events_listener():
     if r.status_code == 200:
         for line in r.iter_lines():
             if line:
-                print("line", json.loads(line))
+                try:
+                    print("payload:", json.loads(line))
+                except json.JSONDecodeError:
+                    print("regular line", line)
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
