@@ -23,7 +23,7 @@ def events_listener():
         for line in r.iter_lines():
             if line:
                 try:
-                    print("payload:", json.loads(line))
+                    print("payload:", json.loads(line.decode("utf-8")))
                 except json.JSONDecodeError:
                     print("regular line", line)
 
