@@ -3,7 +3,7 @@ import time
 
 from google.cloud import firestore  # type: ignore
 
-from infra.infra.proxies.alpaca import alpaca_proxy
+from infra.proxies.alpaca import alpaca_proxy
 from infra.stytch_actions import update_user_vault
 
 
