@@ -1,12 +1,27 @@
+import json
 import time
 
 from google.cloud import firestore  # type: ignore
 
+from infra.infra.proxies.alpaca import alpaca_proxy
 from infra.stytch_actions import update_user_vault
 
 
 def events_listener():
-    return
+    r = alpaca_proxy(
+        method="GET",
+        url="/v1/events/accounts/status",
+        args=None,
+        payload=None,
+        headers={"accept": "text/event-stream"},
+        stream=True,
+    )
+
+    for line in r.iter_lines():
+        # filter out keep-alive new lines
+        if line:
+            decoded_line = line.decode("utf-8")
+            print(json.loads(decoded_line))
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
