@@ -5,6 +5,10 @@ from google.cloud import firestore  # type: ignore
 from infra.stytch_actions import update_user_vault
 
 
+def events_listener():
+    return
+
+
 def alpaca_state_handler(user_id: str, payload: dict):
     print(f"user-id={user_id}, payload={payload}")
 
@@ -29,7 +33,7 @@ def alpaca_state_handler(user_id: str, payload: dict):
         update_data["alpaca_crypto_status"] = crypto_status
     if account_type := payload.get("account_type"):
         update_data["alpaca_account_type"] = account_type
-    if account_id := payload.get("account_id"):
-        update_data["linked_bank_account_id"] = account_id
+    # if account_id := payload.get("account_id"):
+    #    update_data["linked_bank_account_id"] = account_id
 
     status = doc_ref.update(update_data)

@@ -11,8 +11,8 @@ from ..config import alpaca_events_topic_id, project_id
 from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
 
-api_key_name = "alpaca_api_key"
-api_secret_name = "alpaca_api_secret"
+api_key_name = "alpaca_api_key"  # nosec
+api_secret_name = "alpaca_api_secret"  # nosec
 
 
 alpaca_base_url = os.getenv(
@@ -43,20 +43,18 @@ def _get_alpaca_authentication() -> HTTPBasicAuth:
     )
 
 
-def trigger_step_function(user_id: str, url: str, response: dict):
-    print(f"trigger_step_function {user_id}, {url}, {response}")
-    if "v1/accounts" in url:
-        publisher = pubsub_v1.PublisherClient()
-        topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
-        publish_future = publisher.publish(
-            topic_path,
-            json.dumps({"user_id": user_id, "payload": response}).encode(
-                "utf-8"
-            ),
-        )
+def trigger_user_updates(user_id: str, response: dict):
+    print(f"trigger_step_function {user_id}, {response}")
 
-        futures.wait([publish_future])
-        print("triggered step_function")
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, alpaca_events_topic_id)
+    publish_future = publisher.publish(
+        topic_path,
+        json.dumps({"user_id": user_id, "payload": response}).encode("utf-8"),
+    )
+
+    futures.wait([publish_future])
+    print("triggered step_function")
 
 
 def alpaca_proxy(
@@ -65,6 +63,7 @@ def alpaca_proxy(
     args: list | dict | None,
     payload: dict | None,
     headers: dict | None,
+    stream: bool = False,
 ) -> Response:
     request_url = construct_url(alpaca_base_url, url)
     auth = _get_alpaca_authentication()
@@ -77,6 +76,7 @@ def alpaca_proxy(
             json=payload,
             auth=auth,
             headers=headers,
+            stream=stream,
         )
         if payload
         else request(
@@ -85,14 +85,15 @@ def alpaca_proxy(
             url=request_url,
             auth=auth,
             # headers=headers,
+            stream=stream,
         )
     )
 
     try:
         user_id = authenticated_user_id.get()  # type: ignore
         print(f"looked up user_id {user_id}")
-        if user_id:
-            trigger_step_function(user_id, url, r.json())
+        if user_id and method in {"POST", "PATCH"} and "v1/accounts" in url:
+            trigger_user_updates(user_id, r.json())
     except LookupError:
         log_error("alpaca_proxy", "failed to lookup 'user_id' in Context")
 

@@ -49,13 +49,3 @@ resource "google_project_service" "enable_cloud_tasks_api" {
   service    = "tasks.googleapis.com"
   depends_on = [google_project_service.enable_cloud_resource_manager_api]
 }
-
-resource "google_project_service" "enable_redis_api" {
-  service    = "redis.googleapis.com"
-  depends_on = [google_project_service.enable_cloud_resource_manager_api]
-}
-resource "google_redis_instance" "cache" {
-  name           = "memory-cache"
-  memory_size_gb = 1
-  depends_on     = [google_project_service.enable_redis_api]
-}
