@@ -36,4 +36,7 @@ def alpaca_state_handler(user_id: str, payload: dict):
     # if account_id := payload.get("account_id"):
     #    update_data["linked_bank_account_id"] = account_id
 
-    status = doc_ref.update(update_data)
+    if doc_ref.get().exists:
+        status = doc_ref.update(update_data)
+    else:
+        status = doc_ref.set(update_data)
