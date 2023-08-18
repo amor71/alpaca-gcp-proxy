@@ -13,13 +13,14 @@ def events_listener():
         args=None,
         payload=None,
         headers={"accept": "text/event-stream"},
-        # stream=True,
+        stream=True,
     )
 
     print(f"status : {r.status_code}")
 
     if r.status_code == 200:
-        print(r.text)
+        for line in r.iter_lines():
+            print("line", line)
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
