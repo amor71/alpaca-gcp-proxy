@@ -24,9 +24,9 @@ def events_listener():
             r.encoding = "utf-8"
 
         for line in r.iter_lines(decode_unicode=True):
-            if line:
+            if line and line[:6] == "data: ":
                 try:
-                    print("payload:", json.loads(line))
+                    print("payload:", json.loads(line[6:]))
                 except json.JSONDecodeError:
                     print("regular line", line)
 
