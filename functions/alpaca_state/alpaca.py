@@ -20,10 +20,13 @@ def events_listener():
     print(f"status : {r.status_code}")
 
     if r.status_code == 200:
-        for line in r.iter_lines():
+        if r.encoding is None:
+            r.encoding = "utf-8"
+
+        for line in r.iter_lines(decode_unicode=True):
             if line:
                 try:
-                    print("payload:", json.loads(line.decode("utf-8")))
+                    print("payload:", json.loads(line))
                 except json.JSONDecodeError:
                     print("regular line", line)
 
