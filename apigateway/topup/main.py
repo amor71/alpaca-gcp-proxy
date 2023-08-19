@@ -253,6 +253,8 @@ def transfer_validator(request):
 def handle_users_topup(request):
     """Implement PUT /users/topup end-point"""
 
+    print("!!!!!!!")
+    return ("OK", 200)
     user_id = authenticated_user_id.get()  # type: ignore
     if not user_id:
         log_error(
@@ -294,7 +296,6 @@ def handle_users_topup(request):
 
 
 @functions_framework.http
-@auth
 def topup(request):
     if request.method == "PUT":
         return handle_users_topup(request)

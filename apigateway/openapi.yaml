@@ -330,7 +330,7 @@ paths:
         "400":
           description: Error
           
-  /v1/users/topup:
+  /v1/users/topup/{userId}:
     put:
       description: "Update top-up schedule and amount for the authenticated user"
       operationId: "updateTopup"
@@ -341,6 +341,11 @@ paths:
       consumes:
         - application/json
       parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+          description: user identity
         - name: body
           in: body
           required: true
@@ -420,17 +425,14 @@ definitions:
   TopupRequest:
     type: object
     properties:
-      amount:
+      initialAmount:
         description: Set 'top-up' amount, multiplied by 100 (for cents)
         type: integer
         format: int32
-      frequency:
-        description: How often to top-up the account
-        type: string
-        enum:
-          - immediate
-          - weekly
-          - monthly
+      weeklyTopup:
+        description: Set 'top-up' amount, multiplied by 100 (for cents)
+        type: integer
+        format: int32
 
   MissionDetails:
     type: object
