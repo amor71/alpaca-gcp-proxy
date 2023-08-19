@@ -7,6 +7,7 @@ from ..logger import log_error
 
 class Missions:
     def __init__(self, user_id: str | None = None) -> None:
+        self.user_id = user_id
         self.data = self._load_missions() if user_id else None
 
     @property

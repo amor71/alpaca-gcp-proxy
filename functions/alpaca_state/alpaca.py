@@ -33,8 +33,8 @@ def process_account_update(payload):
         return
 
     # TODO: consider handling crypto account approvals too
-    if payload.get("status_to") == "APPROVED":
-        handle_alpaca_approval(user_id, alpaca_account_id)
+    if payload.get("status_to") == "ACTIVE":
+        handle_alpaca_activated(user_id, alpaca_account_id)
 
     # Update user record
     User.update(user_id, payload)
@@ -43,7 +43,7 @@ def process_account_update(payload):
     AlpacaEvents.add("accounts", payload.get("event_id"))
 
 
-def handle_alpaca_approval(user_id, alpaca_account_id):
+def handle_alpaca_activated(user_id, alpaca_account_id):
     # Get Plaid access token
     plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
 
