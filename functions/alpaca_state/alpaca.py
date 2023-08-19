@@ -4,15 +4,52 @@ from google.cloud import firestore  # type: ignore
 
 from infra.data.alpaca_account import AlpacaAccount
 from infra.data.alpaca_events import AlpacaEvents
+from infra.data.bank_account import Account
 from infra.data.users import User
+from infra.logger import log_error
+from infra.plaid_actions import create_alpaca_link
 from infra.proxies.alpaca import alpaca_proxy
-from infra.stytch_actions import update_user_vault
+from infra.stytch_actions import get_from_user_vault, update_user_vault
 
 
 def process_account_update(payload):
+    # get user-id from account_number
     account_number = payload.get("account_number")
     user_id = AlpacaAccount.load(account_number)
+
+    if not user_id:
+        log_error("process_account_update()", "can't load user_id")
+        return
+
+    if not (alpaca_account_id := payload.get("account_id")):
+        log_error(
+            "process_account_update()",
+            f"payload {payload} does not have account_id",
+        )
+        return
+
+    print("payload", payload)
+    if payload.get("to_status") == "APPROVED":
+        # Get Plaid access token
+        plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
+
+        # Get user account-id from DB
+        account_ids = Account.get_account_ids(user_id)
+
+        print("account_ids", account_ids)
+        # Create plaid alpaca link
+        ach_relationship_id = create_alpaca_link(
+            plaid_access_token, account_ids[0], alpaca_account_id
+        )
+
+        print("ach_relationship_id", ach_relationship_id)
+        # Store relationship-id
+        update_user_vault(user_id, "ach_relationship_id", ach_relationship_id)
+
+    # Update user record
     User.update(user_id, payload)
+
+    # Store event-id = mark event as processed
     AlpacaEvents.add("accounts", payload.get("event_id"))
 
 

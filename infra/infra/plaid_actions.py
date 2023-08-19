@@ -1,7 +1,50 @@
 from infra.data.bank_account import Account
 from infra.data.past_transactions import get_cursor, save_past_transactions
 from infra.logger import log_error
+from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
+
+
+def create_alpaca_link(
+    plaid_access_token: str, account_id: str, alpaca_account_id: str
+) -> str | None:
+    """Create plaid <-> alpaca link"""
+
+    r = plaid_proxy(
+        method="POST",
+        url="/processor/token/create",
+        payload={
+            "access_token": plaid_access_token,
+            "processor": "alpaca",
+            "account_id": account_id,
+        },
+        headers={"Content-Type": "application/json"},
+        args=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "set_alpaca_link",
+            "failed to create processor token w {r.status_code}.{r.text}",
+        )
+        return None
+
+    r = alpaca_proxy(
+        method="POST",
+        url=f"/v1/accounts/{alpaca_account_id}/ach_relationships",
+        payload={"processor_token": r.json()["processor_token"]},
+        args=None,
+        headers=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "set_alpaca_link",
+            "failed to create ach_relationship w {r.status_code}.{r.text}",
+        )
+        return None
+
+    return r.json()["id"]
 
 
 def get_access_token(public_token: str) -> tuple[str, str] | None:

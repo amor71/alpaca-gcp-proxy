@@ -24,3 +24,16 @@ class Account:
             account_doc_ref.set(account_details)
         else:
             account_doc_ref.update(account_details)
+
+    @classmethod
+    def get_account_ids(cls, user_id: str) -> list[str]:
+        db = firestore.Client()
+
+        accounts = (
+            db.collection("bank_accounts")
+            .document(user_id)
+            .collection("list")
+            .stream()
+        )
+
+        return [account.id for account in accounts]
