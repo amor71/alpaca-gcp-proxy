@@ -209,7 +209,9 @@ resource "google_cloudfunctions_function" "topup" {
   trigger_http = true
 
   entry_point         = "topup"
-  available_memory_mb = 128
+  available_memory_mb = 256
+
+  ingress_settings = "ALLOW_INTERNAL_ONLY"
 
   environment_variables = {
     PROJECT_ID      = var.project_id
