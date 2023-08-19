@@ -52,6 +52,52 @@ resource "google_cloudfunctions_function" "alpaca_events" {
   available_memory_mb = 256
 }
 
+# -------------------
+# -- post_ach_link --
+# -------------------
+resource "google_pubsub_topic" "post_ach_link" {
+  name = "post_ach_link"
+}
+
+data "archive_file" "post_ach_link" {
+  type        = "zip"
+  output_path = "/tmp/post_ach_link.zip"
+  source_dir  = "functions/post_ach_link"
+}
+resource "google_storage_bucket_object" "post_ach_link_zip" {
+  name         = format("post_ach_link-%s.zip", data.archive_file.post_ach_link.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.post_ach_link.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+
+}
+
+resource "google_cloudfunctions_function" "post_ach_link" {
+  name                  = "post_ach_link"
+  description           = "Handling post ach link complete"
+  runtime               = "python311"
+  timeout               = 540
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.post_ach_link_zip.name
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "projects/${var.project_id}/topics/post_ach_link"
+  }
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+  entry_point         = "post_ach_link"
+  available_memory_mb = 256
+}
+
 # -----------------
 # -- plaid_state --
 # -----------------

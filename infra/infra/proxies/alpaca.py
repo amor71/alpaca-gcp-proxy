@@ -8,7 +8,6 @@ from requests.auth import HTTPBasicAuth
 
 from .. import authenticated_user_id
 from ..config import alpaca_events_topic_id, project_id
-from ..logger import log_error
 from ..proxies.proxy_base import check_crc, construct_url
 
 api_key_name = "alpaca_api_key"  # nosec
@@ -95,6 +94,6 @@ def alpaca_proxy(
         if user_id and method in {"POST", "PATCH"} and "v1/accounts" in url:
             trigger_user_updates(user_id, r.json())
     except LookupError:
-        log_error("alpaca_proxy", "failed to lookup 'user_id' in Context")
+        print("alpaca_proxy() - failed to lookup 'user_id' in Context")
 
     return r

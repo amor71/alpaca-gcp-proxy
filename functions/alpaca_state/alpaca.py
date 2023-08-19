@@ -1,7 +1,10 @@
 import json
+from concurrent import futures
 
 from google.cloud import firestore  # type: ignore
+from google.cloud import pubsub_v1  # type:ignore
 
+from infra.config import post_ach_link_topic_id, project_id
 from infra.data.alpaca_account import AlpacaAccount
 from infra.data.alpaca_events import AlpacaEvents
 from infra.data.bank_account import Account
@@ -12,6 +15,7 @@ from infra.proxies.alpaca import alpaca_proxy
 from infra.stytch_actions import get_from_user_vault, update_user_vault
 
 
+# TODO: consider converting into workflow
 def process_account_update(payload):
     # get user-id from account_number
     account_number = payload.get("account_number")
@@ -28,29 +32,45 @@ def process_account_update(payload):
         )
         return
 
-    print("payload", payload)
+    # TODO: consider handling crypto account approvals too
     if payload.get("status_to") == "APPROVED":
-        # Get Plaid access token
-        plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
-
-        # Get user account-id from DB
-        account_ids = Account.get_account_ids(user_id)
-
-        print("account_ids", account_ids)
-        # Create plaid alpaca link
-        ach_relationship_id = create_alpaca_link(
-            plaid_access_token, account_ids[0], alpaca_account_id
-        )
-
-        print("ach_relationship_id", ach_relationship_id)
-        # Store relationship-id
-        update_user_vault(user_id, "ach_relationship_id", ach_relationship_id)
+        handle_alpaca_approval(user_id, alpaca_account_id)
 
     # Update user record
     User.update(user_id, payload)
 
     # Store event-id = mark event as processed
     AlpacaEvents.add("accounts", payload.get("event_id"))
+
+
+def handle_alpaca_approval(user_id, alpaca_account_id):
+    # Get Plaid access token
+    plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
+
+    # Get user account-id from DB
+    account_ids = Account.get_account_ids(user_id)
+
+    # Create plaid alpaca link
+    ach_relationship_id = create_alpaca_link(
+        plaid_access_token, account_ids[0], alpaca_account_id
+    )
+
+    # Store relationship-id
+    update_user_vault(user_id, "ach_relationship_id", ach_relationship_id)
+
+    trigger_post_ach_link(user_id)
+
+
+def trigger_post_ach_link(user_id: str):
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project_id, post_ach_link_topic_id)
+    publish_future = publisher.publish(
+        topic_path,
+        json.dumps({"user_id": user_id}).encode("utf-8"),
+    )
+
+    futures.wait([publish_future])
+    print("triggered post_ach_link function")
 
 
 def events_listener():
@@ -63,9 +83,8 @@ def events_listener():
         stream=True,
     )
 
-    print(f"status : {r.status_code}")
-
     if r.status_code == 200:
+        print("events_listener(): stream started")
         if r.encoding is None:
             r.encoding = "utf-8"
 
@@ -77,8 +96,6 @@ def events_listener():
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
-    print(f"user-id={user_id}, payload={payload}")
-
     db = firestore.Client()
 
     doc_ref = db.collection("users").document(user_id)
