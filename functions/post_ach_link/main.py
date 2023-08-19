@@ -48,6 +48,8 @@ def handle_mission(user_id: str, mission: dict) -> None:
         "initialAmount": mission.get("initial_amount"),
         "weeklyTopup": mission.get("weekly_topup"),
     }
+
+    print(f"calling topup w/ {payload}")
     # Construct the task.
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
@@ -62,6 +64,13 @@ def handle_mission(user_id: str, mission: dict) -> None:
             else None
         ),
     )
+
+    status = set_task(
+        client,
+        task,
+    )
+
+    print(f"set_task() completed with {status}")
 
 
 @functions_framework.cloud_event
