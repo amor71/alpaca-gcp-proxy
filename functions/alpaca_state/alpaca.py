@@ -13,7 +13,7 @@ def process_account_update(payload):
     account_number = payload.get("account_number")
     user_id = AlpacaAccount.load(account_number)
     User.update(user_id, payload)
-    AlpacaEvents.add(payload.get("event_id"))
+    AlpacaEvents.add("accounts", payload.get("event_id"))
 
 
 def events_listener():
