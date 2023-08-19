@@ -26,7 +26,7 @@ class Missions:
         db = firestore.Client()
 
         doc_ref = db.collection("missions").document(self.user_id)
-        if not doc_ref.exists:
+        if not doc_ref.get().exists:
             log_error(
                 "Missions",
                 f"could not load missions for user_id {self.user_id}",
