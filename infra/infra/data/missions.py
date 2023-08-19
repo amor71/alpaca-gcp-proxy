@@ -25,15 +25,12 @@ class Missions:
     def _load_missions(self):
         db = firestore.Client()
 
-        doc_ref = db.collection("missions").document(self.user_id)
-        if not doc_ref.get().exists:
-            log_error(
-                "Missions",
-                f"could not load missions for user_id {self.user_id}",
-            )
-            return None
-
-        docs = doc_ref.collection("user_missions").stream()
+        docs = (
+            db.collection("missions")
+            .document(self.user_id)
+            .collection("user_missions")
+            .stream()
+        )
 
         return [doc_ref.to_dict() for doc_ref in docs]
 
