@@ -29,7 +29,7 @@ def process_account_update(payload):
         return
 
     print("payload", payload)
-    if payload.get("to_status") == "APPROVED":
+    if payload.get("status_to") == "APPROVED":
         # Get Plaid access token
         plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
 
