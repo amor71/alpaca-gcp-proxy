@@ -33,6 +33,7 @@ resource "google_cloudfunctions_function" "alpaca_events" {
   name                  = "alpaca_state"
   description           = "Handling Alpaca.Market states"
   runtime               = "python311"
+  timeout               = 540
   source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
   source_archive_object = google_storage_bucket_object.alpaca_state_zip.name
 
