@@ -14,12 +14,6 @@ class User:
 
         return self.data != None
 
-    @property
-    def transfer_relationship_id(self) -> str | None:
-        """Return the Alpaca id to be used in transfer requests, if exists. Otherwise None"""
-
-        return self.data.get("transfer_relationship_id") if self.data else None
-
     def _load_user(self) -> dict | None:
         """Load document from Firestore, based on the user-id"""
 
@@ -32,3 +26,12 @@ class User:
             return None
 
         return doc.to_dict()
+
+    @classmethod
+    def update(cls, user_id: str, payload: dict) -> None:
+        """Update user details with details in payload"""
+
+        db = firestore.Client()
+        db.collection("users").document(user_id).set(
+            document_data=payload, merge=True
+        )

@@ -1,10 +1,19 @@
 import json
-import time
 
 from google.cloud import firestore  # type: ignore
 
+from infra.data.alpaca_account import AlpacaAccount
+from infra.data.alpaca_events import AlpacaEvents
+from infra.data.users import User
 from infra.proxies.alpaca import alpaca_proxy
 from infra.stytch_actions import update_user_vault
+
+
+def process_account_update(payload):
+    account_number = payload.get("account_number")
+    user_id = AlpacaAccount.load(account_number)
+    User.update(user_id, payload)
+    AlpacaEvents.add(payload.get("event_id"))
 
 
 def events_listener():
@@ -25,10 +34,9 @@ def events_listener():
 
         for line in r.iter_lines(decode_unicode=True):
             if line and line[:6] == "data: ":
-                try:
-                    print("payload:", json.loads(line[6:]))
-                except json.JSONDecodeError:
-                    print("regular line", line)
+                payload = json.loads(line[6:])
+                print(f"events_listener() received update {payload}")
+                process_account_update(payload)
 
 
 def alpaca_state_handler(user_id: str, payload: dict):
@@ -39,24 +47,22 @@ def alpaca_state_handler(user_id: str, payload: dict):
     doc_ref = db.collection("users").document(user_id)
 
     update_data = {
-        "alpaca_updated": time.time_ns(),
+        "alpaca_updated": firestore.SERVER_TIMESTAMP,
     }
 
     if alpaca_account_id := payload.get("id"):
         update_user_vault(user_id, "alpaca_account_id", alpaca_account_id)
     if relationship_id := payload.get("relationship_id"):
         update_user_vault(user_id, "relationship_id", relationship_id)
+    if account_number := payload.get("account_number"):
+        AlpacaAccount.save(account_number, user_id)
 
     if status := payload.get("status"):
         update_data["alpaca_status"] = status
-    if account_number := payload.get("account_number"):
-        update_data["alpaca_account_number"] = account_number
     if crypto_status := payload.get("crypto_status"):
         update_data["alpaca_crypto_status"] = crypto_status
     if account_type := payload.get("account_type"):
         update_data["alpaca_account_type"] = account_type
-    # if account_id := payload.get("account_id"):
-    #    update_data["linked_bank_account_id"] = account_id
 
     if doc_ref.get().exists:
         status = doc_ref.update(update_data)
