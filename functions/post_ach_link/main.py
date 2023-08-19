@@ -54,7 +54,7 @@ def handle_mission(user_id: str, mission: dict) -> None:
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.PUT,
-            url=f"https://api.nine30.com/v1/users/topup/{user_id}",
+            url=f"https://us-east4-development-380917.cloudfunctions.net/topup/{user_id}",
             body=json.dumps(payload).encode(),
             headers=None,
         ),
