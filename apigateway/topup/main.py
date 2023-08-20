@@ -63,7 +63,13 @@ def schedule_transfer_validator(id, headers):
             else None
         ),
     )
-    return set_task(client, task, 60 * 60 * 24)
+
+    task_setup = set_task(client, task, 60 * 60)
+
+    if task_setup:
+        print(f"transfer validator scheduled for transfer {id}")
+
+    return task_setup
 
 
 def transfer(
@@ -85,6 +91,7 @@ def transfer(
     ):
         return False
 
+    print(f"transfer() result : {transfer_details}")
     transfer = Transfer(details=transfer_details)
 
     return schedule_transfer_validator(transfer.id, headers)
@@ -111,7 +118,12 @@ def weekly_transfer(amount: int, headers) -> bool:
             else None
         ),
     )
-    return set_task(client, task, 60 * 60 * 7)
+    task_setup = set_task(client, task, 60 * 60 * 24 * 7)
+
+    if task_setup:
+        print("weekly topup scheduled with amount {amount}")
+
+    return task_setup
 
 
 def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
@@ -221,17 +233,20 @@ def transfer_validator(request):
             t = Transfer(details=transfer)
 
             # TODO: This may be too naive
-            if t.status == "COMPLETE" and not trigger_rebalance(
+            if t.status == "COMPLETE" and trigger_rebalance(
                 user_id, request.headers
             ):
-                schedule_transfer_validator(transfer_id, request.headers)
+                return ("OK", 200)
+            elif t.status in {"REJECTED", "CANCELED", "RETURNED"}:
+                return (f"transfer failed with {t.status}", 202)
 
-            return ("OK", 200)
+            schedule_transfer_validator(transfer_id, request.headers)
+            return ("rescheduled", 201)
 
     log_error(
         "transfer_validator()", f"cloud not find {transfer_id} in {transfers}"
     )
-    abort(400)
+    return ("failed", 202)
 
 
 def retry_till_linked(user_id, request):
