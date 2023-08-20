@@ -96,7 +96,7 @@ def load_recent_transactions(user_id: str, plaid_access_token: str) -> bool:
         if r.status_code != 200:
             log_error(
                 "get_recent_transactions()",
-                "failed to called Plaid with {r.status_code}:{r.text}",
+                f"failed to called Plaid with {r.status_code}:{r.text}",
             )
             return False
 

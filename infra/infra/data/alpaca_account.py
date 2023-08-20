@@ -4,8 +4,6 @@ from google.cloud import firestore  # type: ignore
 class AlpacaAccount:
     @classmethod
     def save(cls, account_number: str, user_id: str) -> None:
-        print(f"AlpacaAccount.save(): {user_id}:{account_number}")
-
         data = {"updated_at": firestore.SERVER_TIMESTAMP, "user_id": user_id}
         db = firestore.Client()
 
