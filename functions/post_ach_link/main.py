@@ -56,7 +56,7 @@ def handle_mission(user_id: str, mission: dict) -> None:
             http_method=tasks_v2.HttpMethod.PUT,
             url=f"https://api.nine30.com/v1/users/topup/{user_id}",
             body=json.dumps(payload).encode(),
-            headers=None,
+            headers={"Content-Type": "application/json"},
         ),
         name=(
             client.task_path(project_id, location, rebalance_queue, task_id)  # type: ignore
