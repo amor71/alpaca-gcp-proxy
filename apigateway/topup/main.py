@@ -44,7 +44,7 @@ def set_task(
     return True
 
 
-def schedule_transfer_validator(id, headers):
+def schedule_transfer_validator(user_id, id, headers):
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
@@ -54,7 +54,7 @@ def schedule_transfer_validator(id, headers):
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.GET,
-            url=f"https://api.nine30.com/v1/transfers/{id}",
+            url=f"https://api.nine30.com/v1/transfers/{id}?userId={user_id}",
             headers=headers,
         ),
         name=(
@@ -73,7 +73,11 @@ def schedule_transfer_validator(id, headers):
 
 
 def transfer(
-    alpaca_account_id: str, relationship_id: str, amount: int, headers
+    user_id: str,
+    alpaca_account_id: str,
+    relationship_id: str,
+    amount: int,
+    headers,
 ) -> bool:
     """Initiate a transfer of 'amount' to user's alpaca account"""
 
@@ -94,10 +98,10 @@ def transfer(
     print(f"transfer() result : {transfer_details}")
     transfer = Transfer(details=transfer_details)
 
-    return schedule_transfer_validator(transfer.id, headers)
+    return schedule_transfer_validator(user_id, transfer.id, headers)
 
 
-def weekly_transfer(amount: int, headers) -> bool:
+def weekly_transfer(user_id: str, amount: int, headers) -> bool:
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
@@ -108,7 +112,7 @@ def weekly_transfer(amount: int, headers) -> bool:
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.PUT,
-            url="https://api.nine30.com/v1/users/topup",
+            url=f"https://api.nine30.com/v1/users/topup/{user_id}",
             headers=headers,
             body=json.dumps(payload).encode(),
         ),
@@ -126,11 +130,14 @@ def weekly_transfer(amount: int, headers) -> bool:
     return task_setup
 
 
-def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
+def process(
+    user_id, alpaca_account_id, relationship_id, headers, payload
+) -> bool:
     rc = False
 
     if initial_amount := payload.get("initialAmount"):
         rc |= transfer(
+            user_id,
             alpaca_account_id,
             relationship_id,
             int(initial_amount),
@@ -139,6 +146,7 @@ def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
 
     if weekly_topup := payload.get("weeklyTopup"):
         rc |= weekly_transfer(
+            user_id,
             int(weekly_topup),
             headers,
         )
@@ -241,7 +249,7 @@ def transfer_validator(request):
             elif t.status in {"REJECTED", "CANCELED", "RETURNED"}:
                 return (f"transfer failed with {t.status}", 202)
 
-            schedule_transfer_validator(transfer_id, request.headers)
+            schedule_transfer_validator(user_id, transfer_id, request.headers)
             return ("rescheduled", 201)
 
     log_error(
@@ -325,6 +333,7 @@ def handle_users_topup(request):
     print("its all good! ready to progress")
 
     if not process(
+        user_id=user_id,
         alpaca_account_id=alpaca_account_id,
         relationship_id=relationship_id,
         headers=request.headers,
