@@ -234,6 +234,7 @@ resource "google_service_account" "tasks_service_account" {
 }
 
 resource "google_project_iam_binding" "task_enqueue_binding" {
+  project = var.project_id
   role    = "roles/cloudtasks.enqueuer"
   members = ["serviceAccount:${google_service_account.tasks_service_account.email}"]
 }
