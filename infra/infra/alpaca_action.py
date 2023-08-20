@@ -2,7 +2,7 @@ from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
 
-def bank_link_ready(account_id: str, relationship_id: str) -> bool:
+def bank_link_ready(account_id: str, relationship_id: str) -> bool | None:
     r = alpaca_proxy(
         method="GET",
         url=f"/v1/accounts/{account_id}/ach_relationships",
@@ -16,12 +16,22 @@ def bank_link_ready(account_id: str, relationship_id: str) -> bool:
             "bank_link_ready()",
             f"failed to load account {account_id}: {r.text}",
         )
-        return False
+        return None
 
     payload = r.json()
     print(f"payload = {payload}")
 
-    return True
+    for link in payload:
+        if link.get("id") == relationship_id:
+            print("found:", link)
+            if link.get("status") == "APPROVED":
+                return True
+            elif link.get("status") in {"QUEUED", "SENT_TO_CLEARING"}:
+                return False
+
+            return None
+
+    return None
 
 
 def get_available_cash(account_id: str) -> float | None:

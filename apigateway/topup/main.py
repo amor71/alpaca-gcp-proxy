@@ -245,6 +245,35 @@ def transfer_validator(request):
     abort(400)
 
 
+def retry_topup_for_link(user_id, request):
+    client = tasks_v2.CloudTasksClient()
+
+    task_id = str(uuid.uuid4())
+
+    # Construct the task.
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.PUT,
+            url=f"https://api.nine30.com/v1/users/topup/{user_id}",
+            body=json.dumps(request.get_json()).encode(),
+            headers=request.headers,
+        ),
+        name=(
+            client.task_path(project_id, location, rebalance_queue, task_id)  # type: ignore
+            if task_id is not None
+            else None
+        ),
+    )
+
+    status = set_task(
+        client,
+        task,
+        10 * 60 * 60,
+    )
+
+    print(f"set_task() completed with {status}")
+
+
 def handle_users_topup(request):
     """Implement PUT /users/topup/{userId} end-point"""
 
@@ -278,10 +307,16 @@ def handle_users_topup(request):
         )
         abort(400)
 
-    if not bank_link_ready(alpaca_account_id, relationship_id):
-        print(f"Bank Account Link not ready for {user_id}. Retry")
-        # retry_topup(user_id, request)
+    link_status = bank_link_ready(alpaca_account_id, relationship_id)
 
+    if link_status is None:
+        return ("Failed, please check previous errors", 202)
+    elif link_status == False:
+        print(f"Bank Account Link not ready for {user_id}. Retry")
+        retry_topup_for_link(user_id, request)
+        return ("OK", 201)
+
+    print("its all good! ready to progress")
     return ("OK", 200)
 
     if not process(
