@@ -37,6 +37,7 @@ def set_task(
             + datetime.timedelta(seconds=second_from_now)
         )
         task.schedule_time = timestamp
+        print(f"set_task() scheduling for {task.schedule_time}")
 
     # Use the client to send a CreateTaskRequest.
     _ = client.create_task(
@@ -96,15 +97,12 @@ def transfer(
     return schedule_transfer_validator(transfer.id, headers)
 
 
-def schedule_transfer(amount: int, frequency: str, headers) -> bool:
+def weekly_transfer(amount: int, headers) -> bool:
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
     task_id = str(uuid.uuid4())
-    payload = [
-        {"frequency": "immediate", "amount": amount},
-        {"frequency": frequency, "amount": amount},
-    ]
+    payload = {"initialAmount": amount, "weeklyTopup": amount}
 
     # Construct the task.
     task = tasks_v2.Task(
@@ -120,27 +118,25 @@ def schedule_transfer(amount: int, frequency: str, headers) -> bool:
             else None
         ),
     )
-    return set_task(
-        client, task, 60 * 60 * 7 if frequency == "weekly" else 60 * 60 * 30
-    )
+    return set_task(client, task, 60 * 60 * 7)
 
 
 def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
     rc = False
-    for item in payload:
-        if payload["frequency"] == "immediate":
-            rc |= transfer(
-                alpaca_account_id,
-                relationship_id,
-                int(item["amount"]),
-                headers,
-            )
-        else:
-            rc |= schedule_transfer(
-                int(item["amount"]),
-                item["frequency"],
-                headers,
-            )
+
+    if initial_amount := payload.get("initialAmount"):
+        rc |= transfer(
+            alpaca_account_id,
+            relationship_id,
+            int(initial_amount),
+            headers,
+        )
+
+    if weekly_topup := payload.get("weeklyTopup"):
+        rc |= weekly_transfer(
+            int(weekly_topup),
+            headers,
+        )
 
     return rc
 
@@ -245,7 +241,8 @@ def transfer_validator(request):
     abort(400)
 
 
-def retry_topup_for_link(user_id, request):
+def retry_till_linked(user_id, request):
+    """Passive waiting till bank link is done"""
     client = tasks_v2.CloudTasksClient()
 
     task_id = str(uuid.uuid4())
@@ -268,7 +265,7 @@ def retry_topup_for_link(user_id, request):
     status = set_task(
         client,
         task,
-        10 * 60 * 60,
+        5 * 60,
     )
 
     print(f"set_task() completed with {status}")
@@ -313,11 +310,10 @@ def handle_users_topup(request):
         return ("Failed, please check previous errors", 202)
     elif link_status == False:
         print(f"Bank Account Link not ready for {user_id}. Retry")
-        retry_topup_for_link(user_id, request)
+        retry_till_linked(user_id, request)
         return ("OK", 201)
 
     print("its all good! ready to progress")
-    return ("OK", 200)
 
     if not process(
         alpaca_account_id=alpaca_account_id,
