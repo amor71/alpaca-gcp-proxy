@@ -121,7 +121,7 @@ def weekly_transfer(amount: int, headers) -> bool:
     task_setup = set_task(client, task, 60 * 60 * 24 * 7)
 
     if task_setup:
-        print("weekly topup scheduled with amount {amount}")
+        print(f"weekly topup scheduled with amount {amount}")
 
     return task_setup
 
@@ -213,10 +213,11 @@ def transfer_validator(request):
     """Implement GET /transfers/{transferId} end-point"""
 
     if not (transfer_id := request.args.get("transferId")):
+        log_error("transfer_validator()", "failed to get transferId")
         abort(400)
 
-    if not (user_id := authenticated_user_id.get()):
-        log_error("handle_post", "could not load authenticated user_id")
+    if not (user_id := request.args.get("userId")):
+        log_error("transfer_validator()", "failed to get  userId")
         abort(403)
 
     if not (alpaca_account_id := get_alpaca_account_id(user_id=user_id)):

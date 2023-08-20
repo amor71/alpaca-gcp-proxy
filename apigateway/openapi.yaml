@@ -329,13 +329,13 @@ paths:
           description: OK
         "400":
           description: Error
-          
+
   /v1/users/topup/{userId}:
     put:
       description: "Update top-up schedule and amount for the authenticated user"
       operationId: "updateTopup"
       tags:
-        - Funding
+        - Funding (Internal only)
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       consumes:
@@ -367,7 +367,7 @@ paths:
       description: "Validate transfer"
       operationId: "validateTransfer"
       tags:
-        - Funding
+        - Funding (Internal only)
       x-google-backend:
         address: https://us-east4-development-380917.cloudfunctions.net/topup
       consumes:
@@ -378,9 +378,18 @@ paths:
           required: true
           type: string
           description: Transfer id
+        - name: userId
+          in: query
+          required: false
+          type: string
+          description: userId (mandatory)
       responses:
         "200":
           description: OK
+        "201":
+          description: Reschedule
+        "202":
+          description: Not as expected
 
 definitions:
   User:
