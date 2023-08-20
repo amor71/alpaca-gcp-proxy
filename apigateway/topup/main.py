@@ -278,7 +278,7 @@ def handle_users_topup(request):
         )
         abort(400)
 
-    if not bank_link_ready(user_id, relationship_id):
+    if not bank_link_ready(alpaca_account_id, relationship_id):
         print(f"Bank Account Link not ready for {user_id}. Retry")
         # retry_topup(user_id, request)
 
