@@ -2,6 +2,28 @@ from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 
 
+def bank_link_ready(account_id: str, relationship_id: str) -> bool:
+    r = alpaca_proxy(
+        method="GET",
+        url=f"/v1/accounts/{account_id}/ach_relationships",
+        args=None,
+        payload=None,
+        headers=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "bank_link_ready()",
+            f"failed to load account {account_id}: {r.text}",
+        )
+        return False
+
+    payload = r.json()
+    print(f"payload = {payload}")
+
+    return True
+
+
 def get_available_cash(account_id: str) -> float | None:
     """Get amount of available cash for trading"""
 

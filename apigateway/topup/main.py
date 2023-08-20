@@ -9,8 +9,8 @@ from google.cloud import tasks_v2
 from google.protobuf import duration_pb2, timestamp_pb2
 
 from infra import auth, authenticated_user_id  # type: ignore
-from infra.alpaca_action import (get_transfers, transfer_amount,
-                                 validate_before_transfer)
+from infra.alpaca_action import (bank_link_ready, get_transfers,
+                                 transfer_amount, validate_before_transfer)
 from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.missions import Missions
 from infra.data.transfers import Transfer
@@ -148,8 +148,8 @@ def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
 def valid_payload(payload) -> bool:
     try:
         for item in payload:
-            if not (amount_str := item.get("amount")) or not (
-                frequency_str := item.get("frequency")
+            if not (amount_str := item.get("initialAmount")) or not (
+                frequency_str := item.get("weeklyTopup")
             ):
                 return False
 
@@ -162,13 +162,13 @@ def valid_payload(payload) -> bool:
                     f"expect amounts to be always positive in {payload}",
                 )
                 return False
-
             try:
-                _ = Frequency[frequency_str]
+                weekly = int(frequency_str)
+                assert weekly > 0
             except Exception:
                 log_error(
                     "valid_payload",
-                    f"frequency {frequency_str} needs to be immediate/weekly/monthly",
+                    f"expect weekly amounts to be always positive in {payload}",
                 )
                 return False
 
@@ -253,15 +253,16 @@ def transfer_validator(request):
 def handle_users_topup(request):
     """Implement PUT /users/topup end-point"""
 
-    print("!!!!!!!")
-    return ("OK", 200)
-    user_id = authenticated_user_id.get()  # type: ignore
-    if not user_id:
-        log_error(
-            "topup()",
-            "could not load authenticated user_id, this shouldn't have happened",
-        )
-        return ("Something went wrong", 403)
+    # validate API
+    if not (user_id := request.args.get("userId")):
+        abort(400)
+
+    payload = request.get_json() if request.is_json else None
+
+    if not payload or not valid_payload(payload):
+        abort(400)
+
+    print(f"topup for {user_id}")
 
     if not (alpaca_account_id := get_alpaca_account_id(user_id=user_id)):
         return ("brokerage account not provisioned yet", 400)
@@ -272,14 +273,11 @@ def handle_users_topup(request):
     ):
         return ("brokerage account not linked to bank account yet", 400)
 
-    # validate API
-    payload = request.get_json() if request.is_json else None
+    if not bank_link_ready(user_id, relationship_id):
+        print(f"Bank Account Link not ready for {user_id}. Retry")
+        retry_topup(user_id, request)
 
-    if not payload or not valid_payload(payload):
-        return (
-            "Missing or invalid payload (expected JSON w/ 'amount' and 'frequency')",
-            400,
-        )
+    return ("OK", 200)
 
     if not process(
         alpaca_account_id=alpaca_account_id,
