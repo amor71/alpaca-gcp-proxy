@@ -184,6 +184,12 @@ resource "google_cloudfunctions_function" "new_user" {
 # --------------
 # -- topup --
 # --------------
+resource "google_vpc_access_connector" "connector" {
+  name          = "vpc-con"
+  ip_cidr_range = "10.8.0.0/28"
+  network       = "default"
+}
+
 data "archive_file" "topup" {
   type        = "zip"
   output_path = "/tmp/topup.zip"
@@ -211,7 +217,7 @@ resource "google_cloudfunctions_function" "topup" {
   entry_point         = "topup"
   available_memory_mb = 256
 
-  ingress_settings = "ALLOW_INTERNAL_ONLY"
+  vpc_connector = google_vpc_access_connector.connector.name
 
   environment_variables = {
     PROJECT_ID      = var.project_id
@@ -220,6 +226,27 @@ resource "google_cloudfunctions_function" "topup" {
     REBALANCE_QUEUE = var.rebalance_queue
   }
 }
+
+
+resource "google_service_account" "tasks_service_account" {
+  account_id   = "my-task-account"
+  display_name = "Service Account for Cloud Tasks"
+}
+
+resource "google_project_iam_binding" "task_enqueue_binding" {
+  role    = "roles/cloudtasks.enqueuer"
+  members = ["serviceAccount:${google_service_account.tasks_service_account.email}"]
+}
+
+resource "google_cloudfunctions_function_iam_member" "function_invoker" {
+  project        = var.project_id
+  region         = var.region
+  cloud_function = google_cloudfunctions_function.topup.name
+
+  role   = "roles/cloudfunctions.invoker"
+  member = "serviceAccount:${google_service_account.tasks_service_account.email}"
+}
+
 
 # ----------------------
 # -- get_user_details --
