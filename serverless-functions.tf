@@ -231,6 +231,7 @@ resource "google_cloudfunctions_function" "topup" {
 resource "google_service_account" "tasks_service_account" {
   account_id   = "my-task-account"
   display_name = "Service Account for Cloud Tasks"
+  email        = "service@nine30.com"
 }
 
 resource "google_project_iam_binding" "task_enqueue_binding" {
