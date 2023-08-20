@@ -262,17 +262,25 @@ def handle_users_topup(request):
     print(f"topup for {user_id}")
 
     if not (alpaca_account_id := get_alpaca_account_id(user_id=user_id)):
-        return ("brokerage account not provisioned yet", 400)
+        log_error(
+            "handle_users_topup()", f"user {user_id} does nor have an account"
+        )
+        abort(400)
+
     if not (
         relationship_id := get_from_user_vault(
             user_id=user_id, key="relationship_id"
         )
     ):
-        return ("brokerage account not linked to bank account yet", 400)
+        log_error(
+            "handle_users_topup()",
+            f"user {user_id} is not linked with an bank account",
+        )
+        abort(400)
 
     if not bank_link_ready(user_id, relationship_id):
         print(f"Bank Account Link not ready for {user_id}. Retry")
-        retry_topup(user_id, request)
+        # retry_topup(user_id, request)
 
     return ("OK", 200)
 

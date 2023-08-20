@@ -56,7 +56,7 @@ def handle_alpaca_activated(user_id, alpaca_account_id):
     )
 
     # Store relationship-id
-    update_user_vault(user_id, "ach_relationship_id", ach_relationship_id)
+    update_user_vault(user_id, "relationship_id", ach_relationship_id)
 
     trigger_post_ach_link(user_id)
 
