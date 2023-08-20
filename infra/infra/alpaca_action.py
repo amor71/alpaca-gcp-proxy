@@ -112,7 +112,7 @@ def validate_before_transfer(account_id: str) -> bool:
         log_error("get_available_cash()", f"{account_id} blocked")
         return False
 
-    return float(payload["cash"]) > 0.0
+    return True
 
 
 def transfer_amount(

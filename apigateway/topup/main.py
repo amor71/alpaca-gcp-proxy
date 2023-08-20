@@ -1,7 +1,6 @@
 import datetime
 import json
 import uuid
-from enum import Enum
 
 import functions_framework
 from flask import abort
@@ -16,12 +15,6 @@ from infra.data.missions import Missions
 from infra.data.transfers import Transfer
 from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id, get_from_user_vault
-
-
-class Frequency(Enum):
-    immediate = 1
-    weekly = 2
-    monthly = 3
 
 
 def set_task(
@@ -81,7 +74,7 @@ def transfer(
     if not validate_before_transfer(alpaca_account_id):
         log_error(
             "transfer()",
-            "{alpaca_account_id} account validation failed, aborting transfer",
+            f"{alpaca_account_id} account validation failed, aborting transfer",
         )
         return False
 
