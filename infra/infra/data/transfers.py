@@ -35,12 +35,11 @@ class Transfer:
         if not self.data:
             return
         db = firestore.Client()
-        doc = db.collection("transfers").document(self.data["id"])
-
-        if doc.exists:
-            doc.update(self.data)
-        else:
-            doc.set(self.data)
+        _ = (
+            db.collection("transfers")
+            .document(self.data["id"])
+            .set(document_data=self.data, merge=True)
+        )
 
     def _load(self) -> None:
         """Load transfer details document from Firestore"""
