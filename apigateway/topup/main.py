@@ -146,33 +146,28 @@ def process(alpaca_account_id, relationship_id, headers, payload) -> bool:
 
 
 def valid_payload(payload) -> bool:
+    if not (amount_str := payload.get("initialAmount")) or not (
+        frequency_str := payload.get("weeklyTopup")
+    ):
+        return False
+
     try:
-        for item in payload:
-            if not (amount_str := item.get("initialAmount")) or not (
-                frequency_str := item.get("weeklyTopup")
-            ):
-                return False
-
-            try:
-                amount = int(amount_str)
-                assert amount > 0
-            except Exception:
-                log_error(
-                    "valid_payload",
-                    f"expect amounts to be always positive in {payload}",
-                )
-                return False
-            try:
-                weekly = int(frequency_str)
-                assert weekly > 0
-            except Exception:
-                log_error(
-                    "valid_payload",
-                    f"expect weekly amounts to be always positive in {payload}",
-                )
-                return False
-
+        amount = int(amount_str)
+        assert amount > 0
     except Exception:
+        log_error(
+            "valid_payload",
+            f"expect amounts to be always positive in {payload}",
+        )
+        return False
+    try:
+        weekly = int(frequency_str)
+        assert weekly > 0
+    except Exception:
+        log_error(
+            "valid_payload",
+            f"expect weekly amounts to be always positive in {payload}",
+        )
         return False
 
     return True
@@ -251,15 +246,17 @@ def transfer_validator(request):
 
 
 def handle_users_topup(request):
-    """Implement PUT /users/topup end-point"""
+    """Implement PUT /users/topup/{userId} end-point"""
 
     # validate API
     if not (user_id := request.args.get("userId")):
+        log_error("handle_users_topup()", "missing user_id")
         abort(400)
 
     payload = request.get_json() if request.is_json else None
 
     if not payload or not valid_payload(payload):
+        log_error("handle_users_topup()", "invalid payload {payload}")
         abort(400)
 
     print(f"topup for {user_id}")
