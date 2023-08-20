@@ -256,7 +256,7 @@ def handle_users_topup(request):
     payload = request.get_json() if request.is_json else None
 
     if not payload or not valid_payload(payload):
-        log_error("handle_users_topup()", "invalid payload {payload}")
+        log_error("handle_users_topup()", f"invalid payload {payload}")
         abort(400)
 
     print(f"topup for {user_id}")
