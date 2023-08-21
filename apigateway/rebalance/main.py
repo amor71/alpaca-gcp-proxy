@@ -98,7 +98,7 @@ def handle_create_rebalance(request: Request):
 
 
 @functions_framework.http
-def missions(request):
+def rebalance(request):
     """Implement /v1/missions/rebalance/{userId} end points"""
 
     if request.method == "POST":
