@@ -234,6 +234,8 @@ resource "google_cloudfunctions_function" "topup" {
 
   vpc_connector = google_vpc_access_connector.connector.name
 
+  ingress_settings = "ALLOW_INTERNAL_ONLY"
+
   environment_variables = {
     PROJECT_ID      = var.project_id
     TOKEN_BYPASS    = var.token_bypass
@@ -649,13 +651,13 @@ data "google_iam_policy" "n30-noauth-func" {
     ]
   }
 }
-#resource "google_cloudfunctions_function_iam_policy" "function_iam_policy" {
-#  project        = var.project_id
-#  region         = var.region
-#  cloud_function = google_cloudfunctions_function.proxy.name
-#
-#  policy_data = data.google_iam_policy.n30-noauth-func.policy_data
-#}
+resource "google_cloudfunctions_function_iam_policy" "function_iam_policy" {
+  project        = var.project_id
+  region         = var.region
+  cloud_function = google_cloudfunctions_function.proxy.name
+
+  policy_data = data.google_iam_policy.n30-noauth-func.policy_data
+}
 
 
 # --------------------------
