@@ -328,7 +328,7 @@ resource "google_cloudfunctions_function" "get_user_details" {
   trigger_http = true
 
   entry_point         = "get_user_details"
-  available_memory_mb = 128
+  available_memory_mb = 256
 
   environment_variables = {
     PROJECT_ID      = var.project_id
