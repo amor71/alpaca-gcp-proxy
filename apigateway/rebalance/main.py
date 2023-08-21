@@ -57,6 +57,7 @@ def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
         return "reschedule" if r.status_code == 422 else None
 
     run_payload = r.json()
+    print(f"created run with id {run_payload.get('id')}")
     return run_payload["id"]
 
 
@@ -84,6 +85,7 @@ def handle_create_rebalance(request: Request):
             )
             return ("invalid_user", 202)
 
+        print(f"creating run for {alpaca_account_id} with {model_portfolio}")
         if not (run_id := create_run(alpaca_account_id, model_portfolio)):
             return ("failed run", 201)
 
