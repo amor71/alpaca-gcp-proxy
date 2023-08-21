@@ -649,13 +649,13 @@ data "google_iam_policy" "n30-noauth-func" {
     ]
   }
 }
-resource "google_cloudfunctions_function_iam_policy" "function_iam_policy" {
-  project        = var.project_id
-  region         = var.region
-  cloud_function = google_cloudfunctions_function.proxy.name
-
-  policy_data = data.google_iam_policy.n30-noauth-func.policy_data
-}
+#resource "google_cloudfunctions_function_iam_policy" "function_iam_policy" {
+#  project        = var.project_id
+#  region         = var.region
+#  cloud_function = google_cloudfunctions_function.proxy.name
+#
+#  policy_data = data.google_iam_policy.n30-noauth-func.policy_data
+#}
 
 
 # --------------------------
