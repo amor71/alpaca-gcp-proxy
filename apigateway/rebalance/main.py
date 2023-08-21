@@ -1,5 +1,4 @@
 import functions_framework
-import telemetrics
 from flask import Request, abort
 
 from infra.alpaca_action import get_available_cash, get_model_portfolio_by_name
