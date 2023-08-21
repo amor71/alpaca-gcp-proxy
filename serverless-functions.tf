@@ -181,14 +181,29 @@ resource "google_cloudfunctions_function" "new_user" {
   }
 }
 
-# --------------
-# -- topup --
-# --------------
+#-------------------------
+# -- INTERNAL FUNCTIONS --
+# ------------------------
 resource "google_vpc_access_connector" "connector" {
   name          = "vpc-con"
   ip_cidr_range = "10.8.0.0/28"
   network       = "default"
 }
+
+resource "google_service_account" "tasks_service_account" {
+  account_id   = "my-task-account"
+  display_name = "Service Account for Cloud Tasks"
+}
+
+resource "google_project_iam_binding" "task_enqueue_binding" {
+  project = var.project_id
+  role    = "roles/cloudtasks.enqueuer"
+  members = ["serviceAccount:${google_service_account.tasks_service_account.email}"]
+}
+
+# -----------
+# -- topup --
+# -----------
 
 data "archive_file" "topup" {
   type        = "zip"
@@ -227,19 +242,7 @@ resource "google_cloudfunctions_function" "topup" {
   }
 }
 
-
-resource "google_service_account" "tasks_service_account" {
-  account_id   = "my-task-account"
-  display_name = "Service Account for Cloud Tasks"
-}
-
-resource "google_project_iam_binding" "task_enqueue_binding" {
-  project = var.project_id
-  role    = "roles/cloudtasks.enqueuer"
-  members = ["serviceAccount:${google_service_account.tasks_service_account.email}"]
-}
-
-resource "google_cloudfunctions_function_iam_member" "function_invoker" {
+resource "google_cloudfunctions_function_iam_member" "function_invoker-topup" {
   project        = var.project_id
   region         = var.region
   cloud_function = google_cloudfunctions_function.topup.name
@@ -248,6 +251,54 @@ resource "google_cloudfunctions_function_iam_member" "function_invoker" {
   member = "serviceAccount:${google_service_account.tasks_service_account.email}"
 }
 
+# ---------------
+# -- rebalance --
+# ---------------
+data "archive_file" "rebalance" {
+  type        = "zip"
+  output_path = "/tmp/rebalance.zip"
+  source_dir  = "apigateway/rebalance"
+}
+resource "google_storage_bucket_object" "rebalance_zip" {
+  name         = format("rebalance-%s.zip", data.archive_file.rebalance.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.rebalance.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+
+resource "google_cloudfunctions_function" "rebalance" {
+  name                  = "rebalance"
+  description           = "Rebalance missions for a user"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.rebalance_zip.name
+
+  trigger_http = true
+
+  entry_point         = "rebalance"
+  available_memory_mb = 256
+
+  vpc_connector = google_vpc_access_connector.connector.name
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
+resource "google_cloudfunctions_function_iam_member" "function_invoker-rebalance" {
+  project        = var.project_id
+  region         = var.region
+  cloud_function = google_cloudfunctions_function.rebalance.name
+
+  role   = "roles/cloudfunctions.invoker"
+  member = "serviceAccount:${google_service_account.tasks_service_account.email}"
+}
 
 # ----------------------
 # -- get_user_details --

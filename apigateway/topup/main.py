@@ -186,35 +186,23 @@ def trigger_rebalance(user_id: str, headers) -> bool:
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
-    missions = Missions(user_id)
-
-    for mission in missions:
-        task_id = str(uuid.uuid4())
-        payload = {
-            "name": mission["name"],
-            "strategy": mission["strategy"],
-        }
-
-        # Construct the task.
-        task = tasks_v2.Task(
-            http_request=tasks_v2.HttpRequest(
-                http_method=tasks_v2.HttpMethod.POST,
-                url="https://api.nine30.com/v1/missions",
-                headers=headers,
-                body=json.dumps(payload).encode(),
-            ),
-            name=(
-                client.task_path(
-                    project_id, location, rebalance_queue, task_id  # type: ignore
-                )
-                if task_id is not None
-                else None
-            ),
-        )
-        if not set_task(client, task):
-            return False
-
-    return True
+    # Construct the task.
+    task_id = str(uuid.uuid4())
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.POST,
+            url="https://api.nine30.com/v1/missions/rebalance/{user_id}",
+            headers=headers,
+        ),
+        name=(
+            client.task_path(
+                project_id, location, rebalance_queue, task_id  # type: ignore
+            )
+            if task_id is not None
+            else None
+        ),
+    )
+    return bool(set_task(client, task))
 
 
 def transfer_validator(request):
@@ -245,6 +233,7 @@ def transfer_validator(request):
             if t.status == "COMPLETE" and trigger_rebalance(
                 user_id, request.headers
             ):
+                print("Transfer completed, missions rebalance triggered")
                 return ("OK", 200)
             elif t.status in {"REJECTED", "CANCELED", "RETURNED"}:
                 return (f"transfer failed with {t.status}", 202)

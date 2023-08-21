@@ -174,6 +174,24 @@ paths:
         "204":
           description: OK
 
+  /v1/missions/rebalance/{userId}:
+    post:
+      description: "Rebalance investment Missions  for a user"
+      operationId: "rebalance-missions"
+      tags:
+        - Missions (Internal only)
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/rebalance
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+          description: User details
+      responses:
+        "200":
+          description: OK
+
   /v1/missions/suggestion:
     get:
       description: "Get a suggested mission details, based on user knowledge"
