@@ -191,7 +191,7 @@ def trigger_rebalance(user_id: str, headers) -> bool:
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.POST,
-            url="https://api.nine30.com/v1/missions/rebalance/{user_id}",
+            url=f"https://api.nine30.com/v1/missions/rebalance/{user_id}",
             headers=headers,
         ),
         name=(

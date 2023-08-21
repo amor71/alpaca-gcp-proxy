@@ -45,10 +45,26 @@ def process_account_update(payload):
 
 def handle_alpaca_activated(user_id, alpaca_account_id):
     # Get Plaid access token
-    plaid_access_token = get_from_user_vault(user_id, "plaid_access_token")
+    if not (
+        plaid_access_token := get_from_user_vault(
+            user_id, "plaid_access_token"
+        )
+    ):
+        log_error(
+            "handle_alpaca_activated()",
+            f"failed to get plaid_access_token for {user_id}",
+        )
+        return
 
     # Get user account-id from DB
     account_ids = Account.get_account_ids(user_id)
+
+    if not account_ids:
+        log_error(
+            "handle_alpaca_activated()",
+            f"failed to load account-id for user {user_id}",
+        )
+        return
 
     # Create plaid alpaca link
     ach_relationship_id = create_alpaca_link(
