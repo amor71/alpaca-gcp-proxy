@@ -234,7 +234,7 @@ resource "google_cloudfunctions_function" "topup" {
 
   vpc_connector = google_vpc_access_connector.connector.name
 
-  ingress_settings = "ALLOW_INTERNAL_ONLY"
+  ingress_settings = "ALLOW_INTERNAL_AND_GCLB"
 
   environment_variables = {
     PROJECT_ID      = var.project_id
