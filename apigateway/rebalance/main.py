@@ -18,6 +18,7 @@ def save_run(
     Runs.add(run_id, user_id, mission_name, strategy)
 
 
+# TODO: move to infra and consolidate w/ mission end-point
 def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
     """rebalance user account, to bring it to same allocations as in the model portfolio"""
 
@@ -57,9 +58,6 @@ def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
         return "reschedule" if r.status_code == 422 else None
 
     run_payload = r.json()
-    telemetrics.run_status(run_payload["status"])
-    telemetrics.mission_amount(int(cash))
-
     return run_payload["id"]
 
 
