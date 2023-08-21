@@ -67,8 +67,10 @@ def handle_create_rebalance(request: Request):
         log_error("handle_users_topup()", "missing user_id")
         abort(400)
 
+    print(f"loading missions for user_id {user_id}")
     missions = Missions(user_id)
 
+    print("missions:", missions)
     for mission in missions:
         strategy = mission.get("strategy")
         if not (model_portfolio := get_model_portfolio_by_name(strategy)):
