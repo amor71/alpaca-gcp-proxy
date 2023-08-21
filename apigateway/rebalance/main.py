@@ -94,7 +94,7 @@ def handle_create_rebalance(request: Request):
         save_run(
             user_id=user_id,
             run_id=run_id,
-            mission_name=mission.name,
+            mission_name=mission.get("name"),
             strategy=mission.get("strategy"),
         )
 
