@@ -15,6 +15,7 @@ from infra import auth, authenticated_user_id  # type: ignore
 from infra.alpaca_action import get_available_cash, get_model_portfolio_by_name
 from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.missions import Missions, Runs
+from infra.data.users import User
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 from infra.stytch_actions import get_alpaca_account_id
@@ -258,6 +259,7 @@ def handle_create_rebalance(request: Request):
             initial_amount=initial_amount,
             weekly_topup=weekly_topup,
         )
+        User.update(user_id=user_id, payload={"mission": True})
         return ({"mission_id": mission_id}, 202)
 
     if not (run_id := create_run(user_id, alpaca_account_id, model_portfolio)):

@@ -34,10 +34,12 @@ def process_account_update(payload):
 
     # TODO: consider handling crypto account approvals too
     if payload.get("status_to") == "ACTIVE":
+        User.update(user_id, {"onboardingCompleted": True})
         handle_alpaca_activated(user_id, alpaca_account_id)
 
     # Update user record
     User.update(user_id, payload)
+    User.update(user_id, {"alpaca": True})
 
     # Store event-id = mark event as processed
     AlpacaEvents.add("accounts", payload.get("event_id"))

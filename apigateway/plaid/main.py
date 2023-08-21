@@ -3,6 +3,7 @@ from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.data.plaid_item import PlaidItem
+from infra.data.users import User
 from infra.logger import log_error
 from infra.plaid_actions import (get_access_token, load_new_accounts,
                                  load_recent_transactions)
@@ -30,6 +31,7 @@ def plaid_link(request):
     ):
         abort(400)
 
+    User.update(user_id=user_id, payload={"plaid": True})
     PlaidItem.save(item_id=item_id, user_id=user_id)
 
     # load transactions
