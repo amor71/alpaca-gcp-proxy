@@ -192,6 +192,24 @@ paths:
         "200":
           description: OK
 
+  /v1/missions/validate/{runId}:
+    patch:
+      description: "Validate rebalance run completed as expected"
+      operationId: "validate-run"
+      tags:
+        - Missions (Internal only)
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/validate_run
+      parameters:
+        - in: path
+          name: runId
+          required: true
+          type: string
+          description: User details
+      responses:
+        "200":
+          description: OK
+
   /v1/missions/suggestion:
     get:
       description: "Get a suggested mission details, based on user knowledge"

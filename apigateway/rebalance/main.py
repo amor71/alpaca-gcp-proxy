@@ -106,13 +106,13 @@ def _extracted_from_calculate_seconds_from_now_27(
 
 
 def set_task(
-    client: tasks_v2.CloudTasksClient, task: tasks_v2.Task
+    client: tasks_v2.CloudTasksClient, task: tasks_v2.Task, offset: int = 0
 ) -> tuple[str, int]:
     if not (second_from_now := calculate_seconds_from_now()):
         return ("failed to calculate 'set_task' schedule", 400)
 
     # Convert "seconds from now" to an absolute Protobuf Timestamp
-    second_from_now = int(second_from_now)  # type : ignore
+    second_from_now = int(second_from_now) + offset  # type : ignore
     timestamp = timestamp_pb2.Timestamp()
     timestamp.FromDatetime(
         datetime.datetime.now(datetime.timezone.utc)
@@ -238,7 +238,34 @@ def handle_create_rebalance(request: Request):
             strategy=mission.get("strategy"),
         )
 
+        schedule_verify_run(run_id, request)
+
     return ("OK", 200)
+
+
+def schedule_verify_run(
+    run_id: str,
+    request: Request,
+) -> tuple[str, int]:
+    # Create a client.
+    client = tasks_v2.CloudTasksClient()
+
+    task_id = str(uuid.uuid4())
+
+    # Construct the task.
+    task = tasks_v2.Task(
+        http_request=tasks_v2.HttpRequest(
+            http_method=tasks_v2.HttpMethod.PATCH,
+            url=f"https://api.nine30.com/v1/missions/validate/{run_id}",
+            headers=request.headers,
+        ),
+        name=(
+            client.task_path(project_id, location, rebalance_queue, task_id)  # type: ignore
+            if task_id is not None
+            else None
+        ),
+    )
+    return set_task(client, task, 60 * 5)
 
 
 @functions_framework.http
