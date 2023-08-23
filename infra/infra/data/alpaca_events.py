@@ -16,7 +16,5 @@ class AlpacaEvents:
         query = collection.order_by(
             "updated_at", direction=firestore.Query.DESCENDING
         ).limit(1)
-        docs = query.get()
-
-        print(f"latest_event_id query-result={docs}")
-        return [doc.to_dict() for doc in docs]
+        doc = query.get()[0]
+        return doc.to_dict()
