@@ -9,14 +9,14 @@ class AlpacaEvents:
         db.collection(f"alpaca_events_{event_entity}").add(data)
 
     @classmethod
-    def latest_event_id(cls, event_entity: str) -> str | None:
+    def latest_event_id(cls, event_entity: str) -> list[dict] | None:
         db = firestore.Client()
 
         collection = db.collection(f"alpaca_events_{event_entity}")
         query = collection.order_by(
             "updated_at", direction=firestore.Query.DESCENDING
         ).limit(1)
-        doc = query.get()
+        docs = query.get()
 
-        print(f"latest_event_id query-result={doc}")
-        return doc.to_dict()
+        print(f"latest_event_id query-result={docs}")
+        return [doc.to_dict() for doc in docs]
