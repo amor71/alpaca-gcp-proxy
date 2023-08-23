@@ -7,7 +7,7 @@ resource "google_cloud_scheduler_job" "alpaca_account_events_collector" {
   schedule = "0 * * * *" # This runs every hour, adjust as needed.
 
   pubsub_target {
-    topic_name = google_pubsub_topic.alpaca_account_events.name
+    topic_name = google_pubsub_topic.alpaca_account_events.id
     data       = base64encode("Your message data here")
   }
 }
