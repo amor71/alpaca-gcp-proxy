@@ -59,4 +59,4 @@ def alpaca_account_events_collector(cloud_event: CloudEvent):
         )
         return
 
-    process_from_event(since=since)
+    process_from_event(since=since.isoformat())
