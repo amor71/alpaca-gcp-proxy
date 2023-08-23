@@ -1,7 +1,7 @@
 import functions_framework
 from cloudevents.http.event import CloudEvent
 
-from infra.infra.data.alpaca_events import AlpacaEvents
+from infra.data.alpaca_events import AlpacaEvents
 
 
 @functions_framework.cloud_event
