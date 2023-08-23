@@ -174,9 +174,55 @@ resource "google_cloudfunctions_function_iam_member" "function_invoker-validate_
   member = "serviceAccount:${google_service_account.tasks_service_account.email}"
 }
 
+# -------------------------------------
+# -- alpaca_account_events_collector --
+# -------------------------------------
+data "archive_file" "alpaca_account_events_collector" {
+  type        = "zip"
+  output_path = "/tmp/alpaca_account_events_collector.zip"
+  source_dir  = "functions/alpaca_account_events_collector"
+}
+resource "google_storage_bucket_object" "alpaca_account_events_collector_zip" {
+  name         = format("alpaca_account_events_collector-%s.zip", data.archive_file.alpaca_account_events_collector.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.alpaca_account_events_collector.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+
+}
+
+resource "google_cloudfunctions_function" "alpaca_account_events_collector" {
+  name                  = "alpaca_account_events_collector"
+  description           = "Handling Alpaca.Market events"
+  runtime               = "python311"
+  timeout               = 540
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.alpaca_account_events_collector_zip.name
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "projects/${var.project_id}/topics/alpaca_account_events"
+  }
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+  entry_point         = "alpaca_account_events_collector"
+  available_memory_mb = 256
+}
+
+
 #-------------------------
 # -- EXTERNAL FUNCTIONS --
 # ------------------------
+
+
+
 
 # ------------------
 # -- alpaca_state --
