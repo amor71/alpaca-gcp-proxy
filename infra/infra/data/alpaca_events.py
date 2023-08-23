@@ -9,7 +9,7 @@ class AlpacaEvents:
         db.collection(f"alpaca_events_{event_entity}").add(data)
 
     @classmethod
-    def latest_event_id(cls, event_entity: str) -> list[dict] | None:
+    def latest_event_id(cls, event_entity: str) -> dict | None:
         db = firestore.Client()
 
         collection = db.collection(f"alpaca_events_{event_entity}")
