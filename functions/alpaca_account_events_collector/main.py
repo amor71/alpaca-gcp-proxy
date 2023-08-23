@@ -11,10 +11,13 @@ from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy
 
 
-def process_from_event(event_id: str):
+def process_from_event(since: str):
     EDT = ZoneInfo("US/Eastern")
     now_in_nyc = datetime.datetime.now(EDT)
-    args = {"since_id": event_id, "until": now_in_nyc.isoformat()}
+    until = now_in_nyc.isoformat()
+    args = {"since": since, "until": until}
+
+    print(f"calling events between {since}:{until}")
     r = alpaca_proxy(
         method="GET",
         url="/v1/events/accounts/status",
@@ -49,11 +52,11 @@ def alpaca_account_events_collector(cloud_event: CloudEvent):
         log_error("alpaca_account_events_collector()", "no events")
         return
 
-    if not (event_id := data.get("event_id")):
+    if not (since := data.get("updated_at")):
         log_error(
             "alpaca_account_events_collector()",
             f"can't get event_id in {data}",
         )
         return
 
-    process_from_event(event_id=event_id)
+    process_from_event(since=since)
