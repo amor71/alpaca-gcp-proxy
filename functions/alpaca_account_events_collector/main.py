@@ -24,16 +24,21 @@ def process_from_event(event_id: str):
         stream=True,
     )
 
-    if r.status_code == 200:
-        print("events_listener(): stream started")
-        if r.encoding is None:
-            r.encoding = "utf-8"
+    if r.status_code != 200:
+        log_error(
+            "process_from_event()", f"failed with {r.status_code} & {r.text}"
+        )
+        return
 
-        for line in r.iter_lines(decode_unicode=True):
-            if line and line[:6] == "data: ":
-                payload = json.loads(line[6:])
-                print(f"events_listener() received update {payload}")
-                process_account_update(payload)
+    print("events_listener(): stream started")
+    if r.encoding is None:
+        r.encoding = "utf-8"
+
+    for line in r.iter_lines(decode_unicode=True):
+        if line and line[:6] == "data: ":
+            payload = json.loads(line[6:])
+            print(f"events_listener() received update {payload}")
+            process_account_update(payload)
 
 
 @functions_framework.cloud_event
