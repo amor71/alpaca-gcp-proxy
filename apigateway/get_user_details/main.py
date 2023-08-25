@@ -41,7 +41,7 @@ def _process_identities(plaid_access_token: str, data: dict) -> dict:
     data["names"] = list(set(data["names"]))
     data["phone_numbers"] = _dedup(data["phone_numbers"])
     data["addresses"] = _dedup(data["addresses"])
-    data["emails"] = _dedup(data["emails"])
+    # data["emails"] = _dedup(data["emails"])
 
     return data
 
