@@ -1,5 +1,6 @@
 from infra.data.bank_account import Account
 from infra.data.past_transactions import get_cursor, save_past_transactions
+from infra.data.users import Identity
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
@@ -45,6 +46,32 @@ def create_alpaca_link(
         return None
 
     return r.json()["id"]
+
+
+def load_identities(plaid_access_token: str) -> list[dict] | None:
+    """Load identities"""
+
+    r = plaid_proxy(
+        method="POST",
+        url="/identity/get",
+        payload={
+            "access_token": plaid_access_token,
+        },
+        headers={"Content-Type": "application/json"},
+        args=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "get_identities()",
+            "failed to create processor token w {r.status_code}.{r.text}",
+        )
+        return None
+
+    payload = r.json()
+    print(f"load_identities(): {payload}")
+
+    return payload["accounts"]
 
 
 def get_access_token(public_token: str) -> tuple[str, str] | None:

@@ -1,4 +1,4 @@
-from google.cloud import exceptions, firestore  # type: ignore
+from google.cloud import firestore  # type: ignore
 
 from ..logger import log_error
 
@@ -35,3 +35,34 @@ class User:
         db.collection("users").document(user_id).set(
             document_data=payload, merge=True
         )
+
+
+class Identity:
+    @classmethod
+    def save(cls, user_id: str, account_details: dict) -> None:
+        update_data = {"last_update": firestore.SERVER_TIMESTAMP}
+        db = firestore.Client()
+        doc_ref = (
+            db.collection("identity")
+            .document(user_id)
+            .set(document_data=update_data, merge=True)
+        )
+
+        _ = (
+            doc_ref.collection("list")
+            .document(account_details["account_id"])
+            .set(document_data=account_details, merge=True)
+        )
+
+    @classmethod
+    def load(cls, user_id: str) -> list[dict] | None:
+        update_data = {"last_update": firestore.SERVER_TIMESTAMP}
+        db = firestore.Client()
+        doc_ref = db.collection("identity").document(user_id)
+
+        if not doc_ref.get().exists:
+            return None
+
+        docs = doc_ref.collection("list").stream()
+
+        return [doc.to_dict() for doc in docs]
