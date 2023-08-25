@@ -7,6 +7,36 @@ from infra.plaid_actions import load_identities
 from infra.stytch_actions import get_from_user_vault
 
 
+def _process_owner_data(data: dict, owner: dict):
+    if names := owner.get("names"):
+        print(f"names {names}")
+        data["names"] += names
+    if phone_numbers := owner.get("phone_numbers"):
+        print(f"phone_numbers {phone_numbers}")
+        data["phone_numbers"] += phone_numbers
+    if addresses := owner.get("addresses"):
+        print(f"addresses {addresses}")
+        data["addresses"] += addresses
+    if emails := owner.get("emails"):
+        print(f"emails {emails}")
+        data["emails"] += emails
+
+
+def _process_identities(plaid_access_token: str, data: dict) -> dict:
+    data["names"] = []
+    data["phone_numbers"] = []
+    data["addresses"] = []
+    data["emails"] = []
+
+    if identities := load_identities(plaid_access_token):
+        for identity in identities:
+            if owners := identity.get("owners"):
+                for owner in owners:
+                    _process_owner_data(data, owner)
+
+    return data
+
+
 def process(user_id: str) -> dict | None:
     db = firestore.Client()
 
@@ -26,29 +56,7 @@ def process(user_id: str) -> dict | None:
         print("process(): plaid account not setup")
         return data
 
-    data["names"] = []
-    data["phone_numbers"] = []
-    data["addresses"] = []
-    data["emails"] = []
-
-    # TODO: we should refrain from storing identities
-    if identities := load_identities(plaid_access_token):
-        for identity in identities:
-            if owners := identity.get("owners"):
-                if names := owners.get("names"):
-                    print(f"names {names}")
-                    data["names"] += names
-                if phone_numbers := owners.get("phone_numbers"):
-                    print(f"phone_numbers {phone_numbers}")
-                    data["phone_numbers"] += phone_numbers
-                if addresses := owners.get("addresses"):
-                    print(f"addresses {addresses}")
-                    data["addresses"] += addresses
-                if emails := owners.get("emails"):
-                    print(f"emails {emails}")
-                    data["emails"] += emails
-
-    return data
+    return _process_identities(plaid_access_token, data)
 
 
 @functions_framework.http
