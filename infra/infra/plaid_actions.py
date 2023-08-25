@@ -69,7 +69,6 @@ def load_identities(plaid_access_token: str) -> list[dict] | None:
         return None
 
     payload = r.json()
-    print(f"load_identities(): {payload}")
 
     return payload["accounts"]
 

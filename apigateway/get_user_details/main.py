@@ -34,6 +34,8 @@ def _process_identities(plaid_access_token: str, data: dict) -> dict:
                 for owner in owners:
                     _process_owner_data(data, owner)
 
+    data["names"] = list(set(data["names"]))
+
     return data
 
 
