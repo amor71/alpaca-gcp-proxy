@@ -22,8 +22,17 @@ def _process_owner_data(data: dict, owner: dict):
         data["emails"] += emails
 
 
-def _dedup(l):
-    return [dict(t) for t in {tuple(d.items()) for d in l}]
+def _dedup(data):
+    data["names"] = list(set(data["names"]))
+    data["phone_numbers"] = [
+        dict(t) for t in {tuple(d.items()) for d in data["phone_numbers"]}
+    ]
+    data["addresses"] = [
+        dict(t) for t in {tuple(d.items()) for d in data["addresses"]}
+    ]
+    data["emails"] = [
+        dict(t) for t in {tuple(d.items()) for d in data["emails"]}
+    ]
 
 
 def _process_identities(plaid_access_token: str, data: dict) -> dict:
@@ -38,13 +47,7 @@ def _process_identities(plaid_access_token: str, data: dict) -> dict:
                 for owner in owners:
                     _process_owner_data(data, owner)
 
-    data["names"] = list(set(data["names"]))
-    data["phone_numbers"] = [
-        dict(t) for t in {tuple(d.items()) for d in data["phone_numbers"]}
-    ]
-    # data["addresses"] = _dedup(data["addresses"])
-    # data["emails"] = _dedup(data["emails"])
-
+    _dedup(data)
     return data
 
 
