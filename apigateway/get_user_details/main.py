@@ -16,7 +16,11 @@ def _process_owner_data(data: dict, owner: dict):
         data["phone_numbers"] += phone_numbers
     if addresses := owner.get("addresses"):
         print(f"addresses {addresses}")
-        data["addresses"] += addresses
+        data["addresses"] += [
+            address.get("data") for address in addresses if address["primary"]
+        ]
+        print(f"addresses so far {data['addresses']}")
+
     if emails := owner.get("emails"):
         print(f"emails {emails}")
         data["emails"] += emails
