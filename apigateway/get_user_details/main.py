@@ -35,7 +35,9 @@ def _process_identities(plaid_access_token: str, data: dict) -> dict:
                     _process_owner_data(data, owner)
 
     data["names"] = list(set(data["names"]))
-    data["phone_numbers"] = list(set(data["phone_numbers"]))
+    data["phone_numbers"] = [
+        dict(t) for t in {tuple(d.items()) for d in data["phone_numbers"]}
+    ]
     return data
 
 
