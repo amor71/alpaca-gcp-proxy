@@ -53,7 +53,4 @@ def alpaca_state_handler(user_id: str, payload: dict):
     if account_type := payload.get("account_type"):
         update_data["alpaca_account_type"] = account_type
 
-    if doc_ref.get().exists:
-        status = doc_ref.update(update_data)
-    else:
-        status = doc_ref.set(update_data)
+    doc_ref.set(document_data=update_data, merge=True)

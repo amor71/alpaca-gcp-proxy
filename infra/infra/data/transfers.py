@@ -5,11 +5,12 @@ from ..logger import log_error
 
 class Transfer:
     def __init__(
-        self, details: dict | None = None, id: str | None = None
+        self, user_id: str, details: dict | None = None, id: str | None = None
     ) -> None:
         self.data = None
         if details:
             self.data = details
+            self.user_id = user_id
             self.id = details["id"]
             self._save()
         elif id:
@@ -35,17 +36,24 @@ class Transfer:
         if not self.data:
             return
         db = firestore.Client()
-        _ = (
-            db.collection("transfers")
-            .document(self.data["id"])
-            .set(document_data=self.data, merge=True)
+        doc_ref = db.collection("transfers").document(self.user_id)
+        doc_ref.set(
+            document_data={"updated": firestore.SERVER_TIMESTAMP}, merge=True
+        )
+        doc_ref.collection("list").document(self.data["id"]).set(
+            document_data=self.data, merge=True
         )
 
     def _load(self) -> None:
         """Load transfer details document from Firestore"""
 
         db = firestore.Client()
-        doc_ref = db.collection("transfers").document(self.id)
+        doc_ref = (
+            db.collection("transfers")
+            .document(self.user_id)
+            .collection("list")
+            .document(self.id)
+        )
 
         if not doc_ref.exists:
             log_error("Transfer", "cant load transfer with id {self.id}")

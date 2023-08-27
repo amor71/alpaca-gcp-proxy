@@ -96,7 +96,7 @@ def transfer(
         return False
 
     print(f"transfer() result : {transfer_details}")
-    transfer = Transfer(details=transfer_details)
+    transfer = Transfer(user_id=user_id, details=transfer_details)
 
     return schedule_transfer_validator(user_id, transfer.id, headers)
 
@@ -227,7 +227,7 @@ def transfer_validator(request):
 
     for transfer in transfers:
         if transfer["id"] == transfer_id:
-            t = Transfer(details=transfer)
+            t = Transfer(user_id=user_id, details=transfer)
 
             # TODO: This may be too naive
             if t.status == "COMPLETE" and trigger_rebalance(
