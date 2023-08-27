@@ -21,7 +21,7 @@ def save_run(
     mission_name: str,
     strategy: str,
 ) -> None:
-    Runs.add(run_id, user_id, mission_name, strategy)
+    Runs.add(user_id, run_id, mission_name, strategy)
 
 
 def calculate_seconds_from_now() -> int | None:
@@ -238,12 +238,13 @@ def handle_create_rebalance(request: Request):
             strategy=mission.get("strategy"),
         )
 
-        schedule_verify_run(run_id, request)
+        schedule_verify_run(user_id, run_id, request)
 
     return ("OK", 200)
 
 
 def schedule_verify_run(
+    user_id: str,
     run_id: str,
     request: Request,
 ) -> tuple[str, int]:
@@ -256,7 +257,7 @@ def schedule_verify_run(
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.PATCH,
-            url=f"https://api.nine30.com/v1/missions/validate/{run_id}",
+            url=f"https://api.nine30.com/v1/missions/validate/{run_id}?userId={user_id}",
             headers=request.headers,
         ),
         name=(

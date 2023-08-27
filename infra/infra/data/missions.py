@@ -1,5 +1,3 @@
-import time
-
 from google.cloud import exceptions, firestore  # type: ignore
 
 from ..logger import log_error
@@ -46,7 +44,7 @@ class Missions:
         data = {
             "name": mission_name,
             "strategy": strategy,
-            "created": time.time_ns(),
+            "created": firestore.SERVER_TIMESTAMP,
         }
 
         if initial_amount:
@@ -81,25 +79,48 @@ class Runs:
 
     @classmethod
     def add(
-        cls, run_id: str, user_id: str, mission_name: str, strategy: str
+        cls, user_id: str, run_id: str, mission_name: str, strategy: str
     ) -> str:
         data = {
             "name": mission_name,
             "strategy": strategy,
-            "created": time.time_ns(),
+            "created": firestore.SERVER_TIMESTAMP,
         }
 
         db = firestore.Client()
 
-        run_doc_def = db.collection("runs").document(run_id)
-        _ = run_doc_def.set(data)
+        _ = (
+            db.collection("runs")
+            .document(user_id)
+            .collection("list")
+            .document(run_id)
+            .set(document_data=data, merge=True)
+        )
 
-        return run_doc_def.id
+        return run_id
 
     @classmethod
-    def load(cls, run_id: str):
+    def update(cls, user_id: str, run_id: str, details: dict) -> None:
         db = firestore.Client()
-        doc = db.collection("runs").document(run_id).get()
+
+        _ = (
+            db.collection("runs")
+            .document(user_id)
+            .collection("list")
+            .document(run_id)
+            .set(document_data=details, merge=True)
+        )
+
+    @classmethod
+    def load(cls, user_id: str, run_id: str):
+        db = firestore.Client()
+        doc = (
+            db.collection("runs")
+            .document(user_id)
+            .collection("list")
+            .document(run_id)
+            .get()
+        )
 
         if doc.exists:
             return Runs(doc.to_dict())

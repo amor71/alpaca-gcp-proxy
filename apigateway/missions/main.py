@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 import functions_framework
 import pandas as pd
 import telemetrics
-from flask import Request
+from flask import Request, abort
 from google.cloud import tasks_v2
 from google.protobuf import timestamp_pb2
 
@@ -32,7 +32,7 @@ def save_new_mission_and_run(
     new_id = Missions.add(
         user_id, mission_name, strategy, initial_amount, weekly_topup
     )
-    Runs.add(run_id, user_id, mission_name, strategy)
+    Runs.add(user_id, run_id, mission_name, strategy)
 
     return new_id
 
@@ -313,49 +313,17 @@ def reschedule_verify(
     return set_task(client, task)
 
 
-def reschedule_run_by_run_id(request: Request, run_id: str) -> tuple[str, int]:
-    if not project_id or not location or not rebalance_queue:
-        log_error(
-            "reschedule_run_by_run_id", "could not load environment variables"
-        )
-        return ("missing environment variable(s)", 400)
-
-    # load run details
-    if not (run := Runs.load(run_id)):
-        return ("failed to load previous run details", 400)
-
-    # Create a client.
-    client = tasks_v2.CloudTasksClient()
-    task_id = str(uuid.uuid4())
-
-    # Construct the task.
-    payload = {
-        "name": run.name,
-        "strategy": run.strategy,
-    }
-
-    task = tasks_v2.Task(
-        http_request=tasks_v2.HttpRequest(
-            http_method=tasks_v2.HttpMethod.POST,
-            url="https://api.nine30.com/v1/missions",
-            headers=request.headers,
-            body=json.dumps(payload).encode(),
-        ),
-        name=(
-            client.task_path(project_id, location, rebalance_queue, task_id)
-            if task_id is not None
-            else None
-        ),
-    )
-    return set_task(client, task)
-
-
 def handle_validate(request: Request) -> tuple[str, int]:
-    run_id = request.args.get("runId")
+    # validate
+    if not (run_id := request.args.get("runId")):
+        log_error("handle_validate()", "missing runId")
+        abort(202)
 
-    if not run_id:
-        return ("missing run-id", 400)
+    if not (user_id := request.args.get("userId")):
+        log_error("handle_validate()", "missing userId")
+        abort(202)
 
+    # TODO: move to alpaca_actions
     r = alpaca_proxy(
         method="GET",
         url=f"/v1/rebalancing/runs/{run_id}",
@@ -374,11 +342,13 @@ def handle_validate(request: Request) -> tuple[str, int]:
     print(f"validating run {run_id} with status={status}")
 
     if status in {"COMPLETED_SUCCESS", "COMPLETED_ADJUSTED"}:
+        Runs.update(user_id=user_id, run_id=run_id, details=payload)
         return (f"{status}", 200)
     elif status in {"IN_PROGRESS", "QUEUED"}:
         return reschedule_verify(request, run_id)
 
-    return reschedule_run_by_run_id(request, run_id)
+    log_error("handle_validate()", f"unhandled status {status} in {payload}")
+    abort(202)
 
 
 def handle_mission_suggestion(request):
