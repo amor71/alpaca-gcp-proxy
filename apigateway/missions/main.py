@@ -279,7 +279,7 @@ def handle_create_rebalance(request: Request):
         weekly_topup=weekly_topup,
     )
 
-    _ = reschedule_verify(request=request, run_id=run_id)
+    _ = reschedule_verify(request=request, user_id=user_id, run_id=run_id)
 
     return (
         {"id": mission_id, "status": "created", "created": time.time_ns()},
@@ -289,6 +289,7 @@ def handle_create_rebalance(request: Request):
 
 def reschedule_verify(
     request: Request,
+    user_id: str,
     run_id: str,
 ) -> tuple[str, int]:
     # Create a client.
@@ -300,7 +301,7 @@ def reschedule_verify(
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.PATCH,
-            url=f"https://api.nine30.com/v1/runs/{run_id}",
+            url=f"https://api.nine30.com/v1/runs/{run_id}?userId={user_id}",
             headers=request.headers,
             body=json.dumps(request.json).encode(),
         ),
@@ -345,7 +346,7 @@ def handle_validate(request: Request) -> tuple[str, int]:
         Runs.update(user_id=user_id, run_id=run_id, details=payload)
         return (f"{status}", 200)
     elif status in {"IN_PROGRESS", "QUEUED"}:
-        return reschedule_verify(request, run_id)
+        return reschedule_verify(request, user_id, run_id)
 
     log_error("handle_validate()", f"unhandled status {status} in {payload}")
     abort(202)

@@ -177,6 +177,7 @@ def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
         "weights": model_portfolio["weights"],
     }
 
+    # TODO: move to infra
     r = alpaca_proxy(
         method="POST",
         url="/v1/beta/rebalancing/runs",
