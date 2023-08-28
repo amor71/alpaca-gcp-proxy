@@ -26,12 +26,29 @@ def plaid_callback(request):
     payload = request.get_json() if request.is_json else None
 
     if payload.get("webhook_type") == "TRANSACTIONS":
-        print(f"TRANSACTIONS callback {payload.get('webhook_code')}")
+        webhook_code = payload.get("webhook_code")
+        print(f"TRANSACTIONS callback {webhook_code}")
+
+        if webhook_code in {
+            "DEFAULT_UPDATE",
+            "INITIAL_UPDATE",
+            "HISTORICAL_UPDATE",
+            "TRANSACTIONS_REMOVED",
+        }:
+            print("skip callback")
+            return ("OK", 200)
 
         item_id = payload.get("item_id")
         user_id = PlaidItem.load(item_id)
 
         print(f"item_id={item_id} -> user_id={user_id}")
+
+        if not user_id:
+            log_error(
+                "plaid_callback()",
+                f"failed to load user for {item_id}. de-register",
+            )
+            abort(400)
 
         plaid_access_token = get_from_user_vault(
             user_id=user_id, key="plaid_access_token"

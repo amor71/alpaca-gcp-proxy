@@ -32,6 +32,8 @@ def plaid_link(request):
         abort(400)
 
     User.update(user_id=user_id, payload={"plaid": True})
+
+    print(f"item_id={item_id} user_id={user_id}")
     PlaidItem.save(item_id=item_id, user_id=user_id)
 
     # load transactions
