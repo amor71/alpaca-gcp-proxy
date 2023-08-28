@@ -46,12 +46,7 @@ class Missions:
             filter=firestore.FieldFilter("name", "==", mission_name)
         ).stream()
 
-        print(f"found {user_id} is missions collection w/ docs:{docs}")
-
-        for doc in docs:
-            print("found doc", doc)
-
-        return bool(docs)
+        return len(list(docs)) > 0
 
     @classmethod
     def add(
