@@ -89,9 +89,15 @@ def alpaca_proxy(
         )
     )
 
-    with contextlib.suppress(LookupError):
-        user_id = authenticated_user_id.get()  # type: ignore
-        print(f"looked up user_id {user_id}")
-        if user_id and method in {"POST", "PATCH"} and "v1/accounts" in url:
-            trigger_user_updates(user_id, r.json())
+    if r.status_code not in {400, 409, 422, 500}:
+        with contextlib.suppress(LookupError):
+            user_id = authenticated_user_id.get()  # type: ignore
+            print(f"looked up user_id {user_id}")
+            if (
+                user_id
+                and method in {"POST", "PATCH"}
+                and "v1/accounts" in url
+            ):
+                trigger_user_updates(user_id, r.json())
+
     return r
