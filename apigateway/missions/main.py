@@ -20,22 +20,6 @@ from infra.proxies.alpaca import alpaca_proxy  # type: ignore
 from infra.stytch_actions import get_alpaca_account_id
 
 
-def save_new_mission_and_run(
-    user_id: str,
-    mission_name: str,
-    strategy: str,
-    run_id: str,
-    initial_amount: str | None,
-    weekly_topup: str | None,
-) -> str:
-    new_id = Missions.add(
-        user_id, mission_name, strategy, initial_amount, weekly_topup
-    )
-    Runs.add(user_id, run_id, mission_name, strategy)
-
-    return new_id
-
-
 def save_new_mission(
     user_id: str,
     mission_name: str,
@@ -263,6 +247,10 @@ def handle_create_mission(request: Request):
         initial_amount=initial_amount,
         weekly_topup=weekly_topup,
     )
+
+    if not mission_id:
+        abort(400)
+
     User.update(user_id=user_id, payload={"mission": True})
     return ({"mission_id": mission_id}, 202)
 
