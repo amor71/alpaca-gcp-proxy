@@ -1,6 +1,5 @@
 import datetime
 import json
-import time
 import uuid
 from zoneinfo import ZoneInfo
 
@@ -37,13 +36,20 @@ def save_new_mission_and_run(
     return new_id
 
 
-def save_pending_new_mission(
+def save_new_mission(
     user_id: str,
     mission_name: str,
     strategy: str,
     initial_amount: str | None,
     weekly_topup: str | None,
-) -> str:
+) -> str | None:
+    if Missions.exists_by_name(user_id, mission_name):
+        log_error(
+            "save_new_mission()",
+            f"{user_id} already has mission {mission_name}",
+        )
+        return None
+
     return Missions.add(
         user_id, mission_name, strategy, initial_amount, weekly_topup
     )
@@ -226,7 +232,7 @@ def reschedule_run(request):
     return set_task(client, task)
 
 
-def handle_create_rebalance(request: Request):
+def handle_create_mission(request: Request):
     payload = request.get_json() if request.is_json else None
 
     if (
@@ -250,41 +256,15 @@ def handle_create_rebalance(request: Request):
         f"Located portfolio id {model_portfolio['id']} for strategy name {strategy}"
     )
 
-    if not (alpaca_account_id := get_alpaca_account_id(user_id)):
-        print(f"user_id {user_id} does not have alpaca_account_id (yet)")
-        mission_id = save_pending_new_mission(
-            user_id=user_id,
-            mission_name=name,
-            strategy=strategy,
-            initial_amount=initial_amount,
-            weekly_topup=weekly_topup,
-        )
-        User.update(user_id=user_id, payload={"mission": True})
-        return ({"mission_id": mission_id}, 202)
-
-    if not (run_id := create_run(user_id, alpaca_account_id, model_portfolio)):
-        return ("could not create rebalance run", 400)
-
-    if run_id == "reschedule":
-        return reschedule_run(request)
-
-    print(f"created run with id {run_id}")
-
-    mission_id = save_new_mission_and_run(
+    mission_id = save_new_mission(
         user_id=user_id,
         mission_name=name,
         strategy=strategy,
-        run_id=run_id,
         initial_amount=initial_amount,
         weekly_topup=weekly_topup,
     )
-
-    _ = reschedule_verify(request=request, user_id=user_id, run_id=run_id)
-
-    return (
-        {"id": mission_id, "status": "created", "created": time.time_ns()},
-        200,
-    )
+    User.update(user_id=user_id, payload={"mission": True})
+    return ({"mission_id": mission_id}, 202)
 
 
 def reschedule_verify(
@@ -399,7 +379,7 @@ def missions(request):
     if request.method == "GET":
         return handle_mission_suggestion(request)
     if request.method == "POST":
-        return handle_create_rebalance(request)
+        return handle_create_mission(request)
     if request.method == "PATCH":
         return handle_validate(request)
 

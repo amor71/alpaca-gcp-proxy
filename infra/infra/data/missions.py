@@ -33,6 +33,20 @@ class Missions:
         return [doc_ref.to_dict() for doc_ref in docs]
 
     @classmethod
+    def exists_by_name(cls, user_id: str, mission_name: str) -> bool:
+        db = firestore.Client()
+        ref = (
+            db.collection("missions")
+            .document(user_id)
+            .collection("user_missions")
+        )
+        return bool(
+            docs := ref.where(
+                filter=firestore.FieldFilter("name", "==", mission_name)
+            ).stream()
+        )
+
+    @classmethod
     def add(
         cls,
         user_id: str,
