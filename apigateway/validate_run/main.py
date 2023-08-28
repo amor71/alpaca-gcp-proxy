@@ -173,6 +173,7 @@ def handle_validate_run(request: Request):
     status = payload["status"]
     print(f"validating run {run_id} with {status} in {payload}")
 
+    # TODO: handle case of failed orders!
     if status in {"COMPLETED_SUCCESS", "COMPLETED_ADJUSTED"}:
         Runs.update(user_id=user_id, run_id=run_id, details=payload)
         return (f"{status}", 200)

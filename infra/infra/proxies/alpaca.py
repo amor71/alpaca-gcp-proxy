@@ -1,3 +1,4 @@
+import contextlib
 import json
 import os
 from concurrent import futures
@@ -88,12 +89,9 @@ def alpaca_proxy(
         )
     )
 
-    try:
+    with contextlib.suppress(LookupError):
         user_id = authenticated_user_id.get()  # type: ignore
         print(f"looked up user_id {user_id}")
         if user_id and method in {"POST", "PATCH"} and "v1/accounts" in url:
             trigger_user_updates(user_id, r.json())
-    except LookupError:
-        print("alpaca_proxy() - failed to lookup 'user_id' in Context")
-
     return r
