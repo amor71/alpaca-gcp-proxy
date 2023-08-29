@@ -12,6 +12,8 @@ dependencies = [
     "alpaca-py>=0.8.2",
     "jupyter-black>=0.3.4",
     "nbqa>=1.7.0",
+    "google-cloud-firestore>=2.11.1",
+    "firebase-admin>=6.2.0",
 ]
 requires-python = ">=3.11"
 license = {text = "MIT"}

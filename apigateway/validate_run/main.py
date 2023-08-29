@@ -122,6 +122,7 @@ def set_task(
 
 
 def schedule_verify_run(
+    user_id: str,
     run_id: str,
     request: Request,
 ) -> tuple[str, int]:
@@ -134,7 +135,7 @@ def schedule_verify_run(
     task = tasks_v2.Task(
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.PATCH,
-            url=f"https://api.nine30.com/v1/missions/validate/{run_id}",
+            url=f"https://api.nine30.com/v1/missions/validate/{run_id}?userId={user_id}",
             headers=request.headers,
         ),
         name=(
@@ -178,7 +179,7 @@ def handle_validate_run(request: Request):
         Runs.update(user_id=user_id, run_id=run_id, details=payload)
         return (f"{status}", 200)
     elif status in {"IN_PROGRESS", "QUEUED"}:
-        return schedule_verify_run(run_id, request)
+        return schedule_verify_run(user_id, run_id, request)
 
     log_error("handle_validate_run()", f"unknown status {status} in {payload}")
     return ("OK", 202)
