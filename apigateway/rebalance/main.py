@@ -143,7 +143,7 @@ def reschedule_run(user_id, request):
         http_request=tasks_v2.HttpRequest(
             http_method=tasks_v2.HttpMethod.POST,
             url=f"https://api.nine30.com/v1/missions/rebalance/{user_id}",
-            headers=request.headers,
+            # headers=request.headers,
         ),
         name=(
             client.task_path(project_id, location, rebalance_queue, task_id)

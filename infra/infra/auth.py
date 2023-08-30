@@ -18,6 +18,8 @@ def get_bearer_token(request: Request) -> str | None:
                 return auth_headers[1]
         except Exception as e:
             log_error("get_bearer_token()", str(e))
+    else:
+        log_error("get_bearer_token", f"{authorization_header} not present")
 
     return None
 
