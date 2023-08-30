@@ -200,6 +200,8 @@ def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
 
 
 def handle_create_rebalance(request: Request):
+    print("handle_create_rebalance")
+    print(request)
     # validate API
     if not (user_id := request.args.get("userId")):
         log_error("handle_users_topup()", "missing user_id")
