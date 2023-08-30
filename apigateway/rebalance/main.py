@@ -200,8 +200,7 @@ def create_run(alpaca_account_id: str, model_portfolio: dict) -> str | None:
 
 
 def handle_create_rebalance(request: Request):
-    print("handle_create_rebalance")
-    print(request)
+    print("handle_create_rebalance started")
     # validate API
     if not (user_id := request.args.get("userId")):
         log_error("handle_users_topup()", "missing user_id")
@@ -213,13 +212,15 @@ def handle_create_rebalance(request: Request):
     print("missions:", missions)
     for mission in missions:
         strategy = mission.get("strategy")
+
+        print("loading model portfolio")
         if not (model_portfolio := get_model_portfolio_by_name(strategy)):
             log_error(
                 "handle_create_rebalance()",
                 f"model portfolio '{strategy}' not found",
             )
             return ("invalid strategy", 202)
-
+        print("model portfolio found")
         if not (alpaca_account_id := get_alpaca_account_id(user_id)):
             log_error(
                 "handle_create_rebalance()",
@@ -276,7 +277,6 @@ def schedule_verify_run(
 def rebalance(request):
     """Implement /v1/missions/rebalance/{userId} end points"""
 
-    print("here!", request.method)
     if request.method == "POST":
         return handle_create_rebalance(request)
 
