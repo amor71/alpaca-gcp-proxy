@@ -276,6 +276,7 @@ def schedule_verify_run(
 def rebalance(request):
     """Implement /v1/missions/rebalance/{userId} end points"""
 
+    print("here!", request.method)
     if request.method == "POST":
         return handle_create_rebalance(request)
 
