@@ -12,7 +12,11 @@ class Mission:
         initial_investment = int(self.data.get("initialAmount") or 0)
         weekly_topup = int(self.data.get("weeklyTopup") or 0)
 
-        if not (initial_investment and weekly_topup):
+        print(
+            f"initial_investment={initial_investment} weekly_topup={weekly_topup}"
+        )
+
+        if not initial_investment and not weekly_topup:
             log_error(
                 "forecaster()",
                 "can not create forecast when without both initial investment and weekly topup",
