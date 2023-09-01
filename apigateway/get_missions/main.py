@@ -9,8 +9,13 @@ from infra.logger import log_error
 def process_mission(mission_details: Mission) -> dict:
     """create mission payload"""
 
-    payload: dict = mission_details.data
-    payload["forecast"] = mission_details.forecaster()
+    payload: dict = {
+        "initialAmount": mission_details.data["initial_amount"],
+        "weeklyTopup": mission_details.data["weekly_topup"],
+        "forecast": mission_details.forecaster(),
+        "name": mission_details.data["name"],
+        "strategy": mission_details.data["strategy"],
+    }
 
     return payload
 

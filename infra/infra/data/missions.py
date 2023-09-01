@@ -9,8 +9,8 @@ class Mission:
         self.data = data
 
     def forecaster(self, bins: int = 30) -> list:
-        initial_investment = int(self.data.get("initialAmount") or 0)
-        weekly_topup = int(self.data.get("weeklyTopup") or 0)
+        initial_investment = int(self.data.get("initial_amount") or 0)
+        weekly_topup = int(self.data.get("weekly_topup") or 0)
 
         print(
             f"initial_investment={initial_investment} weekly_topup={weekly_topup}"
