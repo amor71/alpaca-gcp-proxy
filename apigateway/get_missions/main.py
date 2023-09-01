@@ -2,7 +2,7 @@ import functions_framework
 from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
-from infra.infra.data.missions import Missions
+from infra.data.missions import Missions
 from infra.logger import log_error
 
 
