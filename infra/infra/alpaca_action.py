@@ -143,7 +143,9 @@ def get_account_balance(alpaca_account_id: str) -> int | None:
         )
         return None
 
-    usd = r.json().get("usd")
+    payload = r.json()
+    print(payload)
+    usd = payload.get("usd")
 
     portfolio_value = int(usd.get("portfolio_value", 0))
     cash = int(usd.get("cash", 0))
