@@ -13,6 +13,7 @@ def get_bearer_token(request: Request) -> str | None:
     """Extract 'Bearer' token from Authorization header"""
     if auth_header := request.headers.get(authorization_header):
         try:
+            print("get_bearer_token", auth_header)
             auth_headers = auth_header.split()
             if auth_headers[0] == "Bearer":
                 return auth_headers[1]

@@ -11,6 +11,7 @@ from infra.stytch_actions import get_from_user_vault
 @auth
 def get_missions(request):
     """implement GET /v1/missions"""
+
     user_id = authenticated_user_id.get()  # type: ignore
     if not user_id:
         log_error(
