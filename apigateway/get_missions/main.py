@@ -2,8 +2,17 @@ import functions_framework
 from flask import abort
 
 from infra import auth, authenticated_user_id  # type: ignore
-from infra.data.missions import Missions
+from infra.data.missions import Mission, Missions
 from infra.logger import log_error
+
+
+def process_mission(mission_details: Mission) -> dict:
+    """create mission payload"""
+
+    payload: dict = mission_details.data
+    payload["forecast"] = mission_details.forecaster()
+
+    return payload
 
 
 @functions_framework.http
@@ -20,15 +29,11 @@ def get_missions(request):
         return ("Something went wrong", 403)
 
     missions = Missions(user_id=user_id)
-
-    payload = []
-    for mission in missions:
-        print(mission)
-
+    payload = [process_mission(mission) for mission in missions]
     if not payload:
         log_error(
             "get_missions()", f"{user_id} does not have any active missions"
         )
         abort(400)
 
-    return ("OK", 200)
+    return (payload, 200)

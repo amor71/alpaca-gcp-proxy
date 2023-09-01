@@ -1,24 +1,65 @@
 from google.cloud import exceptions, firestore  # type: ignore
+from pandas import pd
 
 from ..logger import log_error
+
+
+class Mission:
+    def __init__(self, data: dict):
+        self.data = data
+
+    def forecaster(self, bins: int = 30) -> list:
+        initial_investment = int(self.data.get("initialAmount") or 0)
+        weekly_topup = int(self.data.get("weeklyTopup") or 0)
+
+        if not (initial_investment and weekly_topup):
+            log_error(
+                "forecaster()",
+                "can not create forecast when without both initial investment and weekly topup",
+            )
+            return []
+
+        num_years_to_calc = 30
+        annual_interest = 0.1
+        weekly_interest = annual_interest / 52
+        num_weeks = 52 * num_years_to_calc
+
+        deposit = [weekly_topup] * num_weeks
+        deposit[0] += initial_investment
+        rate = [weekly_interest] * num_weeks
+
+        df = pd.DataFrame({"deposit": deposit, "rate": rate})
+        df["total"] = (
+            df["deposit"] * df["rate"].shift().add(1).cumprod().fillna(1)
+        ).cumsum()
+        df["year"] = df.index // (52 * num_years_to_calc / bins)
+
+        new_df = pd.DataFrame(
+            {
+                "deposit": df.groupby("year").sum()["deposit"].cumsum(),
+                "amount": df.groupby("year").last()["total"],
+            }
+        ).round(1)
+
+        return new_df.values.tolist()
 
 
 class Missions:
     def __init__(self, user_id: str | None = None) -> None:
         self.user_id = user_id
-        self.data = self._load_missions() if user_id else None
+        self.missions = self._load_missions() if user_id else None
 
     @property
     def exists(self) -> bool:
         """Return True if User object is populated with data"""
 
-        return self.data != None
+        return self.missions != None
 
     def __iter__(self):
         if not self.exists:
             return None
 
-        yield from self.data
+        yield from self.missions
 
     def _load_missions(self):
         db = firestore.Client()
@@ -30,7 +71,7 @@ class Missions:
             .stream()
         )
 
-        return [doc_ref.to_dict() for doc_ref in docs]
+        return [Mission(doc_ref.to_dict()) for doc_ref in docs]
 
     @classmethod
     def exists_by_name(cls, user_id: str, mission_name: str) -> bool:

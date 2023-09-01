@@ -320,6 +320,7 @@ def handle_validate(request: Request) -> tuple[str, int]:
     abort(202)
 
 
+# TODO: use infra
 def handle_mission_suggestion(request):
     initial_investment = int(request.args.get("initialAmount") or 100)
     weekly_topup = int(request.args.get("weeklyTopup") or 50)
