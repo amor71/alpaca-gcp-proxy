@@ -1,5 +1,5 @@
+import pandas as pd
 from google.cloud import exceptions, firestore  # type: ignore
-from pandas import pd
 
 from ..logger import log_error
 
