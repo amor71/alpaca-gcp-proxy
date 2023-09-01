@@ -44,4 +44,5 @@ def authenticate_token(token: str, headers: dict) -> str | None:
     if r.status_code == 200:
         return r.json().get("session").get("user_id")
 
+    print(r.status_code, r.text)
     abort(403)
