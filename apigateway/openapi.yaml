@@ -163,6 +163,19 @@ paths:
           schema:
             $ref: "#/definitions/MissionStatus"
 
+      get:
+        description: "Get user missions with details"
+        operationId: "get-missions"
+        tags:
+          - Missions
+        x-google-backend:
+          address: https://us-east4-development-380917.cloudfunctions.net/get_missions
+        responses:
+          "200":
+            description: OK
+            schema:
+              $ref: "#/definitions/MissionStatus"
+
     options:
       description: "CORS support"
       operationId: "missions-cors"

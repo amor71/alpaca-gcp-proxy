@@ -554,6 +554,43 @@ resource "google_cloudfunctions_function" "missions" {
   }
 }
 
+# ------------------
+# -- get_missions --
+# ------------------
+data "archive_file" "get_missions" {
+  type        = "zip"
+  output_path = "/tmp/get_missions.zip"
+  source_dir  = "apigateway/get_missions"
+}
+resource "google_storage_bucket_object" "get_missions" {
+  name         = format("get_missions-%s.zip", data.archive_file.get_missions.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.get_missions.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "get_missions" {
+  name                  = "get_missions"
+  description           = "Get Missions"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.get_missions.name
+
+  trigger_http = true
+
+  entry_point         = "get_missions"
+  available_memory_mb = 256
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
 # -----------------
 # -- preferences --
 # -----------------
@@ -582,7 +619,7 @@ resource "google_cloudfunctions_function" "preferences" {
   trigger_http = true
 
   entry_point         = "preferences"
-  available_memory_mb = 128
+  available_memory_mb = 256
 
   environment_variables = {
     PROJECT_ID      = var.project_id

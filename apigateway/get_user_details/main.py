@@ -9,13 +9,10 @@ from infra.stytch_actions import get_from_user_vault
 
 def _process_owner_data(data: dict, owner: dict):
     if names := owner.get("names"):
-        print(f"names {names}")
         data["names"] += names
     if phone_numbers := owner.get("phone_numbers"):
-        print(f"phone_numbers {phone_numbers}")
         data["phone_numbers"] += phone_numbers
     if addresses := owner.get("addresses"):
-        print(f"addresses {addresses}")
         data["addresses"] += [
             address.get("data") for address in addresses if address["primary"]
         ]

@@ -213,7 +213,7 @@ def handle_create_rebalance(request: Request):
     for mission in missions:
         strategy = mission.get("strategy")
 
-        print("loading model portfolio")
+        print(f"looking up model portfolio {strategy}")
         if not (model_portfolio := get_model_portfolio_by_name(strategy)):
             log_error(
                 "handle_create_rebalance()",
