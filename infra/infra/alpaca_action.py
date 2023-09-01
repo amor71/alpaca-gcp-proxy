@@ -127,6 +127,34 @@ def validate_before_transfer(account_id: str) -> bool:
     return True
 
 
+def get_account_balance(alpaca_account_id: str) -> int | None:
+    r = alpaca_proxy(
+        method="GET",
+        url=f"v1/accounts/{alpaca_account_id}",
+        args=None,
+        headers=None,
+        payload=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "get_account_balance()",
+            f"failed to get account details {alpaca_account_id}: {r.text}",
+        )
+        return None
+
+    usd = r.json().get("usd")
+
+    portfolio_value = int(usd.get("portfolio_value", 0))
+    cash = int(usd.get("cash", 0))
+
+    print(
+        f"account balances for {alpaca_account_id}: {portfolio_value}, {cash}"
+    )
+
+    return portfolio_value + cash
+
+
 def transfer_amount(
     alpaca_account_id: str, relationship_id: str, amount: int
 ) -> dict | None:

@@ -5,6 +5,17 @@ from ..logger import log_error
 
 
 class Mission:
+    level_step: dict = {
+        200: 25,
+        1000: 50,
+        2500: 100,
+        5000: 250,
+        15000: 500,
+        20000: 750,
+        40000: 1000,
+        150000: 2000,
+    }
+
     def __init__(self, data: dict):
         self.data = data
 
@@ -46,6 +57,15 @@ class Mission:
         ).round(1)
 
         return new_df.values.tolist()
+
+    def calculate_milestones(self, account_size: int) -> list[int]:
+        level = min(
+            self.level_step.keys(), key=lambda x: abs(x - account_size)
+        )
+
+        print(level)
+
+        return []
 
 
 class Missions:
