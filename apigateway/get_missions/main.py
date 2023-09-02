@@ -8,7 +8,7 @@ from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id
 
 
-def process_mission(account_balance: int, mission_details: Mission) -> dict:
+def process_mission(account_balance: float, mission_details: Mission) -> dict:
     """create mission payload"""
 
     payload: dict = {
@@ -17,7 +17,9 @@ def process_mission(account_balance: int, mission_details: Mission) -> dict:
         "forecast": mission_details.forecaster(),
         "name": mission_details.data["name"],
         "strategy": mission_details.data["strategy"],
-        "milestones": mission_details.calculate_milestones(account_balance),
+        "milestones": mission_details.calculate_milestones(
+            int(account_balance)
+        ),
         "currentBalance": account_balance,
     }
 

@@ -127,7 +127,7 @@ def validate_before_transfer(account_id: str) -> bool:
     return True
 
 
-def get_account_balance(alpaca_account_id: str) -> int | None:
+def get_account_balance(alpaca_account_id: str) -> float | None:
     r = alpaca_proxy(
         method="GET",
         url=f"v1/trading/accounts/{alpaca_account_id}/account",
@@ -146,8 +146,8 @@ def get_account_balance(alpaca_account_id: str) -> int | None:
     payload = r.json()
     print(payload)
 
-    portfolio_value = int(payload.get("portfolio_value", 0))
-    cash = int(payload.get("cash", 0))
+    portfolio_value = float(payload.get("portfolio_value", 0.0))
+    cash = float(payload.get("cash", 0.0))
 
     print(
         f"account balances for {alpaca_account_id}: {portfolio_value}, {cash}"
