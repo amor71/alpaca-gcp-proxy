@@ -18,6 +18,7 @@ def process_mission(account_balance: int, mission_details: Mission) -> dict:
         "name": mission_details.data["name"],
         "strategy": mission_details.data["strategy"],
         "milestones": mission_details.calculate_milestones(account_balance),
+        "currentBalance": account_balance,
     }
 
     return payload

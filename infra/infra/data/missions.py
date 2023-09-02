@@ -5,7 +5,9 @@ from ..logger import log_error
 
 
 class Mission:
+    # TODO: move to database
     level_step: dict = {
+        0: 0,
         200: 25,
         1000: 50,
         2500: 100,
@@ -59,13 +61,21 @@ class Mission:
         return new_df.values.tolist()
 
     def calculate_milestones(self, account_size: int) -> list[int]:
-        level = min(
-            self.level_step.keys(), key=lambda x: abs(x - account_size)
+        keys = list(self.level_step.keys())
+        index = min(
+            range(len(keys)), key=lambda i: abs(keys[i] - account_size)
         )
+        level = keys[index + 1]
 
-        print(level)
+        past_milestone = (
+            account_size // self.level_step[level]
+        ) * self.level_step[level]
 
-        return []
+        next_milestones = [
+            past_milestone + (i + 1) * self.level_step[level] for i in range(3)
+        ]
+
+        return [past_milestone, *next_milestones]
 
 
 class Missions:
