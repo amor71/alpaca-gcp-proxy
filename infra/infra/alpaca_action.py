@@ -130,7 +130,7 @@ def validate_before_transfer(account_id: str) -> bool:
 def get_account_balance(alpaca_account_id: str) -> int | None:
     r = alpaca_proxy(
         method="GET",
-        url=f"v1/accounts/{alpaca_account_id}/account",
+        url=f"v1/trading/accounts/{alpaca_account_id}/account",
         args=None,
         headers=None,
         payload=None,
