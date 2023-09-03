@@ -407,4 +407,4 @@ wrapt==1.15.0 \
 
 --extra-index-url https://us-east4-python.pkg.dev/development-380917/python-repos/simple/
 infra==0.1.113 \
-    --hash=sha256:8c7f058b707ad3bff1b156ab2db0ee40209ec5d0041129463adc72963e967e7d
+    --hash=sha256:8c7f058b707b81dddfcb791d7cc25ae1e74de910e27aa8e681217f7529da00e3b22b1a90931ad3bff1b156ab2db0ee40209ec5d0041129463adc72963e967e7d
