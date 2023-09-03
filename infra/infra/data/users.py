@@ -9,7 +9,7 @@ class User:
         self.data = self._load_user() if user_id else None
 
     def __getattr__(self, name):
-        return self.data.get(name) if self.exists() else None
+        return self.data.get(name) if self.exists else None
 
     @property
     def exists(self) -> bool:
