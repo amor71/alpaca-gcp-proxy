@@ -30,10 +30,6 @@ def load_accounts(request):
         abort(400)
 
     if not load_new_accounts(user_id, plaid_access_token):
-        log_error(
-            "load_accounts()",
-            "could not load recent transactions ",
-        )
         abort(400)
 
     return ("OK", 200)

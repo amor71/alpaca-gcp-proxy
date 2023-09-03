@@ -33,16 +33,17 @@ def plaid_link(request):
 
     User.update(user_id=user_id, payload={"plaid": True})
 
-    print(f"item_id={item_id} user_id={user_id}")
+    # save mapping between user_id and Plaid item_id, to be used by Plaid Callback
     PlaidItem.save(item_id=item_id, user_id=user_id)
 
     # load transactions
     load_recent_transactions(user_id, plaid_access_token)
 
     # load accounts
-    load_new_accounts(user_id, plaid_access_token)
+    if not (accounts := load_new_accounts(user_id, plaid_access_token)):
+        abort(400)
 
-    return ("OK", 200)
+    return (accounts, 200)
 
 
 def load_transactions(request):

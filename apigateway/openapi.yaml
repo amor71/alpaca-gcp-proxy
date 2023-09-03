@@ -363,6 +363,23 @@ paths:
         "400":
           description: Error
 
+  /v1/plaid/account/{accountId}:
+    put:
+      description: "select bank account for linking"
+      operationId: "selectBankAccount"
+      tags:
+        - FinancialProfile
+      x-google-backend:
+        address: https://us-east4-development-380917.cloudfunctions.net/select_bankaccount
+      consumes:
+        - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Error
+
+          
   /v1/plaid/accounts:
     get:
       description: "load user accounts details via Plaid"
@@ -378,6 +395,7 @@ paths:
           description: OK
         "400":
           description: Error
+
 
   /v1/users/topup/{userId}:
     put:

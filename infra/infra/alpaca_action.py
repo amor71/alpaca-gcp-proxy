@@ -144,7 +144,10 @@ def get_account_balance(alpaca_account_id: str) -> float | None:
         return None
 
     payload = r.json()
-    print(payload)
+
+    if payload["account_blocked"] == True:
+        log_error("get_available_cash()", f"{alpaca_account_id} blocked")
+        return None
 
     portfolio_value = float(payload.get("portfolio_value", 0.0))
     cash = float(payload.get("cash", 0.0))
@@ -221,18 +224,27 @@ def handle_alpaca_activated(user_id, alpaca_account_id):
         return
 
     # Get user account-id from DB
-    account_ids = Account.get_account_ids(user_id)
+    user = User(user_id=user_id)
 
-    if not account_ids:
+    if not (account_id := user.plaid_account_id):
         log_error(
             "handle_alpaca_activated()",
-            f"failed to load account-id for user {user_id}",
+            f"user does not have 'plaid_account_id' property ({user.data})",
         )
-        return
+        account_ids = Account.get_account_ids(user_id)
+
+        if not account_ids:
+            log_error(
+                "handle_alpaca_activated()",
+                f"failed to load account-id for user {user_id}",
+            )
+            return
+
+        account_id = account_ids[0]
 
     # Create plaid alpaca link
     ach_relationship_id = create_alpaca_link(
-        plaid_access_token, account_ids[0], alpaca_account_id
+        plaid_access_token, account_id, alpaca_account_id
     )
 
     # Store relationship-id

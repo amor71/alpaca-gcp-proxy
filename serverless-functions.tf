@@ -702,6 +702,44 @@ resource "google_cloudfunctions_function" "plaid_accounts" {
   }
 }
 
+
+# ------------------------
+# -- select_bankaccount --
+# ------------------------
+data "archive_file" "select_bankaccount" {
+  type        = "zip"
+  output_path = "/tmp/select_bankaccount.zip"
+  source_dir  = "apigateway/select_bankaccount"
+}
+resource "google_storage_bucket_object" "select_bankaccount" {
+  name         = format("select_bankaccount-%s.zip", data.archive_file.select_bankaccount.output_md5)
+  bucket       = google_storage_bucket.serverless_function_bucket.name
+  content_type = "application/zip"
+  source       = data.archive_file.select_bankaccount.output_path
+  depends_on = [
+    google_storage_bucket.serverless_function_bucket
+  ]
+}
+resource "google_cloudfunctions_function" "select_bankaccount" {
+  name                  = "select_bankaccount"
+  description           = "Select specific bank account"
+  runtime               = "python311"
+  source_archive_bucket = google_storage_bucket.serverless_function_bucket.name
+  source_archive_object = google_storage_bucket_object.select_bankaccount.name
+
+  trigger_http = true
+
+  entry_point         = "select_bankaccount"
+  available_memory_mb = 256
+
+  environment_variables = {
+    PROJECT_ID      = var.project_id
+    TOKEN_BYPASS    = var.token_bypass
+    LOCATION        = var.region
+    REBALANCE_QUEUE = var.rebalance_queue
+  }
+}
+
 # -----------
 # -- plaid --
 # -----------

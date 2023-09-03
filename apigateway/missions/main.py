@@ -16,8 +16,9 @@ from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.missions import Missions, Runs
 from infra.data.users import User
 from infra.logger import log_error
+from infra.plaid_actions import get_bank_account_balance
 from infra.proxies.alpaca import alpaca_proxy  # type: ignore
-from infra.stytch_actions import get_alpaca_account_id
+from infra.stytch_actions import get_from_user_vault
 
 
 def save_new_mission(
@@ -320,10 +321,36 @@ def handle_validate(request: Request) -> tuple[str, int]:
     abort(202)
 
 
+def _calc_initial_amounts(balance: float) -> tuple[int, int]:
+    """Calculate initial investment amounts based on account balance"""
+
+    initial_amount = int(balance * 0.1)
+    weekly_topup = int(balance * 0.025)
+    return initial_amount, weekly_topup
+
+
 # TODO: use infra
 def handle_mission_suggestion(request):
-    initial_investment = int(request.args.get("initialAmount") or 100)
-    weekly_topup = int(request.args.get("weeklyTopup") or 50)
+    if not (user_id := authenticated_user_id.get()):
+        log_error("handle_mission_suggestion()", "user not specified")
+        abort(403)
+
+    if not (
+        plaid_access_token := get_from_user_vault(
+            user_id, "plaid_access_token"
+        )
+    ):
+        log_error("handle_mission_suggestion()", "not linked to Plaid")
+        abort(400)
+
+    if not (balance := get_bank_account_balance(user_id, plaid_access_token)):
+        log_error(
+            "handle_mission_suggestion()",
+            f"could not get balance for {user_id}",
+        )
+        abort(400)
+
+    initial_investment, weekly_topup = _calc_initial_amounts(balance)
     bins = int(request.args.get("bins") or 30)
 
     num_years_to_calc = 30

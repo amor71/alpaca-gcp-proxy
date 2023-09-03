@@ -1,9 +1,34 @@
 from infra.data.bank_account import Account
 from infra.data.past_transactions import get_cursor, save_past_transactions
-from infra.data.users import Identity
+from infra.data.users import User
 from infra.logger import log_error
 from infra.proxies.alpaca import alpaca_proxy
 from infra.proxies.plaid import plaid_proxy
+
+
+def get_bank_account_balance(
+    user_id: str, plaid_access_token: str
+) -> float | None:
+    user = User(user_id=user_id)
+
+    if not (bank_account_id := user.plaid_account_id):
+        log_error(
+            "get_bank_account_balance()",
+            f"{user_id} does not have selected banked account {user.data}",
+        )
+        return None
+
+    if not (
+        balance := load_account_balance(
+            user_id, plaid_access_token, bank_account_id
+        )
+    ):
+        log_error(
+            "get_bank_account_balance()", "could not load account balance"
+        )
+        return None
+
+    return balance
 
 
 def create_alpaca_link(
@@ -48,6 +73,38 @@ def create_alpaca_link(
     return r.json()["id"]
 
 
+def load_account_balance(
+    user_id: str, plaid_access_token: str, account_id: str
+) -> bool:
+    """load latest account balance"""
+
+    r = plaid_proxy(
+        method="POST",
+        url="/accounts/balance/get",
+        payload={
+            "access_token": plaid_access_token,
+            "account_ids": [account_id],
+        },
+        headers={"Content-Type": "application/json"},
+        args=None,
+    )
+
+    if r.status_code != 200:
+        log_error(
+            "get_latest_balances()",
+            "failed to get balances w {r.status_code}.{r.text}",
+        )
+        return False
+
+    payload = r.json()
+
+    print(f"load_account_balance: {payload}")
+    account_details = payload["accounts"][0]
+    Account.save(user_id=user_id, account_details=account_details)
+
+    return account_details["balances"]["available"]
+
+
 def load_identities(plaid_access_token: str) -> list[dict] | None:
     """Load identities"""
 
@@ -64,7 +121,7 @@ def load_identities(plaid_access_token: str) -> list[dict] | None:
     if r.status_code != 200:
         log_error(
             "get_identities()",
-            "failed to create processor token w {r.status_code}.{r.text}",
+            "failed to load identities w {r.status_code}.{r.text}",
         )
         return None
 
@@ -143,7 +200,9 @@ def load_recent_transactions(user_id: str, plaid_access_token: str) -> bool:
     return True
 
 
-def load_new_accounts(user_id: str, plaid_access_token: str) -> bool:
+def load_new_accounts(
+    user_id: str, plaid_access_token: str
+) -> list[dict] | None:
     r = plaid_proxy(
         method="POST",
         url="/accounts/get",
@@ -159,11 +218,19 @@ def load_new_accounts(user_id: str, plaid_access_token: str) -> bool:
             "get_recent_transactions()",
             "failed to called Plaid with {r.status_code}:{r.text}",
         )
-        return False
+        return None
 
     payload = r.json()
 
+    response = []
     for account in payload["accounts"]:
         Account.save(user_id=user_id, account_details=account)
+        response.append(
+            {
+                "name": account["name"],
+                "type": account["type"],
+                "account_id": account["account_id"],
+            }
+        )
 
-    return True
+    return response
