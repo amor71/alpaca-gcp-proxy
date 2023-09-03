@@ -83,7 +83,7 @@ def load_account_balance(
         url="/accounts/balance/get",
         payload={
             "access_token": plaid_access_token,
-            "options:": {"account_ids": [account_id]},
+            "options": {"account_ids": [account_id]},
         },
         headers={"Content-Type": "application/json"},
         args=None,
