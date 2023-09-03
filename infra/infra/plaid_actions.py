@@ -92,7 +92,7 @@ def load_account_balance(
     if r.status_code != 200:
         log_error(
             "get_latest_balances()",
-            "failed to get balances w {r.status_code}.{r.text}",
+            f"failed to get balances w {r.status_code}.{r.text}",
         )
         return False
 
