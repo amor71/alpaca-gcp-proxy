@@ -6,7 +6,7 @@ groups = ["default", "dev"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:a46288fbfbf0a860f646f7092c85c4737869a177fa584fd6a77bcb085930c3a6"
+content_hash = "sha256:6debec57b4b63108876e6932fef889310ff743c41b21d1330c068383d018cfe7"
 
 [[package]]
 name = "aiohttp"
@@ -931,6 +931,23 @@ dependencies = [
 files = [
     {file = "google-cloud-secret-manager-2.16.3.tar.gz", hash = "sha256:6cab5cbf1927a34c586e4af90437eea3d44ff4b41b9a82ec86fcff09a5ac26ea"},
     {file = "google_cloud_secret_manager-2.16.3-py2.py3-none-any.whl", hash = "sha256:266ab8da831b3532ca197b5a30dcde0f0504761390bb26c3397403d6ff0b8e3f"},
+]
+
+[[package]]
+name = "google-cloud-tasks"
+version = "2.14.1"
+requires_python = ">=3.7"
+summary = "Google Cloud Tasks API client library"
+dependencies = [
+    "google-api-core[grpc]!=2.0.*,!=2.1.*,!=2.10.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*,!=2.8.*,!=2.9.*,<3.0.0dev,>=1.34.0",
+    "grpc-google-iam-v1<1.0.0dev,>=0.12.4",
+    "proto-plus<2.0.0dev,>=1.22.0",
+    "proto-plus<2.0.0dev,>=1.22.2; python_version >= \"3.11\"",
+    "protobuf!=3.20.0,!=3.20.1,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.19.5",
+]
+files = [
+    {file = "google-cloud-tasks-2.14.1.tar.gz", hash = "sha256:ca1a83df7391a78592dcca751583b22c9074d0a72dc8debdb4a4687ff9958a29"},
+    {file = "google_cloud_tasks-2.14.1-py2.py3-none-any.whl", hash = "sha256:b44ff8721f9a36f118892c5d45745393fba0ce0ef27fab3853e07cb5fba91a92"},
 ]
 
 [[package]]

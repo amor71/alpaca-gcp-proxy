@@ -51,6 +51,7 @@ dependencies = [
     "pytz>=2023.3",
     "nb-clean>=3.0.0",
     "pandas>=2.1.0",
+    "google-cloud-tasks>=2.14.1",
 ]
 requires-python = ">=3.9"
 license = {text = "MIT"}
