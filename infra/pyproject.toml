@@ -14,7 +14,7 @@ license = {text = "MIT"}
 name = "infra"
 readme = "README.md"
 requires-python = ">=3.11"
-version = "0.1.115"
+version = "0.1.116"
 
 [build-system]
 build-backend = "pdm.backend"
