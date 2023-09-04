@@ -11,7 +11,7 @@ from infra.alpaca_action import (bank_link_ready, get_transfers,
                                  transfer_amount, validate_before_transfer)
 from infra.config import location, project_id, rebalance_queue  # type: ignore
 from infra.data.transfers import Transfer
-from infra.infra.data.users import User
+from infra.data.users import User
 from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id, get_from_user_vault
 

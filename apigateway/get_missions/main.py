@@ -4,7 +4,7 @@ from flask import abort
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.alpaca_action import get_account_balance
 from infra.data.missions import Mission, Missions
-from infra.infra.data.users import User
+from infra.data.users import User
 from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id
 
