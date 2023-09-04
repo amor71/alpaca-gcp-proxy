@@ -4,6 +4,7 @@ from flask import abort
 from infra import auth, authenticated_user_id  # type: ignore
 from infra.alpaca_action import get_account_balance
 from infra.data.missions import Mission, Missions
+from infra.infra.data.users import User
 from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id
 
@@ -48,9 +49,15 @@ def get_missions(request):
         abort(400)
 
     missions = Missions(user_id=user_id)
-    payload = [
-        process_mission(account_balance, mission) for mission in missions
-    ]
+    user = User(user_id=user_id)
+    payload = {
+        "missions": [
+            process_mission(account_balance, mission) for mission in missions
+        ],
+        "nextPaymentSchedule": user.next_payment_schedule,
+        "newPaymentAmount": user.next_payment_amount,
+    }
+
     if not payload:
         log_error(
             "get_missions()", f"{user_id} does not have any active missions"

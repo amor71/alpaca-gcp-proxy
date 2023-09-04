@@ -5,14 +5,13 @@ import uuid
 import functions_framework
 from flask import abort
 from google.cloud import tasks_v2
-from google.protobuf import duration_pb2, timestamp_pb2
+from google.protobuf import timestamp_pb2
 
-from infra import auth, authenticated_user_id  # type: ignore
 from infra.alpaca_action import (bank_link_ready, get_transfers,
                                  transfer_amount, validate_before_transfer)
 from infra.config import location, project_id, rebalance_queue  # type: ignore
-from infra.data.missions import Missions
 from infra.data.transfers import Transfer
+from infra.infra.data.users import User
 from infra.logger import log_error
 from infra.stytch_actions import get_alpaca_account_id, get_from_user_vault
 
@@ -21,14 +20,13 @@ def set_task(
     client: tasks_v2.CloudTasksClient,
     task: tasks_v2.Task,
     second_from_now: int = 0,
-) -> bool:
+) -> datetime.datetime:
+    run_time = datetime.datetime.now(datetime.timezone.utc)
     if second_from_now:
         # Convert "seconds from now" to an absolute Protobuf Timestamp
         timestamp = timestamp_pb2.Timestamp()
-        timestamp.FromDatetime(
-            datetime.datetime.now(datetime.timezone.utc)
-            + datetime.timedelta(seconds=second_from_now)
-        )
+        run_time += datetime.timedelta(seconds=second_from_now)
+        timestamp.FromDatetime(run_time)
         task.schedule_time = timestamp
         print(f"set_task() scheduling for {task.schedule_time}")
 
@@ -41,7 +39,7 @@ def set_task(
             task=task,
         )
     )
-    return True
+    return run_time
 
 
 def schedule_transfer_validator(user_id, id, headers):
@@ -64,12 +62,7 @@ def schedule_transfer_validator(user_id, id, headers):
         ),
     )
 
-    task_setup = set_task(client, task, 60 * 60)
-
-    if task_setup:
-        print(f"transfer validator scheduled for transfer {id}")
-
-    return task_setup
+    return set_task(client, task, 60 * 60)
 
 
 def transfer(
@@ -78,7 +71,7 @@ def transfer(
     relationship_id: str,
     amount: int,
     headers,
-) -> bool:
+) -> datetime.datetime | None:
     """Initiate a transfer of 'amount' to user's alpaca account"""
 
     if not validate_before_transfer(alpaca_account_id):
@@ -86,14 +79,14 @@ def transfer(
             "transfer()",
             f"{alpaca_account_id} account validation failed, aborting transfer",
         )
-        return False
+        return None
 
     if not (
         transfer_details := transfer_amount(
             alpaca_account_id, relationship_id, amount
         )
     ):
-        return False
+        return None
 
     print(f"transfer() result : {transfer_details}")
     transfer = Transfer(user_id=user_id, details=transfer_details)
@@ -101,7 +94,7 @@ def transfer(
     return schedule_transfer_validator(user_id, transfer.id, headers)
 
 
-def weekly_transfer(user_id: str, amount: int, headers) -> bool:
+def weekly_transfer(user_id: str, amount: int, headers) -> datetime.datetime:
     # Create a client.
     client = tasks_v2.CloudTasksClient()
 
@@ -122,21 +115,20 @@ def weekly_transfer(user_id: str, amount: int, headers) -> bool:
             else None
         ),
     )
-    task_setup = set_task(client, task, 60 * 60 * 24 * 7)
+    weekly_schedule = set_task(client, task, 60 * 60 * 24 * 7)
+    User.update(
+        user_id=user_id,
+        payload={
+            "next_payment_schedule": weekly_schedule,
+            "next_payment_amount": amount,
+        },
+    )
+    return weekly_schedule
 
-    if task_setup:
-        print(f"weekly topup scheduled with amount {amount}")
 
-    return task_setup
-
-
-def process(
-    user_id, alpaca_account_id, relationship_id, headers, payload
-) -> bool:
-    rc = False
-
+def process(user_id, alpaca_account_id, relationship_id, headers, payload):
     if initial_amount := payload.get("initialAmount"):
-        rc |= transfer(
+        transfer(
             user_id,
             alpaca_account_id,
             relationship_id,
@@ -145,13 +137,11 @@ def process(
         )
 
     if weekly_topup := payload.get("weeklyTopup"):
-        rc |= weekly_transfer(
+        weekly_transfer(
             user_id,
             int(weekly_topup),
             headers,
         )
-
-    return rc
 
 
 def valid_payload(payload) -> bool:
@@ -321,17 +311,13 @@ def handle_users_topup(request):
 
     print("its all good! ready to progress")
 
-    if not process(
+    process(
         user_id=user_id,
         alpaca_account_id=alpaca_account_id,
         relationship_id=relationship_id,
         headers=request.headers,
         payload=payload,
-    ):
-        return (
-            "Failed to process request",
-            400,
-        )
+    )
 
     return ("OK", 200)
 
