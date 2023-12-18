@@ -55,13 +55,13 @@ def slackbot(request):
         message = event_data["event"]["message"]
         user = message.get("user")
         text = message.get("text")
-        channel = message["channel"]
-
         # Add your custom logic here to process and respond to the received message
 
         # Example: Reply to the message
         if user and text:
             reply = f"Thanks for your message, <@{user}>! You said: {text}"
+            channel = message["channel"]
+
             send_slack_message(channel, reply)
 
     # Respond with a 200 status code to acknowledge the event
